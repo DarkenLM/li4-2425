@@ -26,36 +26,36 @@ INSERT INTO Utilizador (username, email, palavraPasse)
 -- ----------------------------------------------------
 -- VALUES FOR PropriedadeConstrucao
 -- ---------------------------------------------------
-INSERT INTO PropriedadeConstrucao (nome, estagio)
+INSERT INTO PropriedadeConstrucao (nome, dificuladade, estagio)
 	VALUES
-	('Casa pequena','3'),
-	('Casa media','5'),
-	('Casa grande','10');
+	('Casa pequena', '1','3'),
+	('Casa media', '2','5'),
+	('Casa grande', '3','10');
 
 -- ----------------------------------------------------
 -- VALUES FOR PropriedadeBloco
 -- ---------------------------------------------------
-INSERT INTO PropriedadeBloco (nome, tempoParaAdquirir)
+INSERT INTO PropriedadeBloco (nome, raridade, tempoParaAdquirir)
 	VALUES
-	('Porta de carvalho','10'),
-	('Tabuas de carvalho','5'),
-	('Cerca de carvalho','12'),
-	('Escadas de carvalho','8'),
-	('Vidro','30'),
-	('Pedregulho','20'),
-	('Laje de Carvalho','8');
+	('Porta de carvalho', 'Comum','10'),
+	('Tabuas de carvalho', 'Comum','5'),
+	('Cerca de carvalho', 'Raro','12'),
+	('Escadas de carvalho', 'Comum','8'),
+	('Vidro', 'Epico','30'),
+	('Pedregulho', 'Raro','20'),
+	('Laje de Carvalho', 'Comum','8');
 
 -- ----------------------------------------------------
 -- VALUES FOR Construcao
 -- ---------------------------------------------------
-INSERT INTO Construcao (dificuladade, estado, idPropriedadeConstrucao, idUtilizador)
+INSERT INTO Construcao (estado, idPropriedadeConstrucao, idUtilizador)
 	VALUES
-	('1','2','1','1'),
-	('2','4','2','5'),
-	('3','7','3','2'),
-	('2','2','2','3'),
-	('2','0','2','3'),
-	('1','3','1','9');
+	('2','1','1'),
+	('4','2','5'),
+	('7','3','2'),
+	('2','2','3'),
+	('0','2','3'),
+	('3','1','9');
 
 -- ----------------------------------------------------
 -- VALUES FOR BlocoProduzirConstrucao
@@ -86,10 +86,10 @@ INSERT INTO Encomenda (idUtilizador, dataEncomenda)
 -- ----------------------------------------------------
 -- VALUES FOR Bloco
 -- ---------------------------------------------------
-INSERT INTO Bloco (raridade, idPropriedadeBloco,idEncomenda)
+INSERT INTO Bloco (idPropriedadeBloco, idEncomenda)
 	VALUES
-	 ('raro', '1', '1'),
-    ('comum', '2', '2'),
-    ('epico', '3', '3'),
-    ('raro', '4', '4'),
-    ('comum', '5', '4'); 
+	('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '4'); 

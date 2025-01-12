@@ -39,10 +39,10 @@ BEGIN
 	CREATE TABLE PropriedadeConstrucao(
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		nome VARCHAR(50) NOT NULL,
+		dificuladade VARCHAR(6) NOT NULL,
 		estagio INT NOT NULL
-)
+	)
 END
-
 -- ----------------------------------------------------
 -- TABLE LI4.PropriedadeBloco
 -- ----------------------------------------------------
@@ -51,6 +51,7 @@ BEGIN
 	CREATE TABLE PropriedadeBloco(
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		nome VARCHAR(40) NOT NULL,
+		raridade VARCHAR(7) NOT NULL,
 		tempoParaAdquirir INT NOT NULL,
 	)
 END
@@ -62,7 +63,6 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Construcao')
 BEGIN
 	CREATE TABLE Construcao(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		dificuladade VARCHAR(6) NOT NULL,
 		estado VARCHAR(9) NOT NULL,
 		idPropriedadeConstrucao INT NOT NULL FOREIGN KEY REFERENCES PropriedadeConstrucao(id),
 		idUtilizador INT NOT NULL FOREIGN KEY REFERENCES Utilizador(id)
@@ -101,7 +101,6 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Bloco')
 BEGIN
 	CREATE TABLE Bloco(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		raridade VARCHAR(7) NOT NULL,
 		idPropriedadeBloco INT NOT NULL FOREIGN KEY REFERENCES PropriedadeBloco(id),
 		idEncomenda INT NOT NULL FOREIGN KEY REFERENCES Encomenda(id)
 	)
