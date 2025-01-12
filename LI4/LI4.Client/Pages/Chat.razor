@@ -1,0 +1,69 @@
+﻿@page "/chat"
+@inject NavigationManager navMan
+@rendermode InteractiveWebAssembly
+
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.DependencyInjection;
+
+<h3>Chat</h3>
+
+@if (IsConnected) {
+	<ul>
+		@foreach (var msg in messages) {
+			<li>@msg</li>
+		}
+	</ul>
+
+	<hl/>
+
+	<input type="text" @bind="userInput"/>
+	<input type="text" @bind="messageInput"/>
+	<button @onclick="Send">Send</button>
+} else {
+	<span>NOT CONNECTED</span>
+}
+
+@code {
+	private HubConnection hubConnection;
+	private readonly List<string> messages = new();
+	private string userInput;
+	private string messageInput;
+
+	protected override async Task OnInitializedAsync() {
+		Console.WriteLine($"CONNECTION: {navMan.ToAbsoluteUri("/api/ws/chat")}");
+
+
+		hubConnection = new HubConnectionBuilder()
+			.WithUrl(navMan.ToAbsoluteUri("/api/ws/chat"))
+			.ConfigureLogging(logging =>{
+				logging.SetMinimumLevel(LogLevel.Information);
+			})
+			.Build();
+		hubConnection.On<string, string>("ReceiveMessage", (user, message) => {
+			messages.Add($"{user}: {message}");
+			InvokeAsync(StateHasChanged);
+		});
+		await hubConnection.StartAsync();
+
+		hubConnection.Closed += async (error) => {
+			Console.WriteLine("Hub connection closed: " + error.Message);
+			await Task.Delay(new Random().Next(0, 5) * 1000);
+			await hubConnection.StartAsync();
+		};
+
+		try {
+			var task = hubConnection.StartAsync();
+			task.Wait();
+			Console.WriteLine("CONNECTED.");
+		} catch (Exception ex) {
+			Console.WriteLine("Hub connection start error: " + ex.Message);
+		}
+	}
+
+	public Task Send() => hubConnection.SendAsync("SendMessage", userInput, messageInput);
+
+	public bool IsConnected {
+		get => hubConnection is not null && hubConnection.State == HubConnectionState.Connected;
+		// get => false;
+	}
+}
