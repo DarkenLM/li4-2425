@@ -1,5 +1,7 @@
 using LI4.Client.Pages;
+using LI4.Common;
 using LI4.Components;
+using LI4.Controllers;
 using LI4.Dados;
 using LI4.Hubs;
 
@@ -13,7 +15,8 @@ builder.Services.AddSignalR(e => {
     e.EnableDetailedErrors = true;
 });
 
-builder.Services.AddScoped<UtilizadorDAO>(sp => new UtilizadorDAO(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<UserDAO>(sp => new UserDAO(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IMineBuildsLN>(sp => new MineBuildsLN(builder.Configuration));
 
 var app = builder.Build();
 

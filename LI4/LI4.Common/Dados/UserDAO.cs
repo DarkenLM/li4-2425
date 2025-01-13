@@ -17,10 +17,10 @@ namespace LI4.Dados;
 /// 
 /// See LI4.Client#Pages.Users for more examples.
 /// </summary>
-public class UtilizadorDAO {
+public class UserDAO {
     private readonly string connectionString;
 
-    public UtilizadorDAO(string conStr) {
+    public UserDAO(string conStr) {
         this.connectionString = conStr;
     }
 
