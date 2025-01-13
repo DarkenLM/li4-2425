@@ -16,4 +16,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public Task<Utilizador> getUser(string email) {
         return userFacade.getUser(email);
     }
+
+    public bool updateUtilizador(string email, string username, string password) {
+        return userFacade.updateUser(email, username, password);
+    }
 }

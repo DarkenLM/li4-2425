@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using LI4.Common.Exceptions.UserExceptions;
-using LI4.Exceptions.UserExceptions;
 using Microsoft.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -59,6 +58,20 @@ public class UserDAO {
         int rowsAffected = await connection.ExecuteAsync(query, user);
         return rowsAffected > 0;
     }
+
+    public async Task<bool> emailExistsAsync(string email) {
+        using var connection = getConnection();
+        const string query = "SELECT COUNT(1) FROM Utilizador WHERE email = @Email";
+        return await connection.ExecuteScalarAsync<int>(query, new { Email = email }) > 0;
+    }
+
+    public async Task<bool> usernameExistsAsync(string username) {
+        using var connection = getConnection();
+        const string query = "SELECT COUNT(1) FROM Utilizador WHERE username = @Username";
+        return await connection.ExecuteScalarAsync<int>(query, new { Username = username }) > 0;
+    }
+
+
 
     public async Task<bool> updateUserEmailAsync(int id, string newEmail) {
         using var connection = getConnection();
