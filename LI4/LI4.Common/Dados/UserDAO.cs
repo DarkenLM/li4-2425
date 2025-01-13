@@ -24,22 +24,22 @@ public class UserDAO {
         this.connectionString = conStr;
     }
 
-    private SqlConnection GetConnection() => new SqlConnection(this.connectionString);
+    private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
-    public async Task<IEnumerable<Utilizador>> GetAllAsync() {
-        using var connection = GetConnection();
+    public async Task<IEnumerable<Utilizador>> getAllAsync() {
+        using var connection = getConnection();
         const string query = "SELECT * FROM Utilizador";
         return await connection.QueryAsync<Utilizador>(query);
     }
 
-    public async Task<Utilizador?> GetByIdAsync(int id) {
-        using var connection = GetConnection();
+    public async Task<Utilizador?> getByIdAsync(int id) {
+        using var connection = getConnection();
         const string query = "SELECT * FROM Utilizador WHERE id = @Id";
         return await connection.QueryFirstOrDefaultAsync<Utilizador>(query, new { id = id });
     }
 
-    public async Task<int> AddAsync(Utilizador user) {
-        using var connection = GetConnection();
+    public async Task<int> addAsync(Utilizador user) {
+        using var connection = getConnection();
         const string query = @"
             INSERT INTO Utilizador (username, email, palavraPasse)
             VALUES (@username, @email, @palavraPasse);
@@ -47,8 +47,8 @@ public class UserDAO {
         return await connection.ExecuteScalarAsync<int>(query, user);
     }
 
-    public async Task<bool> UpdateAsync(Utilizador user) {
-        using var connection = GetConnection();
+    public async Task<bool> updateAsync(Utilizador user) {
+        using var connection = getConnection();
         const string query = @"
             UPDATE Utilizador
             SET username = @username, email = @email, palavraPasse = @palavraPasse
@@ -57,8 +57,8 @@ public class UserDAO {
         return rowsAffected > 0;
     }
 
-    public async Task<bool> UpdateUserEmailAsync(int id, string newEmail) {
-        using var connection = GetConnection();
+    public async Task<bool> updateUserEmailAsync(int id, string newEmail) {
+        using var connection = getConnection();
         const string query = @"
         UPDATE Utilizador
         SET email = @newEmail
@@ -67,8 +67,8 @@ public class UserDAO {
         return rowsAffected > 0;
     }
 
-    public async Task<bool> UpdateUserUsernameAsync(int id, string newUsername) {
-        using var connection = GetConnection();
+    public async Task<bool> updateUserUsernameAsync(int id, string newUsername) {
+        using var connection = getConnection();
         const string query = @"
         UPDATE Utilizador
         SET username = @newUsername
@@ -77,8 +77,8 @@ public class UserDAO {
         return rowsAffected > 0;
     }
 
-    public async Task<bool> UpdateUserPasswordAsync(int id, string newPassword) {
-        using var connection = GetConnection();
+    public async Task<bool> updateUserPasswordAsync(int id, string newPassword) {
+        using var connection = getConnection();
         const string query = @"
         UPDATE Utilizador
         SET palavraPasse = @newPassword
@@ -87,10 +87,17 @@ public class UserDAO {
         return rowsAffected > 0;
     }
 
-    public async Task<bool> DeleteAsync(int id) {
-        using var connection = GetConnection();
+    public async Task<bool> deleteAsync(int id) {
+        using var connection = getConnection();
         const string query = "DELETE FROM Utilizador WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id = id });
         return rowsAffected > 0;
+    }
+
+    public async Task<Utilizador> getAsync(string email) {
+        using var connection = getConnection();
+        const string query = "SELECT * FROM Utilizador WHERE email = @email";
+        Utilizador? user = await connection.QueryFirstOrDefaultAsync<Utilizador>(query, new { email });
+        return user ?? throw new Exception("User does not exists!");
     }
 }

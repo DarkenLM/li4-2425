@@ -1,4 +1,6 @@
-﻿namespace LI4.Controllers;
+﻿using LI4.Dados;
+
+namespace LI4.Controllers;
 
 public class MineBuildsLN : Common.IMineBuildsLN {
     private UserFacade userFacade;
@@ -9,5 +11,9 @@ public class MineBuildsLN : Common.IMineBuildsLN {
 
     public bool authenticate(string username, string password) {
         return userFacade.validarUser(username, password);
+    }
+
+    public Task<Utilizador> getUser(string email) {
+        return userFacade.getUser(email);
     }
 }

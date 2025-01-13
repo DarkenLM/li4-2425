@@ -12,4 +12,8 @@ public class UserFacade {
     public bool validarUser(string username, string password) {
         return false;
     }
+
+    public Task<Utilizador> getUser(string email) {
+        return this.userDAO.getAsync(email);
+    }
 }
