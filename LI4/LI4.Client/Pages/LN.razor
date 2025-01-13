@@ -1,0 +1,14 @@
+﻿@page "/ln"
+@rendermode InteractiveServer
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+
+@using Util;
+
+<h3>LN</h3>
+
+@code {
+    protected override async Task OnInitializedAsync() {
+        Console.WriteLine("AUTHENTICATE: " + facade.authenticate("abc", "def"));
+    }
+}

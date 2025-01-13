@@ -10,7 +10,7 @@ public class UserFacade {
     }
 
     public bool validarUser(string username, string password) {
-        return false;
+        return true;
     }
 
     public Task<Utilizador> getUser(string email) {
