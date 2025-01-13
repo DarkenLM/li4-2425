@@ -7,8 +7,14 @@
 
 <h3>LN</h3>
 
+
+<p>@message</p>
+
 @code {
+    private string message;
+
     protected override async Task OnInitializedAsync() {
-        Console.WriteLine("AUTHENTICATE: " + facade.authenticate("abc", "def"));
+        // bool isAuthenticated = await facade.authenticate("joao@example.com", "password3");
+        // message = "AUTHENTICATE: " + isAuthenticated;
     }
 }

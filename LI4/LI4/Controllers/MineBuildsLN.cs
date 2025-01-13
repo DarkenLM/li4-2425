@@ -9,8 +9,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         this.userFacade = new UserFacade(config);
     }
 
-    public bool authenticate(string username, string password) {
-        return userFacade.validarUser(username, password).Result;
+    public async Task<bool> authenticate(string username, string password) {
+        return await userFacade.validarUser(username, password);
     }
 
     public async Task<Utilizador> getUser(string email) {
