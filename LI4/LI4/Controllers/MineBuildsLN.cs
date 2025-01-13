@@ -10,7 +10,7 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     }
 
     public bool authenticate(string username, string password) {
-        return userFacade.validarUser(username, password);
+        return userFacade.validarUser(username, password).Result;
     }
 
     public Task<Utilizador> getUser(string email) {

@@ -116,7 +116,7 @@
 
     private async Task LoadUsers() {
         Console.WriteLine("LOAD USERS");
-        users = (await UtilizadorDAO.GetAllAsync()).ToList();
+        users = (await UtilizadorDAO.getAllAsync()).ToList();
     }
 
     private async Task AddUser() {
@@ -135,7 +135,7 @@
         Console.WriteLine("AU USER AFTER: ", newUser);
 
         try {
-            await UtilizadorDAO.AddAsync(newUser);
+            await UtilizadorDAO.addAsync(newUser);
         } catch (Exception e) {
             error = e.Message;
             await console.error("AU ERROR:", e.Message, e.Source);
@@ -154,7 +154,7 @@
     private async Task SaveUser(Utilizador user) {
         if (editUserId == null) return;
 
-        await UtilizadorDAO.UpdateAsync(user);
+        await UtilizadorDAO.updateAsync(user);
         editUserId = null;
         await LoadUsers();
     }
@@ -164,7 +164,7 @@
     }
 
     private async Task DeleteUser(int userId) {
-        await UtilizadorDAO.DeleteAsync(userId);
+        await UtilizadorDAO.deleteAsync(userId);
         await LoadUsers();
     }
 }

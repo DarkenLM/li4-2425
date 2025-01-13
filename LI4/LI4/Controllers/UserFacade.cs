@@ -9,9 +9,21 @@ public class UserFacade {
         this.userDAO = new UserDAO(config.GetConnectionString("DefaultConnection"));
     }
 
-    public bool validarUser(string username, string password) {
-        return true;
+    public async Task<bool> validarUser(string email, string password) {
+
+        if (email == null || password == null) { return false; }
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) { return false; }
+
+
+        bool emailExists = await userDAO.emailExistsAsync(email);
+        if (emailExists) {
+
+            bool athenticate = await userDAO.authenticateAsync(email, password);
+            return athenticate;
+        }
+        return false;
     }
+
 
     public Task<Utilizador> getUser(string email) {
         return this.userDAO.getAsync(email);
@@ -19,15 +31,15 @@ public class UserFacade {
 
     public bool updateUser(string email, string username, string password) {
         return Task.Run(async () => {
-            if (!await userDAO.EmailExistsAsync(email)) {
+            if (!await userDAO.emailExistsAsync(email)) {
                 throw new ArgumentException("The account doesn't exist.");
             }
 
-            if (await userDAO.UsernameExistsAsync(username)) {
+            if (await userDAO.usernameExistsAsync(username)) {
                 throw new ArgumentException("The username is already in use.");
             }
 
-            var allUsers = await userDAO.GetAllAsync();
+            var allUsers = await userDAO.getAllAsync();
             var userToUpdate = allUsers.FirstOrDefault(u => u.email == email);
 
             if (userToUpdate == null) {
@@ -38,7 +50,7 @@ public class UserFacade {
             userToUpdate.username = username;
             userToUpdate.palavraPasse = password;
 
-            bool result = await userDAO.UpdateAsync(userToUpdate);
+            bool result = await userDAO.updateAsync(userToUpdate);
             return result;
         }).Result;
     }

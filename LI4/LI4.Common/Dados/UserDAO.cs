@@ -122,4 +122,15 @@ public class UserDAO {
             throw new UserNotFoundException("An error occurred while retrieving the user.", ex);
         }
     }
+
+    public async Task<bool> authenticateAsync(string email, string password) {
+        using var connection = getConnection();
+        const string query = "SELECT COUNT(1) FROM Utilizador WHERE email = @Email AND palavraPasse = @Password";
+        int count = await connection.ExecuteScalarAsync<int>(query, new { Email = email, Password = password });
+        if (count > 0) {
+            return true;
+        } else {
+            throw new UserNotAuthorizedException("Authentication failed: Invalid password.");
+        }
+    }
 }
