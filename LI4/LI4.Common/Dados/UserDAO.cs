@@ -1,5 +1,8 @@
 ﻿using Dapper;
+using LI4.Common.Exceptions.UserExceptions;
+using LI4.Exceptions.UserExceptions;
 using Microsoft.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LI4.Dados;
 
@@ -95,9 +98,15 @@ public class UserDAO {
     }
 
     public async Task<Utilizador> getAsync(string email) {
-        using var connection = getConnection();
-        const string query = "SELECT * FROM Utilizador WHERE email = @email";
-        Utilizador? user = await connection.QueryFirstOrDefaultAsync<Utilizador>(query, new { email });
-        return user ?? throw new Exception("User does not exists!");
+        try {
+            using var connection = getConnection();
+            const string query = "SELECT * FROM Utilizador WHERE email = @email";
+            Utilizador? user = await connection.QueryFirstOrDefaultAsync<Utilizador>(query, new { email });
+
+            return user ?? throw new UserNotFoundException($"User with email: {email} not found");
+
+        } catch (SqlException ex) {
+            throw new UserNotFoundException("An error occurred while retrieving the user.", ex);
+        }
     }
 }
