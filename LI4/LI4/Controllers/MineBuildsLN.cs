@@ -13,8 +13,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return userFacade.validarUser(username, password).Result;
     }
 
-    public Task<Utilizador> getUser(string email) {
-        return userFacade.getUser(email);
+    public async Task<Utilizador> getUser(string email) {
+        return await userFacade.getUser(email);
     }
 
     public bool updateUtilizador(string email, string username, string password) {

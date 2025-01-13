@@ -24,9 +24,8 @@ public class UserFacade {
         return false;
     }
 
-
-    public Task<Utilizador> getUser(string email) {
-        return this.userDAO.getAsync(email);
+    public async Task<Utilizador> getUser(string email) {
+        return await this.userDAO.getAsync(email);
     }
 
     public bool updateUser(string email, string username, string password) {
