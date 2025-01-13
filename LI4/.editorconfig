@@ -209,6 +209,10 @@ dotnet_naming_rule.interface_should_be_begins_with_i.severity = suggestion
 dotnet_naming_rule.interface_should_be_begins_with_i.symbols = interface
 dotnet_naming_rule.interface_should_be_begins_with_i.style = begins_with_i
 
+dotnet_naming_rule.method_should_be_camelcase.severity = suggestion
+dotnet_naming_rule.method_should_be_camelcase.symbols = method
+dotnet_naming_rule.method_should_be_camelcase.style = camelcase
+
 dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.types_should_be_pascal_case.symbols = types
 dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case
@@ -222,6 +226,10 @@ dotnet_naming_rule.non_field_members_should_be_pascal_case.style = pascal_case
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.interface.required_modifiers = 
+
+dotnet_naming_symbols.method.applicable_kinds = method
+dotnet_naming_symbols.method.applicable_accessibilities = public
+dotnet_naming_symbols.method.required_modifiers = 
 
 dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
@@ -242,3 +250,8 @@ dotnet_naming_style.begins_with_i.required_prefix = I
 dotnet_naming_style.begins_with_i.required_suffix = 
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+dotnet_naming_style.camelcase.required_prefix = 
+dotnet_naming_style.camelcase.required_suffix = 
+dotnet_naming_style.camelcase.word_separator = 
+dotnet_naming_style.camelcase.capitalization = camel_case
