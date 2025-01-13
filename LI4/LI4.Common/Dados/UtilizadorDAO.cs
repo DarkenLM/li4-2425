@@ -57,6 +57,36 @@ public class UtilizadorDAO {
         return rowsAffected > 0;
     }
 
+    public async Task<bool> UpdateUserEmailAsync(int id, string newEmail) {
+        using var connection = GetConnection();
+        const string query = @"
+        UPDATE Utilizador
+        SET email = @newEmail
+        WHERE id = @id";
+        int rowsAffected = await connection.ExecuteAsync(query, new { id, newEmail });
+        return rowsAffected > 0;
+    }
+
+    public async Task<bool> UpdateUserUsernameAsync(int id, string newUsername) {
+        using var connection = GetConnection();
+        const string query = @"
+        UPDATE Utilizador
+        SET username = @newUsername
+        WHERE id = @id";
+        int rowsAffected = await connection.ExecuteAsync(query, new { id, newUsername });
+        return rowsAffected > 0;
+    }
+
+    public async Task<bool> UpdateUserPasswordAsync(int id, string newPassword) {
+        using var connection = GetConnection();
+        const string query = @"
+        UPDATE Utilizador
+        SET palavraPasse = @newPassword
+        WHERE id = @id";
+        int rowsAffected = await connection.ExecuteAsync(query, new { id, newPassword });
+        return rowsAffected > 0;
+    }
+
     public async Task<bool> DeleteAsync(int id) {
         using var connection = GetConnection();
         const string query = "DELETE FROM Utilizador WHERE id = @id";
