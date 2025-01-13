@@ -12,11 +12,18 @@
 --	DROP DATABASE LI4;
 --END;
 
+-- Create User
+--CREATE LOGIN batman WITH PASSWORD = '554456asryf74sgr4f8ysyf4564ffhdsdfghz465shrd4hsdf56';
+
 -- Create the database
 CREATE DATABASE LI4;
 
 -- Switch to the newly created database
 USE LI4;
+
+-- Create User for Login
+CREATE USER batman FOR LOGIN batman;
+ALTER ROLE db_owner ADD MEMBER batman;
 
 -- ----------------------------------------------------
 -- TABLE LI4.Utilizador
