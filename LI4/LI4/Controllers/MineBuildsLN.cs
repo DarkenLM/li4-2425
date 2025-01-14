@@ -20,4 +20,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public bool updateUtilizador(string email, string username, string password) {
         return userFacade.updateUser(email, username, password);
     }
+
+    public async Task<bool> registerUser(string email, string username, string password) {
+        return await userFacade.createUser(email, username, password);
+    }
 }

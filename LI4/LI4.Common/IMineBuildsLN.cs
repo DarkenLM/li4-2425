@@ -8,4 +8,6 @@ public interface IMineBuildsLN {
     public bool updateUtilizador(string email, string username,string password);
 
     public Task<Utilizador> getUser(string email);
+
+    public Task<bool> registerUser(string email, string username, string password);
 }

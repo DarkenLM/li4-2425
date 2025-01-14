@@ -9,6 +9,22 @@ public class UserFacade {
         this.userDAO = new UserDAO(config.GetConnectionString("DefaultConnection"));
     }
 
+    public async Task<bool> createUser(string email, string username, string password) {
+        if (email == null || username == null || password == null) { return false; }
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) { return false; }
+
+        bool emailInUse = await userDAO.emailExistsAsync(email);
+        bool usernameInUse = await userDAO.usernameExistsAsync(username);
+
+        if (!emailInUse && !usernameInUse) {
+            Utilizador tmpUser = new Utilizador(username, email, password);
+            await userDAO.addAsync(tmpUser);
+            return true;
+        };
+
+        return false;
+    }
+
     public async Task<bool> validarUser(string email, string password) {
 
         if (email == null || password == null) { return false; }
