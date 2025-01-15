@@ -25,7 +25,7 @@ public class UserFacade {
         return false;
     }
 
-    public async Task<bool> validarUser(string email, string password) {
+    public async Task<bool> validateUser(string email, string password) {
 
         if (email == null || password == null) { return false; }
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) { return false; }
@@ -44,22 +44,12 @@ public class UserFacade {
         return await this.userDAO.getByEmailAsync(email);
     }
 
-    public bool updateUser(string email, string username, string password) {
-        return Task.Run(async () => {
-            if (!await userDAO.emailExistsAsync(email)) {
-                throw new ArgumentException("The account doesn't exist.");
-            }
+    public async Task<bool> updateUser(string emailId, string email, string username, string password) {
+        bool emailExists = await userDAO.emailExistsAsync(emailId);
+        bool usernameExists = await userDAO.usernameNoOtherExistsAsync(emailId, username);
+        if (emailExists && usernameExists) {
 
-            if (await userDAO.usernameExistsAsync(username)) {
-                throw new ArgumentException("The username is already in use.");
-            }
-
-            var allUsers = await userDAO.getAllAsync();
-            var userToUpdate = allUsers.FirstOrDefault(u => u.email == email);
-
-            if (userToUpdate == null) {
-                throw new InvalidOperationException("The user to update was not found.");
-            }
+            var userToUpdate = await getUserByEmail(emailId);
 
             userToUpdate.email = email;
             userToUpdate.username = username;
@@ -67,6 +57,7 @@ public class UserFacade {
 
             bool result = await userDAO.updateAsync(userToUpdate);
             return result;
-        }).Result;
+        }
+        return false;
     }
 }
