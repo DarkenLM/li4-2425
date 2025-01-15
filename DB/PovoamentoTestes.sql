@@ -28,22 +28,30 @@ INSERT INTO Utilizador (username, email, palavraPasse)
 -- ---------------------------------------------------
 INSERT INTO PropriedadeConstrucao (nome, dificuladade, estagio)
 	VALUES
-	('Casa pequena', '1','3'),
-	('Casa media', '2','5'),
-	('Casa grande', '3','10');
+	('Pillager Tent', '1','3'),
+	('Small House 3', '2','5'),
+	('Library 2', '3','7');
 
 -- ----------------------------------------------------
--- VALUES FOR PropriedadeBloco
+-- VALUES FOR PropriedadeBloco (OS TEMPOS ESTAO ALEATORIOS)
 -- ---------------------------------------------------
 INSERT INTO PropriedadeBloco (nome, raridade, tempoParaAdquirir)
 	VALUES
-	('Porta de carvalho', 'Comum','10'),
-	('Tabuas de carvalho', 'Comum','5'),
-	('Cerca de carvalho', 'Raro','12'),
-	('Escadas de carvalho', 'Comum','8'),
-	('Vidro', 'Epico','30'),
-	('Pedregulho', 'Raro','20'),
-	('Laje de Carvalho', 'Comum','8');
+	('Bed', 'RARE','3'),
+	('Bookshelf', 'EPIC','4'),
+	('Cobblestone', 'COMMON','1'),
+	('Crafting Table', 'COMMON','2'),
+	('Dirt', 'COMMON','1'),
+	('Dirt Path', 'RARE','2'),
+	('Glass Pane', 'RARE','1'),
+	('Grass Block', 'EPIC','2'),
+	('Lectern', 'RARE','1'),
+	('Oak Door', 'COMMON','2'),
+	('Oak Fence', 'COMMON','1'),
+	('Oak Log', 'COMMON','3'),
+	('Oak Planks', 'COMMON','4'),
+	('Oak Stairs', 'COMMON','1'),
+	('White Wool', 'RARE','3');
 
 -- ----------------------------------------------------
 -- VALUES FOR Construcao
@@ -51,24 +59,41 @@ INSERT INTO PropriedadeBloco (nome, raridade, tempoParaAdquirir)
 INSERT INTO Construcao (estado, idPropriedadeConstrucao, idUtilizador)
 	VALUES
 	('2','1','1'),
-	('4','2','5'),
-	('7','3','2'),
-	('2','2','3'),
+	('2','2','5'),
+	('1','3','2'),
 	('0','2','3'),
-	('3','1','9');
+	('0','2','3'),
+	('2','1','9');
 
 -- ----------------------------------------------------
 -- VALUES FOR BlocoProduzirConstrucao
 -- ---------------------------------------------------
 INSERT INTO BlocoProduzirConstrucao (idPropriedadeConstrucao, idPropriedadeBloco, quantidade)
 	VALUES
-	('1','2','20'),
-	('2','2','30'),
+	('1','15','20'),
+	('1','11','10'),
+	('1','4','1'),
+	
+	('2','3','37'),
+	('2','7','3'),
+	('2','10','1'),
+	('2','12','22'),
+	('2','13','32'),
+	('2','14','50'),
 	('2','1','1'),
-	('3','2','45'),
-	('3','1','2'),
-	('3','5','20'),
-	('3','6','30');
+	
+	('3','3','55'),
+	('3','2','4'),
+	('3','5','21'),
+	('3','6','4'),
+	('3','7','8'),
+	('3','8','2'),
+	('3','9','1'),
+	('3','10','4'),
+	('3','11','18'),
+	('3','12','60'),
+	('3','13','57'),
+	('3','14','70');
 
 -- ----------------------------------------------------
 -- VALUES FOR Encomenda
