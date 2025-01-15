@@ -25,7 +25,7 @@ public class UserFacade {
         return false;
     }
 
-    public async Task<bool> validarUser(string email, string password) {
+    public async Task<bool> validateUser(string email, string password) {
 
         if (email == null || password == null) { return false; }
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) { return false; }
