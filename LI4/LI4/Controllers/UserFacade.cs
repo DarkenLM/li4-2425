@@ -40,8 +40,8 @@ public class UserFacade {
         return false;
     }
 
-    public async Task<Utilizador> getUser(string email) {
-        return await this.userDAO.getAsync(email);
+    public async Task<Utilizador> getUserByEmail(string email) {
+        return await this.userDAO.getByEmailAsync(email);
     }
 
     public bool updateUser(string email, string username, string password) {

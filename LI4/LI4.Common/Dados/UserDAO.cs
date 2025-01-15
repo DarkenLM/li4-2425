@@ -110,7 +110,7 @@ public class UserDAO {
         return rowsAffected > 0;
     }
 
-    public async Task<Utilizador> getAsync(string email) {
+    public async Task<Utilizador> getByEmailAsync(string email) {
         try {
             using var connection = getConnection();
             const string query = "SELECT * FROM Utilizador WHERE email = @email";

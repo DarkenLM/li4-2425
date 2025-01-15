@@ -14,7 +14,7 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     }
 
     public async Task<Utilizador> getUser(string email) {
-        return await userFacade.getUser(email);
+        return await userFacade.getUserByEmail(email);
     }
 
     public bool updateUtilizador(string email, string username, string password) {
