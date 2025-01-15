@@ -62,13 +62,39 @@ public class UserDAO {
     public async Task<bool> emailExistsAsync(string email) {
         using var connection = getConnection();
         const string query = "SELECT COUNT(1) FROM Utilizador WHERE email = @Email";
-        return await connection.ExecuteScalarAsync<int>(query, new { Email = email }) > 0;
+        bool count = await connection.ExecuteScalarAsync<int>(query, new { Email = email }) > 0;
+        if (count) {
+            return true;
+        } else {
+            throw new UserNotFoundException($"User with email: {email} not found");
+        }
     }
 
     public async Task<bool> usernameExistsAsync(string username) {
         using var connection = getConnection();
         const string query = "SELECT COUNT(1) FROM Utilizador WHERE username = @Username";
-        return await connection.ExecuteScalarAsync<int>(query, new { Username = username }) > 0;
+        bool count = await connection.ExecuteScalarAsync<int>(query, new { Username = username }) > 0;
+        if (count) {
+            return true;
+        } else {
+            throw new UserNotFoundException($"User with username: {username} not found");
+        }
+    }
+
+    public async Task<bool> usernameNoOtherExistsAsync(string email, string username) {
+        using var connection = getConnection();
+        const string query = @"
+        SELECT COUNT(1) 
+        FROM Utilizador 
+        WHERE username = @Username 
+          AND email != @Email";
+        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, Email = email }) > 0;
+
+        if (!existsForOther) {
+            return true;
+        } else {
+            throw new UserAlreadyExistsException($"User with username: {username} already exists for another account.");
+        }
     }
 
 

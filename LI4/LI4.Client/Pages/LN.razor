@@ -16,5 +16,8 @@
     protected override async Task OnInitializedAsync() {
         // bool isAuthenticated = await facade.authenticate("joao@example.com", "password3");
         // message = "AUTHENTICATE: " + isAuthenticated;
+        bool isUpdated = await facade.updateUtilizador("joao@example.com", "joao@example.com", "TheMan", "123");
+        message = "UPDATED: " + isUpdated;
+
     }
 }
