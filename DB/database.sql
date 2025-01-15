@@ -28,87 +28,100 @@ ALTER ROLE db_owner ADD MEMBER batman;
 -- ----------------------------------------------------
 -- TABLE LI4.Utilizador
 -- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Utilizador')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Users')
 BEGIN
-	CREATE TABLE Utilizador(
+	CREATE TABLE Users(
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		username VARCHAR(40) NOT NULL UNIQUE,
 		email VARCHAR(70) NOT NULL UNIQUE,
-		palavraPasse VARCHAR(45) NOT NULL
+		userPassword VARCHAR(45) NOT NULL
 	)
 END
 
 -- ----------------------------------------------------
--- TABLE LI4.PropriedadeConstrucao
+-- TABLE LI4.ConstructionProperties
 -- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='PropriedadeConstrucao')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='ConstructionProperties')
 BEGIN
-	CREATE TABLE PropriedadeConstrucao(
+	CREATE TABLE ConstructionProperties(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		nome VARCHAR(50) NOT NULL,
-		dificuladade VARCHAR(6) NOT NULL,
-		estagio INT NOT NULL
+		name VARCHAR(50) NOT NULL,
+		dificulty VARCHAR(8) NOT NULL,
+		nStages INT NOT NULL
 	)
 END
 -- ----------------------------------------------------
--- TABLE LI4.PropriedadeBloco
+-- TABLE LI4.BlockProperty
 -- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='PropriedadeBloco')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlockProperty')
 BEGIN
-	CREATE TABLE PropriedadeBloco(
+	CREATE TABLE BlockProperty(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		nome VARCHAR(40) NOT NULL,
-		raridade VARCHAR(7) NOT NULL,
-		tempoParaAdquirir INT NOT NULL,
-	)
-END
-
--- ----------------------------------------------------
--- TABLE LI4.Construcao
--- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Construcao')
-BEGIN
-	CREATE TABLE Construcao(
-		id INT IDENTITY(1,1) PRIMARY KEY,
-		estado VARCHAR(9) NOT NULL,
-		idPropriedadeConstrucao INT NOT NULL FOREIGN KEY REFERENCES PropriedadeConstrucao(id),
-		idUtilizador INT NOT NULL FOREIGN KEY REFERENCES Utilizador(id)
+		name VARCHAR(40) NOT NULL,
+		rarity VARCHAR(7) NOT NULL,
+		timeToAcquire INT NOT NULL,
 	)
 END
 
 -- ----------------------------------------------------
--- TABLE LI4.BlocoProduzirConstrucao
+-- TABLE LI4.Construction
+-- ----------------------------------------------------
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Construction')
+BEGIN
+	CREATE TABLE Construction(
+		id INT IDENTITY(1,1) PRIMARY KEY,
+		state VARCHAR(10) NOT NULL,
+		idConstructionProperties INT NOT NULL FOREIGN KEY REFERENCES ConstructionProperties(id),
+		idUser INT NOT NULL FOREIGN KEY REFERENCES Users(id)
+	)
+END
+
+-- ----------------------------------------------------
+-- TABLE LI4.BlocksToConstruction
 -- 
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlocoProduzirConstrucao')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlocksToConstruction')
 BEGIN
-	CREATE TABLE BlocoProduzirConstrucao(
-		idPropriedadeConstrucao INT NOT NULL FOREIGN KEY REFERENCES PropriedadeConstrucao(id),
-		idPropriedadeBloco INT NOT NULL FOREIGN KEY REFERENCES PropriedadeBloco(id),
-		quantidade INT NOT NULL,
-		CONSTRAINT PK_BlocoProduzirConstrucao PRIMARY KEY (idPropriedadeConstrucao, idPropriedadeBloco)
+	CREATE TABLE BlocksToConstruction(
+		idConstructionProperties INT NOT NULL FOREIGN KEY REFERENCES ConstructionProperties(id),
+		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperty(id),
+		quantity INT NOT NULL,
+		CONSTRAINT PK_BlocksToConstruction PRIMARY KEY (idConstructionProperties, idBlockProperty)
 	)
 END
 
 -- ----------------------------------------------------
--- TABLE LI4.Encomenda
+-- TABLE LI4.Orders
 -- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Encomenda')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Orders')
 BEGIN
-	CREATE TABLE Encomenda(
+	CREATE TABLE Orders(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		idUtilizador INT NOT NULL FOREIGN KEY REFERENCES Utilizador(id),
-		dataEncomenda DATETIME NOT NULL,
+		idUser INT NOT NULL FOREIGN KEY REFERENCES Users(id),
+		orderDate DATETIME NOT NULL,
 	)
 END
 
 -- ----------------------------------------------------
--- TABLE LI4.Bloco
--- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Bloco')
+-- TABLE LI4.BlocksInOrder
+-- 
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlocksInOrder')
 BEGIN
-	CREATE TABLE Bloco(
+	CREATE TABLE BlocksInOrder(
+		idOrder INT NOT NULL FOREIGN KEY REFERENCES Orders(id),
+		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperty(id),
+		quantity INT NOT NULL,
+		CONSTRAINT PK_BlocksInOrder PRIMARY KEY (idOrder, idBlockProperty)
+	)
+END
+
+-- ----------------------------------------------------
+-- TABLE LI4.Blocks
+-- ----------------------------------------------------
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Blocks')
+BEGIN
+	CREATE TABLE Blocks(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		idPropriedadeBloco INT NOT NULL FOREIGN KEY REFERENCES PropriedadeBloco(id),
-		idEncomenda INT NOT NULL FOREIGN KEY REFERENCES Encomenda(id)
+		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperty(id),
+		idUser INT NOT NULL FOREIGN KEY REFERENCES Users(id),
 	)
 END
