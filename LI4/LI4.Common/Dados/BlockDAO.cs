@@ -30,7 +30,7 @@ public class BlockDAO {
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
     public async Task<Block> getByIdAsync(int id) {
-        
+   
         // Problema, o bloco tem mais informação do que a retirada por aqui (tenho que aceder a propriedadeBloco)
         using var connection = getConnection();
         const string query = "SELECT * FROM Utilizador WHERE id = @Id";

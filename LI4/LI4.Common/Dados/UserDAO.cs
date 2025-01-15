@@ -13,7 +13,7 @@ namespace LI4.Dados;
 /// <example>
 /// Example:
 /// <code>
-/// Utilizador user = await UtilizadorDAO.GetByIdAsync(1); // Utilizador{id=1, username=abc, email=a@b.c, palavraPasse=123}
+/// Utilizador user = await UtilizadorDAO.GetByIdAsync(1); // Utilizador{id=1, username=abc, email=a@b.c, userPassword=123}
 /// </code>
 /// </example>
 /// 
@@ -28,32 +28,32 @@ public class UserDAO {
 
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
-    public async Task<IEnumerable<Utilizador>> getAllAsync() {
+    public async Task<IEnumerable<User>> getAllAsync() {
         using var connection = getConnection();
-        const string query = "SELECT * FROM Utilizador";
-        return await connection.QueryAsync<Utilizador>(query);
+        const string query = "SELECT * FROM Users";
+        return await connection.QueryAsync<User>(query);
     }
 
-    public async Task<Utilizador?> getByIdAsync(int id) {
+    public async Task<User?> getByIdAsync(int id) {
         using var connection = getConnection();
-        const string query = "SELECT * FROM Utilizador WHERE id = @Id";
-        return await connection.QueryFirstOrDefaultAsync<Utilizador>(query, new { id = id });
+        const string query = "SELECT * FROM Users WHERE id = @Id";
+        return await connection.QueryFirstOrDefaultAsync<User>(query, new { id = id });
     }
 
-    public async Task<int> addAsync(Utilizador user) {
+    public async Task<int> addAsync(User user) {
         using var connection = getConnection();
         const string query = @"
-            INSERT INTO Utilizador (username, email, palavraPasse)
-            VALUES (@username, @email, @palavraPasse);
+            INSERT INTO Users (username, email, userPassword)
+            VALUES (@username, @email, @userPassword);
             SELECT CAST(SCOPE_IDENTITY() as int)";
         return await connection.ExecuteScalarAsync<int>(query, user);
     }
 
-    public async Task<bool> updateAsync(Utilizador user) {
+    public async Task<bool> updateAsync(User user) {
         using var connection = getConnection();
         const string query = @"
-            UPDATE Utilizador
-            SET username = @username, email = @email, palavraPasse = @palavraPasse
+            UPDATE Users
+            SET username = @username, email = @email, userPassword = @userPassword
             WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, user);
         return rowsAffected > 0;
@@ -61,7 +61,7 @@ public class UserDAO {
 
     public async Task<bool> emailExistsAsync(string email) {
         using var connection = getConnection();
-        const string query = "SELECT COUNT(1) FROM Utilizador WHERE email = @Email";
+        const string query = "SELECT COUNT(1) FROM Users WHERE email = @Email";
         bool count = await connection.ExecuteScalarAsync<int>(query, new { Email = email }) > 0;
         if (count) {
             return true;
@@ -72,7 +72,7 @@ public class UserDAO {
 
     public async Task<bool> usernameExistsAsync(string username) {
         using var connection = getConnection();
-        const string query = "SELECT COUNT(1) FROM Utilizador WHERE username = @Username";
+        const string query = "SELECT COUNT(1) FROM Users WHERE username = @Username";
         bool count = await connection.ExecuteScalarAsync<int>(query, new { Username = username }) > 0;
         if (count) {
             return true;
@@ -85,7 +85,7 @@ public class UserDAO {
         using var connection = getConnection();
         const string query = @"
         SELECT COUNT(1) 
-        FROM Utilizador 
+        FROM Users 
         WHERE username = @Username 
           AND email != @Email";
         bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, Email = email }) > 0;
@@ -102,7 +102,7 @@ public class UserDAO {
     public async Task<bool> updateUserEmailAsync(int id, string newEmail) {
         using var connection = getConnection();
         const string query = @"
-        UPDATE Utilizador
+        UPDATE Users
         SET email = @newEmail
         WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id, newEmail });
@@ -112,7 +112,7 @@ public class UserDAO {
     public async Task<bool> updateUserUsernameAsync(int id, string newUsername) {
         using var connection = getConnection();
         const string query = @"
-        UPDATE Utilizador
+        UPDATE Users
         SET username = @newUsername
         WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id, newUsername });
@@ -122,8 +122,8 @@ public class UserDAO {
     public async Task<bool> updateUserPasswordAsync(int id, string newPassword) {
         using var connection = getConnection();
         const string query = @"
-        UPDATE Utilizador
-        SET palavraPasse = @newPassword
+        UPDATE Users
+        SET userPassword = @newPassword
         WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id, newPassword });
         return rowsAffected > 0;
@@ -131,16 +131,16 @@ public class UserDAO {
 
     public async Task<bool> deleteAsync(int id) {
         using var connection = getConnection();
-        const string query = "DELETE FROM Utilizador WHERE id = @id";
+        const string query = "DELETE FROM Users WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id = id });
         return rowsAffected > 0;
     }
 
-    public async Task<Utilizador> getByEmailAsync(string email) {
+    public async Task<User> getByEmailAsync(string email) {
         try {
             using var connection = getConnection();
-            const string query = "SELECT * FROM Utilizador WHERE email = @email";
-            Utilizador? user = await connection.QueryFirstOrDefaultAsync<Utilizador>(query, new { email });
+            const string query = "SELECT * FROM Users WHERE email = @email";
+            User? user = await connection.QueryFirstOrDefaultAsync<User>(query, new { email });
 
             return user ?? throw new UserNotFoundException($"User with email: {email} not found");
 
@@ -151,12 +151,12 @@ public class UserDAO {
 
     public async Task<bool> authenticateAsync(string email, string password) {
         using var connection = getConnection();
-        const string query = "SELECT COUNT(1) FROM Utilizador WHERE email = @Email AND palavraPasse = @Password";
+        const string query = "SELECT COUNT(1) FROM Users WHERE email = @Email AND userPassword = @Password";
         int count = await connection.ExecuteScalarAsync<int>(query, new { Email = email, Password = password });
         if (count > 0) {
             return true;
         } else {
-            throw new UserNotAuthorizedException("Authentication failed: Invalid password.");
+            throw new UserNotAuthorizedException("Authentication failed: Invalid userPassword.");
         }
     }
 }

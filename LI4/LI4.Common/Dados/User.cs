@@ -2,43 +2,43 @@
 
 namespace LI4.Dados;
 
-public class Utilizador {
+public class User {
     public int id { get; set; }
     public required string username { get; set; }
     public required string email { get; set; }
-    public required string palavraPasse { get; set; }
+    public required string userPassword { get; set; }
 
-    public Utilizador() {
+    public User() {
 
     }
 
 
     [SetsRequiredMembers]
-    public Utilizador(string username, string email, string palavraPasse) {
+    public User(string username, string email, string palavraPasse) {
         this.id = 0;
         this.username = username;
         this.email = email;
-        this.palavraPasse = palavraPasse;
+        this.userPassword = palavraPasse;
     }
 
     [SetsRequiredMembers]
-    public Utilizador(int id, string username, string email, string palavraPasse) {
+    public User(int id, string username, string email, string palavraPasse) {
         this.id = id;
         this.username = username;
         this.email = email;
-        this.palavraPasse = palavraPasse;
+        this.userPassword = palavraPasse;
     }
 
-    public static Utilizador empty() {
-        return new Utilizador(0, "", "", "");
+    public static User empty() {
+        return new User(0, "", "", "");
     }
 
-    public static Utilizador from(Utilizador utilizador) {
-        return new Utilizador(
+    public static User from(User utilizador) {
+        return new User(
             utilizador.id,
             utilizador.username,
             utilizador.email,
-            utilizador.palavraPasse
+            utilizador.userPassword
         );
     }
 
@@ -46,6 +46,6 @@ public class Utilizador {
         + "id=" + this.id + ", "
         + "username=" + this.username + ", "
         + "email=" + this.email + ", "
-        + "palavraPasse=" + this.palavraPasse
+        + "userPassword=" + this.userPassword
         + "}";
 }

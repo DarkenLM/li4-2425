@@ -17,7 +17,7 @@ public class UserFacade {
         bool usernameInUse = await userDAO.usernameExistsAsync(username);
 
         if (!emailInUse && !usernameInUse) {
-            Utilizador tmpUser = new Utilizador(username, email, password);
+            User tmpUser = new User(username, email, password);
             await userDAO.addAsync(tmpUser);
             return true;
         };
@@ -40,7 +40,7 @@ public class UserFacade {
         return false;
     }
 
-    public async Task<Utilizador> getUserByEmail(string email) {
+    public async Task<User> getUserByEmail(string email) {
         return await this.userDAO.getByEmailAsync(email);
     }
 
@@ -53,7 +53,7 @@ public class UserFacade {
 
             userToUpdate.email = email;
             userToUpdate.username = username;
-            userToUpdate.palavraPasse = password;
+            userToUpdate.userPassword = password;
 
             bool result = await userDAO.updateAsync(userToUpdate);
             return result;
