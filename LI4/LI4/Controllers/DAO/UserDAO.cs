@@ -37,7 +37,7 @@ public class UserDAO {
 
     public async Task<User?> getByIdAsync(int id) {
         using var connection = getConnection();
-        const string query = "SELECT * FROM Users WHERE id = @Id";
+        const string query = "SELECT * FROM Users WHERE id = @id";
         return await connection.QueryFirstOrDefaultAsync<User>(query, new { id = id });
     }
 
@@ -97,8 +97,6 @@ public class UserDAO {
             throw new UserAlreadyExistsException($"User with username: {username} already exists for another account.");
         }
     }
-
-
 
     public async Task<bool> updateUserEmailAsync(int id, string newEmail) {
         using var connection = getConnection();

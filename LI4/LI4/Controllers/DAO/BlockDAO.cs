@@ -17,7 +17,7 @@ namespace LI4.Controllers.DAO;
 /// </code>
 /// </example>
 /// 
-/// See LI4.Client#Pages.Users for more examples.
+/// See LI4.Client#Pages.Blocks for more examples.
 /// </summary>
 public class BlockDAO {
     private readonly string connectionString;
@@ -28,11 +28,13 @@ public class BlockDAO {
 
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
-    public async Task<Block> getByIdAsync(int id) {
-   
-        // Problema, o bloco tem mais informação do que a retirada por aqui (tenho que aceder a propriedadeBloco)
+    public async Task<Block?> GetByIdAsync(int id) {
         using var connection = getConnection();
-        const string query = "SELECT * FROM Utilizador WHERE id = @Id";
-        return await connection.QueryFirstOrDefaultAsync<Block>(query, new { id = id });
+        const string query = @"
+            SELECT b.id, b.name, b.rarity, b.timeToAcquire
+            FROM Blocks b
+            INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id
+            WHERE b.id = @id;";
+        return await connection.QueryFirstOrDefaultAsync<Block>(query, new { id });
     }
 }
