@@ -43,7 +43,7 @@ public class OrderDAO {
     public async Task<int> addAsync(Order order) {
         using var connection = getConnection();
         const string query = @"
-            INSERT INTO Encomenda (idUser, orderDate)
+            INSERT INTO Orders (idUser, orderDate)
             VALUES (@IdUser, @OrderDate);
             SELECT CAST(SCOPE_IDENTITY() as int)";
         return await connection.ExecuteScalarAsync<int>(query, order);
@@ -53,7 +53,7 @@ public class OrderDAO {
         using var connection = getConnection();
         const string query = @"
             UPDATE Orders
-            SET idUtilizador = @IdUser, orderDate = @OrderDate
+            SET idUser = @IdUser, orderDate = @OrderDate
             WHERE id = @Id";
         int rowsAffected = await connection.ExecuteAsync(query, order);
         return rowsAffected > 0;
