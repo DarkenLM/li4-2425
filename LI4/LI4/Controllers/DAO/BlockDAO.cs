@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using LI4.Common.Dados;
+using LI4.Dados;
 using Microsoft.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -28,10 +29,20 @@ public class BlockDAO {
 
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
-    public async Task<Block?> GetByIdAsync(int id) {
+    public async Task<IEnumerable<Block>> getAllAsync() {
         using var connection = getConnection();
         const string query = @"
-            SELECT b.id, b.name, b.rarity, b.timeToAcquire
+            SELECT b.id, name, rarity, timeToAcquire 
+            FROM Blocks b
+            INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id;";
+        return await connection.QueryAsync<Block>(query);
+    }
+
+
+    public async Task<Block?> getByIdAsync(int id) {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT b.id, bp.name, bp.rarity, bp.timeToAcquire
             FROM Blocks b
             INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id
             WHERE b.id = @id;";

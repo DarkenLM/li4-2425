@@ -1,4 +1,5 @@
-﻿using LI4.Dados;
+﻿using LI4.Controllers.DAO;
+using LI4.Dados;
 
 namespace LI4.Controllers;
 
@@ -8,8 +9,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
 
     public MineBuildsLN(ConfigurationManager config) {
         this.userFacade = new UserFacade(config);
+        this.stockFacade = new StockFacade(config);
     }
 
+    //---- User Related Methods ----//
     public async Task<IEnumerable<User>> getAllAsync() {
         return await userFacade.getAllAsync();
     }
@@ -29,4 +32,11 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public async Task<bool> registerUser(string email, string username, string password) {
         return await userFacade.createUser(email, username, password);
     }
+
+    //---- Stock Related Methods ----//
+    public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
+        return await stockFacade.getOrderContentAsync(id);
+    }
+
+    //---- Construction Related Methods ----//
 }

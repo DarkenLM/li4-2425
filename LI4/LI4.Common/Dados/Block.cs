@@ -6,18 +6,18 @@
     }
 
     public class Block {
-        private int id { get; set; }
-        private string name { get; set; }
-        private BlockRarity rarity { get; set; }
-        private int timeToAcquire { get; set;  }
-        private int orderID { get; set;  }
+        public int id { get; set; }
+        public string name { get; set; }
+        public BlockRarity rarity { get; set; }
+        public int timeToAcquire { get; set;  }
 
-        public Block(int id, string name, BlockRarity rarity, int timeToAcquire, int orderID) {
+        public Block() { }
+
+        public Block(int id, string name, BlockRarity rarity, int timeToAcquire) {
             this.id = id;
             this.name = name;
             this.rarity = rarity;
             this.timeToAcquire = timeToAcquire;
-            this.orderID = orderID;
         }
     }
 }

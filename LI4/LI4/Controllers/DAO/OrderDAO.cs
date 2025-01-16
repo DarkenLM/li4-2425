@@ -30,13 +30,13 @@ public class OrderDAO {
 
     public async Task<IEnumerable<Order>> getAllAsync() {
         using var connection = getConnection();
-        const string query = "SELECT * FROM Encomenda";
+        const string query = "SELECT * FROM Orders";
         return await connection.QueryAsync<Order>(query);
     }
 
     public async Task<Order?> getByIdAsync(int id) {
         using var connection = getConnection();
-        const string query = "SELECT * FROM Utilizador WHERE id = @Id";
+        const string query = "SELECT * FROM Orders WHERE id = @id";
         return await connection.QueryFirstOrDefaultAsync<Order>(query, new { id = id });
     }
 
@@ -64,5 +64,17 @@ public class OrderDAO {
         const string query = "DELETE FROM Encomenda WHERE id = @Id";
         int rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
         return rowsAffected > 0;
+    }
+
+    public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT bp.name, bo.quantity
+            FROM Orders o
+            INNER JOIN BlocksInOrder bo ON o.id = bo.idOrder
+            INNER JOIN BlockProperties bp ON bo.idBlockProperty = bp.id
+            WHERE o.id = @id;";
+        var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id });
+        return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 }

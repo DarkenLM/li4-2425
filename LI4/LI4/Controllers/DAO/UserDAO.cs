@@ -85,10 +85,10 @@ public class UserDAO {
     public async Task<bool> usernameNoOtherExistsAsync(string email, string username) {
         using var connection = getConnection();
         const string query = @"
-        SELECT COUNT(1) 
-        FROM Users 
-        WHERE username = @Username 
-          AND email != @Email";
+            SELECT COUNT(1) 
+            FROM Users 
+            WHERE username = @Username 
+              AND email != @Email";
         bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, Email = email }) > 0;
 
         if (!existsForOther) {
@@ -101,9 +101,9 @@ public class UserDAO {
     public async Task<bool> updateUserEmailAsync(int id, string newEmail) {
         using var connection = getConnection();
         const string query = @"
-        UPDATE Users
-        SET email = @newEmail
-        WHERE id = @id";
+            UPDATE Users
+            SET email = @newEmail
+            WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id, newEmail });
         return rowsAffected > 0;
     }
@@ -111,9 +111,9 @@ public class UserDAO {
     public async Task<bool> updateUserUsernameAsync(int id, string newUsername) {
         using var connection = getConnection();
         const string query = @"
-        UPDATE Users
-        SET username = @newUsername
-        WHERE id = @id";
+            UPDATE Users
+            SET username = @newUsername
+            WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id, newUsername });
         return rowsAffected > 0;
     }
@@ -121,9 +121,9 @@ public class UserDAO {
     public async Task<bool> updateUserPasswordAsync(int id, string newPassword) {
         using var connection = getConnection();
         const string query = @"
-        UPDATE Users
-        SET userPassword = @newPassword
-        WHERE id = @id";
+            UPDATE Users
+            SET userPassword = @newPassword
+            WHERE id = @id";
         int rowsAffected = await connection.ExecuteAsync(query, new { id, newPassword });
         return rowsAffected > 0;
     }
