@@ -49,18 +49,16 @@ public class UserFacade {
         return await this.userDAO.getByEmailAsync(email);
     }
 
-    public async Task<bool> updateUser(string emailId, string email, string username, string password) {
-        bool emailExists = await userDAO.emailExistsAsync(emailId);
-        bool usernameExists = await userDAO.usernameNoOtherExistsAsync(emailId, username);
-        if (emailExists && usernameExists) {
+    public async Task<bool> updateUser(int id, string email, string username, string password) {
+        var account = await userDAO.getByIdAsync(id);
+        bool usernameExists = await userDAO.usernameNoOtherExistsAsync(id, username);
+        if ((account != null) && usernameExists) {
 
-            var userToUpdate = await getUserByEmail(emailId);
+            account.email = email;
+            account.username = username;
+            account.userPassword = password;
 
-            userToUpdate.email = email;
-            userToUpdate.username = username;
-            userToUpdate.userPassword = password;
-
-            bool result = await userDAO.updateAsync(userToUpdate);
+            bool result = await userDAO.updateAsync(account);
             return result;
         }
         return false;

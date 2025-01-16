@@ -82,13 +82,13 @@ public class UserDAO {
         }
     }
 
-    public async Task<bool> usernameNoOtherExistsAsync(string email, string username) {
+    public async Task<bool> usernameNoOtherExistsAsync(int id, string username) {
         using var connection = getConnection();
         const string query = @"
             SELECT COUNT(1) 
             FROM Users 
             WHERE username = @Username 
-              AND email != @Email";
+              AND id != @id";
         bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, Email = email }) > 0;
 
         if (!existsForOther) {

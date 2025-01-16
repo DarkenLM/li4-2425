@@ -25,8 +25,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await userFacade.getUserByEmail(email);
     }
 
-    public async Task<bool> updateUtilizador(string emailId, string email, string username, string password) {
-        return await userFacade.updateUser(emailId, email, username, password);
+    public async Task<bool> updateUtilizador(int id, string email, string username, string password) {
+        return await userFacade.updateUser(id, email, username, password);
     }
 
     public async Task<bool> registerUser(string email, string username, string password) {
@@ -41,9 +41,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await stockFacade.getOrdersUser(email);
     }
 
-    public async Task<Dictionary<string, int>> getStock(string email) {
-        var user = await userFacade.getUserByEmail(email);
-        return await stockFacade.getStockUser(user.id);
+    public async Task<Dictionary<string, int>> getStock(int id) {
+        return await stockFacade.getStockUser(id);
     }
 
     //---- Construction Related Methods ----//

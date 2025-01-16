@@ -7,7 +7,7 @@ public interface IMineBuildsLN {
 
     public Task<bool> authenticate(string email, string password);
     
-    public Task<bool> updateUtilizador(string emailId, string email, string username,string password);
+    public Task<bool> updateUtilizador(int id, string email, string username,string password);
 
     public Task<User> getUserByEmail(string email);
 
@@ -17,5 +17,5 @@ public interface IMineBuildsLN {
 
     public Task<List<Order>> getOrders(string email);
 
-    public Task<Dictionary<string, int>> getStock(string email);
+    public Task<Dictionary<string, int>> getStock(int id);
 }
