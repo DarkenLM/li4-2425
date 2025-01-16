@@ -26,7 +26,7 @@ CREATE USER batman FOR LOGIN batman;
 ALTER ROLE db_owner ADD MEMBER batman;
 
 -- ----------------------------------------------------
--- TABLE LI4.Utilizador
+-- TABLE LI4.Users
 -- ----------------------------------------------------
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Users')
 BEGIN
@@ -50,12 +50,13 @@ BEGIN
 		nStages INT NOT NULL
 	)
 END
+
 -- ----------------------------------------------------
--- TABLE LI4.BlockProperty
+-- TABLE LI4.BlockProperties
 -- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlockProperty')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlockProperties')
 BEGIN
-	CREATE TABLE BlockProperty(
+	CREATE TABLE BlockProperties(
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		name VARCHAR(40) NOT NULL,
 		rarity VARCHAR(7) NOT NULL,
@@ -64,11 +65,11 @@ BEGIN
 END
 
 -- ----------------------------------------------------
--- TABLE LI4.Construction
+-- TABLE LI4.Constructions
 -- ----------------------------------------------------
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Construction')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Constructions')
 BEGIN
-	CREATE TABLE Construction(
+	CREATE TABLE Constructions(
 		id INT IDENTITY(1,1) PRIMARY KEY,
 		state VARCHAR(10) NOT NULL,
 		idConstructionProperties INT NOT NULL FOREIGN KEY REFERENCES ConstructionProperties(id),
@@ -78,12 +79,12 @@ END
 
 -- ----------------------------------------------------
 -- TABLE LI4.BlocksToConstruction
--- 
+-- ----------------------------------------------------
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlocksToConstruction')
 BEGIN
 	CREATE TABLE BlocksToConstruction(
 		idConstructionProperties INT NOT NULL FOREIGN KEY REFERENCES ConstructionProperties(id),
-		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperty(id),
+		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperties(id),
 		quantity INT NOT NULL,
 		CONSTRAINT PK_BlocksToConstruction PRIMARY KEY (idConstructionProperties, idBlockProperty)
 	)
@@ -103,12 +104,12 @@ END
 
 -- ----------------------------------------------------
 -- TABLE LI4.BlocksInOrder
--- 
+-- ----------------------------------------------------
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlocksInOrder')
 BEGIN
 	CREATE TABLE BlocksInOrder(
 		idOrder INT NOT NULL FOREIGN KEY REFERENCES Orders(id),
-		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperty(id),
+		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperties(id),
 		quantity INT NOT NULL,
 		CONSTRAINT PK_BlocksInOrder PRIMARY KEY (idOrder, idBlockProperty)
 	)
@@ -121,7 +122,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Blocks')
 BEGIN
 	CREATE TABLE Blocks(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperty(id),
+		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperties(id),
 		idUser INT NOT NULL FOREIGN KEY REFERENCES Users(id),
 	)
 END

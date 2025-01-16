@@ -37,10 +37,10 @@ INSERT INTO ConstructionProperties (id, name, dificulty, nStages)
 SET IDENTITY_INSERT ConstructionProperties OFF
 
 -- ----------------------------------------------------
--- VALUES FOR BlockProperty (OS TEMPOS ESTAO ALEATORIOS)
+-- VALUES FOR BlockProperties (OS TEMPOS ESTAO ALEATORIOS)
 -- ---------------------------------------------------
-SET IDENTITY_INSERT BlockProperty ON
-INSERT INTO BlockProperty (id, name, rarity, timeToAcquire)
+SET IDENTITY_INSERT BlockProperties ON
+INSERT INTO BlockProperties (id, name, rarity, timeToAcquire)
 	VALUES
 	('1', 'Bed', 'RARE','3'),
 	('2', 'Bookshelf', 'EPIC','4'),
@@ -57,13 +57,13 @@ INSERT INTO BlockProperty (id, name, rarity, timeToAcquire)
 	('13', 'Oak Planks', 'COMMON','4'),
 	('14', 'Oak Stairs', 'COMMON','1'),
 	('15', 'White Wool', 'RARE','3');
-SET IDENTITY_INSERT BlockProperty OFF
+SET IDENTITY_INSERT BlockProperties OFF
 
 -- ----------------------------------------------------
 -- VALUES FOR Construction
 -- ---------------------------------------------------
-SET IDENTITY_INSERT Construction ON
-INSERT INTO Construction (id, state, idConstructionProperties, idUser)
+SET IDENTITY_INSERT Constructions ON
+INSERT INTO Constructions (id, state, idConstructionProperties, idUser)
 	VALUES
 	('1', 'COMPLETED','1','1'),
 	('2', 'COMPLETED','2','5'),
@@ -71,7 +71,7 @@ INSERT INTO Construction (id, state, idConstructionProperties, idUser)
 	('4', 'WAITING','2','3'),
 	('5', 'WATTING','2','3'),
 	('6', 'COMPLETED','1','9');
-SET IDENTITY_INSERT Construction OFF
+SET IDENTITY_INSERT Constructions OFF
 
 -- ---------------------------------------------------
 -- VALUES FOR BlocksToConstruction
