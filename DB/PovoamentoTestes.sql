@@ -33,7 +33,7 @@ INSERT INTO ConstructionProperties (id, name, dificulty, nStages)
 	VALUES
 	('1', 'Pillager Tent', 'LOW','3'),
 	('2', 'Small House 3', 'MEDIUM','5'),
-	('3', 'Library 2', 'HARD','7');
+	('3', 'Library 2', 'HIGH','7');
 SET IDENTITY_INSERT ConstructionProperties OFF
 
 -- ----------------------------------------------------
