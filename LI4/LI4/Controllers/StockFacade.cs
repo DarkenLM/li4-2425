@@ -1,11 +1,11 @@
 ﻿using LI4.Common.Dados;
 using LI4.Controllers.DAO;
+using LI4.Dados;
 using System.Diagnostics.Contracts;
 
 namespace LI4.Controllers;
 
 public class StockFacade {
-    //private BlockDAO blockDAO;
     private OrderDAO orderDAO;
     private BlockDAO blockDAO;
 
@@ -17,6 +17,10 @@ public class StockFacade {
     //---- Order related Methods ----//
     public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
         return await orderDAO.getOrderContentAsync(id);
+    }
+
+    public async Task<List<Order>> getOrdersUser(string email) {
+        return await orderDAO.getOrdersAsync(email);
     }
 
     //---- Block related Methods ----//

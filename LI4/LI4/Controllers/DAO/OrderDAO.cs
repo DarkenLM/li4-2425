@@ -43,25 +43,25 @@ public class OrderDAO {
     public async Task<int> addAsync(Order order) {
         using var connection = getConnection();
         const string query = @"
-            INSERT INTO Encomenda (idUtilizador, orderDate)
-            VALUES (@IdUtilizador, @OrderDate);
+            INSERT INTO Encomenda (idUser, orderDate)
+            VALUES (@IdUser, @OrderDate);
             SELECT CAST(SCOPE_IDENTITY() as int)";
         return await connection.ExecuteScalarAsync<int>(query, order);
     }
 
-    public async Task<bool> UpdateAsync(Order order) {
+    public async Task<bool> updateAsync(Order order) {
         using var connection = getConnection();
         const string query = @"
-            UPDATE Encomenda
-            SET idUtilizador = @IdUtilizador, orderDate = @OrderDate
+            UPDATE Orders
+            SET idUtilizador = @IdUser, orderDate = @OrderDate
             WHERE id = @Id";
         int rowsAffected = await connection.ExecuteAsync(query, order);
         return rowsAffected > 0;
     }
 
-    public async Task<bool> DeleteAsync(int id) {
+    public async Task<bool> deleteAsync(int id) {
         using var connection = getConnection();
-        const string query = "DELETE FROM Encomenda WHERE id = @Id";
+        const string query = "DELETE FROM Orders WHERE id = @Id";
         int rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
         return rowsAffected > 0;
     }
@@ -76,5 +76,26 @@ public class OrderDAO {
             WHERE o.id = @id;";
         var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id });
         return result.ToDictionary(r => r.Name, r => r.Quantity);
+    }
+
+    public async Task<List<Order>> getOrdersAsync(string email) {
+        using var connection = getConnection();
+        const string query = @"
+        SELECT 
+            o.id AS id,
+            o.idUser AS idUser,
+            o.orderDate AS orderDate
+        FROM 
+            Orders o
+        INNER JOIN 
+            Users u
+        ON 
+            o.idUser = u.id
+        WHERE 
+            u.email = @Email;
+        ";
+
+        var orders = await connection.QueryAsync<Order>(query, new { Email = email });
+        return orders.ToList();
     }
 }
