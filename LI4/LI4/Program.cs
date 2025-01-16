@@ -2,7 +2,7 @@ using LI4.Client.Pages;
 using LI4.Common;
 using LI4.Components;
 using LI4.Controllers;
-using LI4.Dados;
+using LI4.Controllers.DAO;
 using LI4.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);

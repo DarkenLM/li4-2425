@@ -1,10 +1,9 @@
 ﻿using Dapper;
-using LI4.Common.Exceptions.UserExceptions;
-using LI4.Dados;
+using LI4.Common.Dados;
 using Microsoft.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace LI4.Common.Dados;
+namespace LI4.Controllers.DAO;
 
 /// <summary>
 /// Provides an access point to the table LI4.Bloco on the database and provides CRUD operations within that table.

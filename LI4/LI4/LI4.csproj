@@ -7,23 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dados\**" />
-    <Content Remove="Dados\**" />
-    <EmbeddedResource Remove="Dados\**" />
-    <None Remove="Dados\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LI4.Client\LI4.Client.csproj" />
     <ProjectReference Include="..\LI4.Common\LI4.Common.csproj" />
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.11" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\DAO\" />
   </ItemGroup>
 
 </Project>

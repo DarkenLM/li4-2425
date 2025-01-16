@@ -10,6 +10,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         this.userFacade = new UserFacade(config);
     }
 
+    public async Task<IEnumerable<User>> getAllAsync() {
+        return await userFacade.getAllAsync();
+    }
+
     public async Task<bool> authenticate(string email, string password) {
         return await userFacade.validateUser(email, password);
     }

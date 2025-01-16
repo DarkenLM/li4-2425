@@ -3,6 +3,8 @@
 namespace LI4.Common;
 public interface IMineBuildsLN {
 
+    public Task<IEnumerable<User>> getAllAsync();
+
     public Task<bool> authenticate(string email, string password);
     
     public Task<bool> updateUtilizador(string emailId, string email, string username,string password);

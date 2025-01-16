@@ -1,4 +1,5 @@
-﻿using LI4.Dados;
+﻿using LI4.Controllers.DAO;
+using LI4.Dados;
 
 namespace LI4.Controllers;
 
@@ -7,6 +8,10 @@ public class UserFacade {
 
     public UserFacade(ConfigurationManager config) {
         this.userDAO = new UserDAO(config.GetConnectionString("DefaultConnection"));
+    }
+
+    public async Task<IEnumerable<User>> getAllAsync() {
+        return await userDAO.getAllAsync();
     }
 
     public async Task<bool> createUser(string email, string username, string password) {

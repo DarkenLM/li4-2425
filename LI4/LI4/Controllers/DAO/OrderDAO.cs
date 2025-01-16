@@ -1,8 +1,9 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using LI4.Dados;
 
-namespace LI4.Dados;
+namespace LI4.Controllers.DAO;
 
 /// <summary>
 /// Provides an access point to the table LI4.Order in the database and supports CRUD operations.
