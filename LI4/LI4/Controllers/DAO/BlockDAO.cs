@@ -48,4 +48,18 @@ public class BlockDAO {
             WHERE b.id = @id;";
         return await connection.QueryFirstOrDefaultAsync<Block>(query, new { id });
     }
+
+    public async Task<Dictionary<string, int>> getAllBlocksUser(int idUser) {
+        using var connection = getConnection();
+        const string query = @"
+        SELECT bp.name, COUNT(b.id) AS quantity
+        FROM Blocks b
+        INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id
+        WHERE b.idUser = @idUser
+        GROUP BY bp.name;";
+
+        var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { idUser });
+        return result.ToDictionary(r => r.Name, r => r.Quantity);
+    }
+
 }

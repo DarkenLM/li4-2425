@@ -27,4 +27,8 @@ public class StockFacade {
     public async Task<IEnumerable<Block>> getAllBlocksAsync() {
         return await blockDAO.getAllAsync();
     }
+
+    public async Task<Dictionary<string, int>> getStockUser(int id) {
+        return await blockDAO.getAllBlocksUser(id);
+    }
 }

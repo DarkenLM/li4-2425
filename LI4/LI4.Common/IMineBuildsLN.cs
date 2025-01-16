@@ -14,4 +14,6 @@ public interface IMineBuildsLN {
     public Task<bool> registerUser(string email, string username, string password);
 
     public Task<Dictionary<string, int>> getOrderContentAsync(int id);
+
+    public Task<Dictionary<string, int>> getStock(string email);
 }
