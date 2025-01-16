@@ -45,7 +45,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='ConstructionProperties')
 BEGIN
 	CREATE TABLE ConstructionProperties(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		name VARCHAR(50) NOT NULL,
+		name VARCHAR(50) NOT NULL UNIQUE,
 		dificulty VARCHAR(8) NOT NULL,
 		nStages INT NOT NULL
 	)
@@ -58,7 +58,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlockProperties')
 BEGIN
 	CREATE TABLE BlockProperties(
 		id INT IDENTITY(1,1) PRIMARY KEY,
-		name VARCHAR(40) NOT NULL,
+		name VARCHAR(40) NOT NULL UNIQUE,
 		rarity VARCHAR(7) NOT NULL,
 		timeToAcquire INT NOT NULL,
 	)

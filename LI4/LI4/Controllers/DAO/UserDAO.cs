@@ -29,10 +29,14 @@ public class UserDAO {
 
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
-    public async Task<IEnumerable<User>> getAllAsync() {
+    #region//---- CRUD OPERATIONS ----//
+    public async Task<int> addAsync(User user) {
         using var connection = getConnection();
-        const string query = "SELECT * FROM Users";
-        return await connection.QueryAsync<User>(query);
+        const string query = @"
+            INSERT INTO Users (username, email, userPassword)
+            VALUES (@username, @email, @userPassword);
+            SELECT CAST(SCOPE_IDENTITY() as int)";
+        return await connection.ExecuteScalarAsync<int>(query, user);
     }
 
     public async Task<User?> getByIdAsync(int id) {
@@ -41,13 +45,23 @@ public class UserDAO {
         return await connection.QueryFirstOrDefaultAsync<User>(query, new { id = id });
     }
 
-    public async Task<int> addAsync(User user) {
+    public async Task<User> getByEmailAsync(string email) {
+        try {
+            using var connection = getConnection();
+            const string query = "SELECT * FROM Users WHERE email = @email";
+            User? user = await connection.QueryFirstOrDefaultAsync<User>(query, new { email });
+
+            return user ?? throw new UserNotFoundException($"User with email: {email} not found");
+
+        } catch (SqlException ex) {
+            throw new UserNotFoundException("An error occurred while retrieving the user.", ex);
+        }
+    }
+
+    public async Task<IEnumerable<User>> getAllAsync() {
         using var connection = getConnection();
-        const string query = @"
-            INSERT INTO Users (username, email, userPassword)
-            VALUES (@username, @email, @userPassword);
-            SELECT CAST(SCOPE_IDENTITY() as int)";
-        return await connection.ExecuteScalarAsync<int>(query, user);
+        const string query = "SELECT * FROM Users";
+        return await connection.QueryAsync<User>(query);
     }
 
     public async Task<bool> updateAsync(User user) {
@@ -59,6 +73,14 @@ public class UserDAO {
         int rowsAffected = await connection.ExecuteAsync(query, user);
         return rowsAffected > 0;
     }
+
+    public async Task<bool> deleteAsync(int id) {
+        using var connection = getConnection();
+        const string query = "DELETE FROM Users WHERE id = @id";
+        int rowsAffected = await connection.ExecuteAsync(query, new { id = id });
+        return rowsAffected > 0;
+    }
+    #endregion//---- END ----/
 
     public async Task<bool> emailExistsAsync(string email) {
         using var connection = getConnection();
@@ -111,56 +133,6 @@ public class UserDAO {
             return true;
         } else {
             throw new UserAlreadyExistsException($"User with email: {email} already exists for another account.");
-        }
-    }
-
-    public async Task<bool> updateUserEmailAsync(int id, string newEmail) {
-        using var connection = getConnection();
-        const string query = @"
-            UPDATE Users
-            SET email = @newEmail
-            WHERE id = @id";
-        int rowsAffected = await connection.ExecuteAsync(query, new { id, newEmail });
-        return rowsAffected > 0;
-    }
-
-    public async Task<bool> updateUserUsernameAsync(int id, string newUsername) {
-        using var connection = getConnection();
-        const string query = @"
-            UPDATE Users
-            SET username = @newUsername
-            WHERE id = @id";
-        int rowsAffected = await connection.ExecuteAsync(query, new { id, newUsername });
-        return rowsAffected > 0;
-    }
-
-    public async Task<bool> updateUserPasswordAsync(int id, string newPassword) {
-        using var connection = getConnection();
-        const string query = @"
-            UPDATE Users
-            SET userPassword = @newPassword
-            WHERE id = @id";
-        int rowsAffected = await connection.ExecuteAsync(query, new { id, newPassword });
-        return rowsAffected > 0;
-    }
-
-    public async Task<bool> deleteAsync(int id) {
-        using var connection = getConnection();
-        const string query = "DELETE FROM Users WHERE id = @id";
-        int rowsAffected = await connection.ExecuteAsync(query, new { id = id });
-        return rowsAffected > 0;
-    }
-
-    public async Task<User> getByEmailAsync(string email) {
-        try {
-            using var connection = getConnection();
-            const string query = "SELECT * FROM Users WHERE email = @email";
-            User? user = await connection.QueryFirstOrDefaultAsync<User>(query, new { email });
-
-            return user ?? throw new UserNotFoundException($"User with email: {email} not found");
-
-        } catch (SqlException ex) {
-            throw new UserNotFoundException("An error occurred while retrieving the user.", ex);
         }
     }
 

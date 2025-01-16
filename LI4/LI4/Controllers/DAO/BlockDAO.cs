@@ -29,17 +29,31 @@ public class BlockDAO {
 
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
-    public async Task<IEnumerable<Block>> getAllAsync() {
+    #region//---- CRUD OPERATIONS ----//
+    /**
+     * This function adds a block instance to a User.
+     * It needs the userID who has ownership off the block, and it need the idBlockProperty which represents the
+     * properties off the block, being the name, etc.
+     */
+    public async Task<int?> addBlockTypeAsync(string name, BlockRarity rarity, int timeToAcquire) {
         using var connection = getConnection();
         const string query = @"
-            SELECT b.id, name, rarity, timeToAcquire 
-            FROM Blocks b
-            INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id;";
-        return await connection.QueryAsync<Block>(query);
+            INSERT INTO BlockProperties (name, rarity, timeToAcquire)
+            Values (@Name, @Rarity, @TimeToAcquire);
+            SELECT CAST(SCOPE_IDENTITY() as int);";
+        return await connection.ExecuteScalarAsync<int>(query, new { Name = name, Rarity = rarity, TimeToAcquire = timeToAcquire });
     }
 
+    public async Task<int?> addBlockInstanceAsync(int userID, int idBlockProperty) {
+        using var connection = getConnection();
+        const string query = @"
+            INSERT INTO Blocks (idBlockProperty, idUser)
+            Values (@UserID, @IDBlockProperty);
+            SELECT CAST(SCOPE_IDENTITY() as int);";
+        return await connection.ExecuteScalarAsync<int>(query, new { UserID = userID, IDBlockProperty = idBlockProperty });
+    }
 
-    public async Task<Block?> getByIdAsync(int id) {
+    public async Task<Block?> getBlockByIdAsync(int id) {
         using var connection = getConnection();
         const string query = @"
             SELECT b.id, bp.name, bp.rarity, bp.timeToAcquire
@@ -49,17 +63,42 @@ public class BlockDAO {
         return await connection.QueryFirstOrDefaultAsync<Block>(query, new { id });
     }
 
+    public async Task<IEnumerable<Block>> getAllBlockInstancesAsync() {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT b.id, name, rarity, timeToAcquire 
+            FROM Blocks b
+            INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id;";
+        return await connection.QueryAsync<Block>(query);
+    }
+
+    public async Task<bool> updateBlockPropertyAsync(int id, string name, BlockRarity rarity, int timeToAcquire) {
+        using var connection = getConnection();
+        const string query = @"
+            UPDATE BlockProperties
+            SET name = @Name, rarity = @Rarity, timeToAcquire = @TimeToAcquire
+            WHERE id = @Id";
+        int rowsAffected = await connection.ExecuteAsync(query, new { Id = id, Name = name, Rarity = rarity, TimeToAcquire = timeToAcquire});
+        return rowsAffected > 0;
+    }
+
+    public async Task<bool> deleteAsync(int id) {
+        using var connection = getConnection();
+        const string query = "DELETE FROM Blocks WHERE id = @Id";
+        int rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
+        return rowsAffected > 0;
+    }
+    #endregion
+
     public async Task<Dictionary<string, int>> getAllBlocksUser(int idUser) {
         using var connection = getConnection();
         const string query = @"
-        SELECT bp.name, COUNT(b.id) AS quantity
-        FROM Blocks b
-        INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id
-        WHERE b.idUser = @idUser
-        GROUP BY bp.name;";
-
+            SELECT bp.name, COUNT(b.id) AS quantity
+            FROM Blocks b
+            INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id
+            WHERE b.idUser = @idUser
+            GROUP BY bp.name;";
         var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { idUser });
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
-
 }

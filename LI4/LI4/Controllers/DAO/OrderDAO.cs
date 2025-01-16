@@ -28,6 +28,16 @@ public class OrderDAO {
 
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
+    #region//---- CRUD OPERATIONS ----//
+    public async Task<int> addAsync(Order order) {
+        using var connection = getConnection();
+        const string query = @"
+            INSERT INTO Orders (idUser, orderDate)
+            VALUES (@idUser, @orderDate);
+            SELECT CAST(SCOPE_IDENTITY() as int)";
+        return await connection.ExecuteScalarAsync<int>(query, order);
+    }
+
     public async Task<IEnumerable<Order>> getAllAsync() {
         using var connection = getConnection();
         const string query = "SELECT * FROM Orders";
@@ -38,15 +48,6 @@ public class OrderDAO {
         using var connection = getConnection();
         const string query = "SELECT * FROM Orders WHERE id = @id";
         return await connection.QueryFirstOrDefaultAsync<Order>(query, new { id = id });
-    }
-
-    public async Task<int> addAsync(Order order) {
-        using var connection = getConnection();
-        const string query = @"
-            INSERT INTO Orders (idUser, orderDate)
-            VALUES (@IdUser, @OrderDate);
-            SELECT CAST(SCOPE_IDENTITY() as int)";
-        return await connection.ExecuteScalarAsync<int>(query, order);
     }
 
     public async Task<bool> updateAsync(Order order) {
@@ -65,6 +66,7 @@ public class OrderDAO {
         int rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
         return rowsAffected > 0;
     }
+    #endregion
 
     public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
         using var connection = getConnection();
@@ -78,7 +80,7 @@ public class OrderDAO {
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 
-    public async Task<List<Order>> getOrdersAsync(int id) {
+    public async Task<List<Order>> getUserOrdersAsync(int id) {
         using var connection = getConnection();
         const string query = @" 
             SELECT * FROM Orders WHERE idUser = @Id; 
@@ -86,5 +88,4 @@ public class OrderDAO {
         var orders = await connection.QueryAsync<Order>(query, new { Id = id });
         return orders.ToList();
     }
-
 }

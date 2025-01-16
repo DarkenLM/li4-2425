@@ -1,4 +1,5 @@
-﻿using LI4.Controllers.DAO;
+﻿using LI4.Common.Dados;
+using LI4.Controllers.DAO;
 using LI4.Dados;
 
 namespace LI4.Controllers;
@@ -12,8 +13,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         this.stockFacade = new StockFacade(config);
     }
 
-    //---- User Related Methods ----//
-    public async Task<IEnumerable<User>> getAllAsync() {
+    #region//---- USER METHODS ----//
+    public async Task<IEnumerable<User>> getAllUsersAsync() {
         return await userFacade.getAllAsync();
     }
 
@@ -32,8 +33,13 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public async Task<bool> registerUser(string email, string username, string password) {
         return await userFacade.createUser(email, username, password);
     }
+    #endregion
 
-    //---- Stock Related Methods ----//
+    #region//---- STOCK METHODS ----//
+    public async Task<IEnumerable<Block>> getAllBlocksAsync() {
+        return await stockFacade.getAllBlocksAsync();
+    }
+
     public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
         return await stockFacade.getOrderContentAsync(id);
     }
@@ -44,6 +50,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public async Task<Dictionary<string, int>> getStock(int id) {
         return await stockFacade.getStockUser(id);
     }
+    #endregion
 
-    //---- Construction Related Methods ----//
+    #region//---- CONSTRUCTION METHODS ----//
+    #endregion
 }
