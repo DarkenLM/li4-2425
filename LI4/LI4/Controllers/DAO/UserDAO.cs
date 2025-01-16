@@ -88,8 +88,8 @@ public class UserDAO {
             SELECT COUNT(1) 
             FROM Users 
             WHERE username = @Username 
-              AND id != @id";
-        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, id = id }) > 0;
+            AND id != @Id";
+        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, Id = id }) > 0;
 
         if (!existsForOther) {
             return true;
