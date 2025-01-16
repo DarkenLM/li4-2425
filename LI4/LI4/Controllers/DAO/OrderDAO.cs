@@ -80,17 +80,9 @@ public class OrderDAO {
 
     public async Task<List<Order>> getOrdersAsync(int id) {
         using var connection = getConnection();
-        const string query = @"
-        SELECT 
-            o.id AS id,
-            o.idUser AS idUser,
-            o.orderDate AS orderDate
-        FROM 
-            Orders o
-        WHERE 
-            o.idUser = @Id;
-    ";
-
+        const string query = @" 
+            SELECT * FROM Orders WHERE idUser = @Id; 
+        ";
         var orders = await connection.QueryAsync<Order>(query, new { Id = id });
         return orders.ToList();
     }

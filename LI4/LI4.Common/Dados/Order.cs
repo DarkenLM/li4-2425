@@ -11,16 +11,16 @@ public class Order {
     public Order() { }
 
     [SetsRequiredMembers]
-    public Order(string idUtilizador, DateTime orderDate) {
+    public Order(string idUser, DateTime orderDate) {
         this.id = 0;
-        this.idUser = idUtilizador;
+        this.idUser = idUser;
         this.orderDate = orderDate;
     }
 
     [SetsRequiredMembers]
-    public Order(int id, string idUtilizador, DateTime orderDate) {
+    public Order(int id, string idUser, DateTime orderDate) {
         this.id = id;
-        this.idUser = idUtilizador;
+        this.idUser = idUser;
         this.orderDate = orderDate;
     }
 
