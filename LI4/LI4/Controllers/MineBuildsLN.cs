@@ -37,8 +37,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
         return await stockFacade.getOrderContentAsync(id);
     }
-    public async Task<List<Order>> getOrders(string email) {
-        return await stockFacade.getOrdersUser(email);
+    public async Task<List<Order>> getOrders(int id) {
+        return await stockFacade.getOrdersUser(id);
     }
 
     public async Task<Dictionary<string, int>> getStock(int id) {

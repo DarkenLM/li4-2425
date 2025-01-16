@@ -15,7 +15,7 @@ public interface IMineBuildsLN {
 
     public Task<Dictionary<string, int>> getOrderContentAsync(int id);
 
-    public Task<List<Order>> getOrders(string email);
+    public Task<List<Order>> getOrders(int id);
 
     public Task<Dictionary<string, int>> getStock(int id);
 }

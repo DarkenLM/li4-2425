@@ -78,7 +78,7 @@ public class OrderDAO {
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 
-    public async Task<List<Order>> getOrdersAsync(string email) {
+    public async Task<List<Order>> getOrdersAsync(int id) {
         using var connection = getConnection();
         const string query = @"
         SELECT 
@@ -87,15 +87,12 @@ public class OrderDAO {
             o.orderDate AS orderDate
         FROM 
             Orders o
-        INNER JOIN 
-            Users u
-        ON 
-            o.idUser = u.id
         WHERE 
-            u.email = @Email;
-        ";
+            o.idUser = @Id;
+    ";
 
-        var orders = await connection.QueryAsync<Order>(query, new { Email = email });
+        var orders = await connection.QueryAsync<Order>(query, new { Id = id });
         return orders.ToList();
     }
+
 }

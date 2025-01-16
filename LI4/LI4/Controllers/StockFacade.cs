@@ -19,8 +19,8 @@ public class StockFacade {
         return await orderDAO.getOrderContentAsync(id);
     }
 
-    public async Task<List<Order>> getOrdersUser(string email) {
-        return await orderDAO.getOrdersAsync(email);
+    public async Task<List<Order>> getOrdersUser(int id) {
+        return await orderDAO.getOrdersAsync(id);
     }
 
     //---- Block related Methods ----//
