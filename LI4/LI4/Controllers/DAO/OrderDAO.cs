@@ -47,7 +47,7 @@ public class OrderDAO {
     public async Task<Order?> getByIdAsync(int id) {
         using var connection = getConnection();
         const string query = "SELECT * FROM Orders WHERE id = @id";
-        return await connection.QueryFirstOrDefaultAsync<Order>(query, new { id = id });
+        return await connection.QueryFirstOrDefaultAsync<Order>(query, new { id });
     }
 
     public async Task<bool> updateAsync(Order order) {
@@ -78,6 +78,17 @@ public class OrderDAO {
             WHERE o.id = @id;";
         var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id });
         return result.ToDictionary(r => r.Name, r => r.Quantity);
+    }
+
+    public async Task<bool> addBlocksInOrder(int idOrder, int idBlockProperty, int quantity) {
+        using var connection = getConnection();
+        const string query = @"
+            INSERT INTO BlocksInOrder (idOrder, idBlockProperty, quantity)
+            VALUES (@idOrder, @idBlockProperty, @quantity);
+        ";
+
+        int rowsAffected = await connection.ExecuteAsync(query, new { idOrder, idBlockProperty, quantity });
+        return rowsAffected > 0;
     }
 
     public async Task<List<Order>> getUserOrdersAsync(int id) {

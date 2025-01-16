@@ -50,6 +50,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public async Task<Dictionary<string, int>> getStock(int id) {
         return await stockFacade.getStockUser(id);
     }
+
+    public async Task<int> createOrderAsync(int id, Dictionary<int, int> blocks) {
+        return await stockFacade.makeOrderAsync(id, blocks);
+    } 
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//

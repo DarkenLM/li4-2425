@@ -19,6 +19,24 @@ public class StockFacade {
         return await orderDAO.getOrderContentAsync(id);
     }
 
+    public async Task<int> makeOrderAsync(int idUser, Dictionary<int, int> blocks) {
+        int estimatedTime = 0;
+        Order order = new Order(idUser, DateTime.Now);
+        int orderId = await orderDAO.addAsync(order);
+
+        foreach (KeyValuePair<int, int> entry in blocks) { 
+            int idBlockProperties = entry.Key;
+            int blockQuantity = entry.Value;
+
+            int timeToAcquire = await blockDAO.getTimeToAcquireById(idBlockProperties);
+            estimatedTime += blockQuantity * timeToAcquire;
+
+            await orderDAO.addBlocksInOrder(orderId, idBlockProperties, blockQuantity);
+            // TODO: Add to Blocks table, but needs control time (estimatedTime)
+        }
+        return estimatedTime;
+    }
+
     public async Task<List<Order>> getOrdersUser(int id) {
         return await orderDAO.getUserOrdersAsync(id);
     }

@@ -24,6 +24,8 @@ public interface IMineBuildsLN {
     public Task<List<Order>> getOrders(int id);
 
     public Task<Dictionary<string, int>> getStock(int id);
+
+    public Task<int> createOrderAsync(int id, Dictionary<int, int> blocks);
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//

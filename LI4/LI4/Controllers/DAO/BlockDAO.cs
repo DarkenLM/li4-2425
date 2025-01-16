@@ -101,4 +101,14 @@ public class BlockDAO {
         var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { idUser });
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
+    public async Task<int> getTimeToAcquireById(int idBlockProperties) {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT timeToAcquire
+            FROM BlockProperties
+            WHERE id = @Id
+        ";
+
+        return await connection.QueryFirstAsync<int>(query, new { Id = idBlockProperties });
+    }
 }

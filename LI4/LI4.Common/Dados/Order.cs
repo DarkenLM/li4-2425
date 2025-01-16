@@ -5,27 +5,27 @@ namespace LI4.Dados;
 
 public class Order {
     public int id { get; set; }
-    public required string idUser { get; set; }
+    public required int idUser { get; set; }
     public required DateTime orderDate { get; set; }
 
     public Order() { }
 
     [SetsRequiredMembers]
-    public Order(string idUser, DateTime orderDate) {
+    public Order(int idUser, DateTime orderDate) {
         this.id = 0;
         this.idUser = idUser;
         this.orderDate = orderDate;
     }
 
     [SetsRequiredMembers]
-    public Order(int id, string idUser, DateTime orderDate) {
+    public Order(int id, int idUser, DateTime orderDate) {
         this.id = id;
         this.idUser = idUser;
         this.orderDate = orderDate;
     }
 
     public static Order empty() {
-        return new Order(0, "", DateTime.MinValue);
+        return new Order(0, 0, DateTime.MinValue);
     }
 
     public static Order from(Order order) {
