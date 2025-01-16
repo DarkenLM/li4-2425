@@ -89,7 +89,7 @@ public class UserDAO {
             FROM Users 
             WHERE username = @Username 
               AND id != @id";
-        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, Email = email }) > 0;
+        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, id = id }) > 0;
 
         if (!existsForOther) {
             return true;
