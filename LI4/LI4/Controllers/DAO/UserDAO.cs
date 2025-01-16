@@ -88,13 +88,29 @@ public class UserDAO {
             SELECT COUNT(1) 
             FROM Users 
             WHERE username = @Username 
-            AND id != @Id";
-        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, Id = id }) > 0;
+            AND id != @id";
+        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Username = username, id = id }) > 0;
 
         if (!existsForOther) {
             return true;
         } else {
             throw new UserAlreadyExistsException($"User with username: {username} already exists for another account.");
+        }
+    }
+
+    public async Task<bool> emailNoOtherExistsAsync(int id, string email) {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT COUNT(1) 
+            FROM Users 
+            WHERE email = @Email 
+            AND id != @Id";
+        bool existsForOther = await connection.ExecuteScalarAsync<int>(query, new { Email = email, id = id }) > 0;
+
+        if (!existsForOther) {
+            return true;
+        } else {
+            throw new UserAlreadyExistsException($"User with email: {email} already exists for another account.");
         }
     }
 

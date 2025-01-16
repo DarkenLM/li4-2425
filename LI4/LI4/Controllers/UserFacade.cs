@@ -51,8 +51,9 @@ public class UserFacade {
 
     public async Task<bool> updateUser(int id, string email, string username, string password) {
         var account = await userDAO.getByIdAsync(id);
-        bool usernameExists = await userDAO.usernameNoOtherExistsAsync(id, username);
-        if ((account != null) && usernameExists) {
+        bool emailNoExists = await userDAO.emailNoOtherExistsAsync(id, email);
+        bool usernameNoExists = await userDAO.usernameNoOtherExistsAsync(id, username);
+        if ((account != null) && usernameNoExists && emailNoExists) {
 
             account.email = email;
             account.username = username;
