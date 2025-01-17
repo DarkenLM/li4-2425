@@ -97,14 +97,13 @@ public class ConstructionDAO {
 
     public async Task<Dictionary<string, int>> getCompletedConstructionBlocks(int userId, int constructionId) {
         using var connection = getConnection();
-
         const string query = @"
-        SELECT b.name, COUNT(b.id) 
-        FROM Blocks b
-        INNER JOIN Constructions c ON b.constructionId = c.id
-        WHERE c.id = @constructionId AND c.idUser = @userId
-        GROUP BY b.name;
-    ";
+        SELECT bp.name, btc.quantity
+        FROM Constructions c
+        INNER JOIN BlocksToConstruction btc ON c.idConstructionProperties = btc.idConstructionProperties
+        INNER JOIN BlockProperties bp ON btc.idBlockProperty = bp.id
+        WHERE c.id = @constructionId AND c.idUser = @userId;
+        ";
 
         var res = await connection.QueryAsync<(string name, int quantity)>(query, new { userId, constructionId });
         return res.ToDictionary(r => r.name, r => r.quantity);
