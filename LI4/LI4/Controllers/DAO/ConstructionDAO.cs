@@ -41,6 +41,15 @@ public class ConstructionDAO {
             throw new ConstructionNotFoundException("An error occurred while retrieving the construction.", ex);
         }
     }
+    
+    public async Task<IEnumerable<Construction>> getAllConstructionInstancesAsync() {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT c.id, name, state, dificulty, nStages 
+            FROM Constructions c
+            INNER JOIN ConstructionProperties cp ON c.idConstructionProperties = cp.id;";
+        return await connection.QueryAsync<Construction>(query);
+    }
 
     public async Task<bool> updateConstructionInstanceAsync(int constructionID, ConstructionState state, int constructionPropertiesID, int userID) {
         using var connection = getConnection();
@@ -58,6 +67,17 @@ public class ConstructionDAO {
         int rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
         return rowsAffected > 0;
     }
-    #endregion//---- END ----/
+    #endregion
 
+    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertyID) {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT bp.name, bc.quantity
+            FROM BlocksToConstruction bc
+            INNER JOIN ConstructionProperties cp ON cp.id = bc.idConstructionProperties
+            INNER JOIN BlockProperties bp ON bp.id = bc.idBlockProperty
+            WHERE cp.id = @Id;";
+        var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id = constructionPropertyID });
+        return result.ToDictionary(r => r.Name, r => r.Quantity);
+    }
 }

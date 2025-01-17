@@ -22,6 +22,10 @@ public class ConstructionFacade {
         return await constructionDAO.getByIDAsync(constructionID);
     }
 
+    public async Task<IEnumerable<Construction>> getAllConstructionInstancesAsync() {
+        return await constructionDAO.getAllConstructionInstancesAsync();
+    }
+
     public async Task<bool> updateConstructionInstanceAsync(int constructionID, ConstructionState state, int constructionPropertiesID, int userID) {
         return await constructionDAO.updateConstructionInstanceAsync(constructionID, state, constructionPropertiesID, userID);
     }
@@ -31,5 +35,8 @@ public class ConstructionFacade {
     }
     
 
+    public async Task<Dictionary<string,int>> getBlocksNeeded(int constructionPropertyID) {
+        return await constructionDAO.getBlocksNeeded(constructionPropertyID);
+    }
     #endregion
 }

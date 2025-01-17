@@ -69,7 +69,7 @@ INSERT INTO Constructions (id, state, idConstructionProperties, idUser)
 	('2', 'COMPLETED','2','5'),
 	('3', 'BUILDING','3','2'),
 	('4', 'WAITING','2','3'),
-	('5', 'WATTING','2','3'),
+	('5', 'WAITING','2','3'),
 	('6', 'COMPLETED','1','9');
 SET IDENTITY_INSERT Constructions OFF
 
