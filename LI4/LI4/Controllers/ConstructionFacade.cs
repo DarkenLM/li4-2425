@@ -33,19 +33,25 @@ public class ConstructionFacade {
     public async Task<bool> deleteConstructionInstanceAsync(int id) {
         return await constructionDAO.deleteConstructionInstanceAsync(id);
     }
-    
 
-    public async Task<Dictionary<string,int>> getBlocksNeeded(int constructionPropertyID) {
+    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertyID) {
         return await constructionDAO.getBlocksNeeded(constructionPropertyID);
     }
 
     public async Task<Dictionary<string, int>> getConstructionsOfState(int userID, int state) {
         return await constructionDAO.getConstructionsOfState(userID, state);
     }
-    #endregion
 
     public async Task<Dictionary<string, int>> getCompletedConstruction(int userId, int constructionId) {
         return await constructionDAO.getCompletedConstructionBlocks(userId, constructionId);
     }
+    public async Task<bool> removeConstructionInWaiting(int idUser, int idConstruction) {
+        return await constructionDAO.removeConstructionInWaitingAsync(idUser, idConstruction);
+    }
 
+    public async Task<Dictionary<int, string>> getConstructions() {
+        return await constructionDAO.getConstructionsAsync();
+    }
+
+    #endregion
 }

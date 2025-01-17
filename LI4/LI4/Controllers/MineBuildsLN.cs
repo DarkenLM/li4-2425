@@ -110,5 +110,13 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getCompletedConstruction(userId, constructionId);
     }
 
+    public async Task<bool> removeConstruction(int idUser, int idConstruction) {
+        return await constructionFacade.removeConstructionInWaiting(idUser, idConstruction);
+    }
+
+    public async Task<Dictionary<int,string>> getCatalog() {
+        return await constructionFacade.getConstructions();
+    }
+
     #endregion
 }

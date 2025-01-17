@@ -3,6 +3,7 @@ using LI4.Common.Dados;
 using LI4.Common.Exceptions.ConstructionExceptions;
 using LI4.Dados;
 using Microsoft.Data.SqlClient;
+using System.Collections;
 
 namespace LI4.Controllers.DAO;
 
@@ -109,5 +110,81 @@ public class ConstructionDAO {
         return res.ToDictionary(r => r.name, r => r.quantity);
     }
 
+    public async Task<bool> removeConstructionInWaitingAsync(int idUser, int idConstruction) {
+        using var connection = getConnection();
+        await connection.OpenAsync(); // Ensure connection is explicitly opened
+        using var transaction = await connection.BeginTransactionAsync();
 
+        try {
+            // see if waiting
+            const string checkQuery = @"
+                SELECT state, idConstructionProperties 
+                FROM Constructions 
+                WHERE id = @IdConstruction AND idUser = @IdUser AND state = 'WAITING'
+            ";
+            var construction = await connection.QueryFirstOrDefaultAsync<(string, int)>(
+                checkQuery,
+                new { IdConstruction = idConstruction, IdUser = idUser },
+                transaction
+            );
+
+            if (construction.Equals(default((string state, int idConstructionProperties)))) {
+                throw new InvalidOperationException("The user does not have the construction."); ///???
+            }
+            if (construction.Item1 != "WAITING") {
+                throw new InvalidOperationException("Construction is not in 'waiting' state or does not exist."); ///???
+            }
+
+            // get blocks of the construction
+            const string blocksQuery = @"
+                SELECT idBlockProperty, quantity 
+                FROM BlocksToConstruction 
+                WHERE idConstructionProperties = @IdConstructionProperties
+            ";
+            var blocks = await connection.QueryAsync<(int idBlockProperty, int quantity)>(
+                blocksQuery,
+                new { IdConstructionProperties = construction.Item2 },
+                transaction
+            );
+
+            // add blocks to user
+            foreach (var block in blocks) {
+                for (int i = 0; i < block.quantity; i++) {
+                    const string insertBlockQuery = @"
+                        INSERT INTO Blocks (idUser, idBlockProperty)
+                        VALUES (@IdUser, @IdBlockProperty)
+                    ";
+
+                    await connection.ExecuteAsync(
+                        insertBlockQuery,
+                        new { IdUser = idUser, IdBlockProperty = block.idBlockProperty },
+                        transaction
+                    );
+                }
+            }
+
+            // remove the construction
+            const string deleteQuery = "DELETE FROM Constructions WHERE id = @IdConstruction AND idUser = @IdUser";
+            await connection.ExecuteAsync(deleteQuery, new { IdConstruction = idConstruction, IdUser = idUser }, transaction);
+
+            // Commit the transaction
+            await transaction.CommitAsync();
+
+            return true;
+        } catch (Exception) {
+            // Rollback the transaction in case of error
+            await transaction.RollbackAsync();
+            throw; /// future exception
+        }
+    }
+
+    public async Task<Dictionary<int, string>> getConstructionsAsync() {
+        using var connection = getConnection();
+        const string query = @"
+        SELECT id, name
+        FROM ConstructionProperties
+        ";
+        var res = await connection.QueryAsync<(int id, string name)>(query);
+        return res.ToDictionary(r => r.id, r => r.name);
+    }
 }
