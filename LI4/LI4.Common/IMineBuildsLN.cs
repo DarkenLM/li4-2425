@@ -26,6 +26,8 @@ public interface IMineBuildsLN {
     public Task<Dictionary<string, int>> getStock(int id);
 
     public Task<int> createOrderAsync(int id, Dictionary<int, int> blocks);
+
+    public BlockProperties getBlockProperties(int blockPropertiesID);
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//
@@ -49,5 +51,8 @@ public interface IMineBuildsLN {
 
     public Task<Dictionary<int, string>> getCatalog();
     
+    public ConstructionProperties getConstructionProperties(int constructionPropertiesID);
+
+    public BlocksToConstruction getBlocksToConstruction(int constructionPropertiesID, int blockPropertiesID);
     #endregion
 }

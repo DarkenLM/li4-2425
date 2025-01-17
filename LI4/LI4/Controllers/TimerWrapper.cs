@@ -12,6 +12,7 @@ public class TimerWrapper {
     private Action _callback;
     private int _delayMilliseconds;
     private bool _isLooping;
+    public DateTime startTime { get; set;  }
 
     /**
      * This class creates an instance of the timer
@@ -47,6 +48,8 @@ public class TimerWrapper {
      * This function starts the timer with the values used to create the object
      */
     public void start() {
+        this.startTime = DateTime.Now;
+
         if (_isLooping) {
             _timer.Change(_delayMilliseconds, _delayMilliseconds);
         } else {

@@ -12,12 +12,6 @@ public enum ConstructionState {
     WAITING
 }
 
-public enum ConstructionDificulty {
-    LOW,
-    MEDIUM,
-    HIGH
-}
-
 public class Construction {
     public int id { get; set; }
     public string name { get; set; }

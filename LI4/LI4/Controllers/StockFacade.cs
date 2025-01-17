@@ -8,11 +8,28 @@ namespace LI4.Controllers;
 public class StockFacade {
     private OrderDAO orderDAO;
     private BlockDAO blockDAO;
+    private Dictionary<int, BlockProperties> blockProperties;
 
     public StockFacade(ConfigurationManager config) {
         this.blockDAO = new BlockDAO(config.GetConnectionString("DefaultConnection"));
         this.orderDAO = new OrderDAO(config.GetConnectionString("DefaultConnection"));
+        this.blockProperties = new Dictionary<int, BlockProperties>();
     }
+
+    public async Task initializeBlockPropertiesAsync() {
+        try {
+            var blockProperties = await blockDAO.getAllBlockPropertiesAsync();
+            this.blockProperties = blockProperties.ToDictionary(b => b.Value.id, b => b.Value);
+        } catch (Exception ex) {
+            throw new Exception("Failed to initialize Block Properties", ex);
+        }
+    }
+
+    #region//---- INTERNAL STRUCTS ----//
+    public BlockProperties getBlockProperties(int blockPropertiesID) {
+        return this.blockProperties[blockPropertiesID];
+    }
+    #endregion
 
     #region//---- ORDER METHODS ----//
     public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {

@@ -41,4 +41,6 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(LI4.Client._Imports).Assembly);
 
+await MineBuildsLN.initStaticData(builder.Configuration);
+
 app.Run();

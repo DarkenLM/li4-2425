@@ -72,6 +72,15 @@ public class BlockDAO {
         return await connection.QueryAsync<Block>(query);
     }
 
+    public async Task<Dictionary<int, BlockProperties>> getAllBlockPropertiesAsync() {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT id, name, rarity, timeToAcquire 
+            FROM BlockProperties;";
+        var result = await connection.QueryAsync<BlockProperties>(query);
+        return result.ToDictionary(r => r.id, r => r);
+    }
+
     public async Task<bool> updateBlockPropertyAsync(int id, int quantity, string name, BlockRarity rarity, int timeToAcquire) {
         using var connection = getConnection();
         const string query = @"

@@ -2,19 +2,26 @@
 using LI4.Controllers.DAO;
 using LI4.Dados;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks.Dataflow;
 
 namespace LI4.Controllers;
 
 public class MineBuildsLN : Common.IMineBuildsLN {
-    private UserFacade userFacade;
-    private StockFacade stockFacade;
-    private ConstructionFacade constructionFacade;
+    private static UserFacade userFacade;
+    private static StockFacade stockFacade;
+    private static ConstructionFacade constructionFacade;
+
+    static public async Task initStaticData(ConfigurationManager config) {
+        stockFacade = new StockFacade(config);
+        userFacade = new UserFacade(config);
+        constructionFacade = new ConstructionFacade(config);
+        await stockFacade.initializeBlockPropertiesAsync();
+        await constructionFacade.initializeConstructionPropertiesAsync();
+        await constructionFacade.initializeBlocksToConstructions();
+    }
 
     public MineBuildsLN(ConfigurationManager config) {
-        this.userFacade = new UserFacade(config);
-        this.stockFacade = new StockFacade(config);
-        this.constructionFacade = new ConstructionFacade(config);
     }
 
     #region//---- USER METHODS ----//
@@ -57,6 +64,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
 
     public async Task<int> createOrderAsync(int id, Dictionary<int, int> blocks) {
         return await stockFacade.makeOrderAsync(id, blocks);
+    }
+
+    public BlockProperties getBlockProperties(int blockPropertiesID) {
+        return stockFacade.getBlockProperties(blockPropertiesID);
     }
     #endregion
 
@@ -118,5 +129,13 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getConstructions();
     }
 
+    public ConstructionProperties getConstructionProperties(int constructionPropertiesID) {
+        return constructionFacade.getConstructionProperties(constructionPropertiesID);
+    }
+
+    public BlocksToConstruction getBlocksToConstruction(int constructionPropertiesID, int blockPropertiesID) {
+        Tuple<int,int> blockToConstructionID = Tuple.Create(constructionPropertiesID, blockPropertiesID);
+        return constructionFacade.getBlocksToConstruction(blockToConstructionID);
+    }
     #endregion
 }

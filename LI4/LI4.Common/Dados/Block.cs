@@ -1,9 +1,4 @@
 ﻿namespace LI4.Common.Dados {
-    public enum BlockRarity {
-        COMMON,
-        RARE,
-        EPIC
-    }
 
     public class Block {
         public int id { get; set; }

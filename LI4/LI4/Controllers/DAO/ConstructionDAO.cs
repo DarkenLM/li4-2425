@@ -52,6 +52,23 @@ public class ConstructionDAO {
         return await connection.QueryAsync<Construction>(query);
     }
 
+    public async Task<Dictionary<int, ConstructionProperties>> getAllConstructionPropertiesAsync() {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT * FROM ConstructionProperties;";
+        var result = await connection.QueryAsync<ConstructionProperties>(query);
+        return result.ToDictionary(r => r.id, r => r);
+    }
+
+    public async Task<Dictionary<Tuple<int,int>, BlocksToConstruction>> getAllBlocksToConstructionAsync() {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT idConstructionProperties AS constructionPropertiesID, idBlockProperty AS blockPropertiesID, quantity as blockQuantity
+            FROM BlocksToConstruction;";
+        var result = await connection.QueryAsync<BlocksToConstruction>(query);
+        return result.ToDictionary(r => Tuple.Create(r.constructionPropertiesID, r.blockPropertiesID), r => r);
+    }
+
     public async Task<bool> updateConstructionInstanceAsync(int constructionID, ConstructionState state, int constructionPropertiesID, int userID) {
         using var connection = getConnection();
         const string query = @"

@@ -3,15 +3,46 @@ using LI4.Common.Exceptions.ConstructionExceptions;
 using LI4.Controllers.DAO;
 using LI4.Dados;
 using Microsoft.Data.SqlClient;
+using System.Runtime.InteropServices;
 
 namespace LI4.Controllers;
 
 public class ConstructionFacade {
     private ConstructionDAO constructionDAO;
+    private Dictionary<int, ConstructionProperties> constructionProperties;
+    private Dictionary<Tuple<int, int>, BlocksToConstruction> blocksToConstruction;
 
     public ConstructionFacade(ConfigurationManager config) {
         this.constructionDAO = new ConstructionDAO(config.GetConnectionString("DefaultConnection"));
     }
+
+    public async Task initializeConstructionPropertiesAsync() {
+        try {
+            var constructionProperties = await constructionDAO.getAllConstructionPropertiesAsync();
+            this.constructionProperties = constructionProperties.ToDictionary(c => c.Value.id, c => c.Value);
+        } catch (Exception ex) {
+            throw new Exception("Failed to initialize Construction Properties", ex);
+        }
+    }
+
+    public async Task initializeBlocksToConstructions() {
+        try {
+            var blocksToConstruction = await constructionDAO.getAllBlocksToConstructionAsync();
+            this.blocksToConstruction = blocksToConstruction.ToDictionary(r => r.Key, r => r.Value);
+        } catch (Exception ex) {
+            throw new Exception("Failed to initialize Blocks To Construction", ex);
+        }
+    }
+
+    #region//---- INTERNAL STRUCTS ----//
+    public ConstructionProperties getConstructionProperties(int constructionPropertiesID) {
+        return this.constructionProperties[constructionPropertiesID];
+    }
+
+    public BlocksToConstruction getBlocksToConstruction(Tuple<int, int> blockToConstructionID) {
+        return this.blocksToConstruction[blockToConstructionID];
+    }
+    #endregion
 
     #region//---- XXX METHODS ----//
     public async Task<int?> addConstructionInstanceAsync(ConstructionState state, int constructionPropertiesID, int userID) {
