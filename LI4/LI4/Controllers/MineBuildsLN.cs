@@ -22,7 +22,7 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await userFacade.getAllAsync();
     }
 
-    public async Task<bool> authenticate(string email, string password) {
+    public async Task<User> authenticate(string email, string password) {
         return await userFacade.validateUser(email, password);
     }
 
@@ -30,7 +30,7 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await userFacade.getUserByEmail(email);
     }
 
-    public async Task<bool> updateUtilizador(int id, string email, string username, string password) {
+    public async Task<User> updateUtilizador(int id, string email, string username, string password) {
         return await userFacade.updateUser(id, email, username, password);
     }
 

@@ -7,9 +7,9 @@ public interface IMineBuildsLN {
     #region//---- USER METHODS ----//
     public Task<IEnumerable<User>> getAllUsersAsync();
 
-    public Task<bool> authenticate(string email, string password);
+    public Task<User> authenticate(string email, string password);
     
-    public Task<bool> updateUtilizador(int id, string email, string username,string password);
+    public Task<User> updateUtilizador(int id, string email, string username,string password);
 
     public Task<User> getUserByEmail(string email);
 

@@ -1,4 +1,5 @@
-﻿using LI4.Controllers.DAO;
+﻿using LI4.Common.Exceptions.UserExceptions;
+using LI4.Controllers.DAO;
 using LI4.Dados;
 
 namespace LI4.Controllers;
@@ -30,27 +31,28 @@ public class UserFacade {
         return false;
     }
 
-    public async Task<bool> validateUser(string email, string password) {
+    public async Task<User> validateUser(string email, string password) {
 
-        if (email == null || password == null) { return false; }
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) { return false; }
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) {
+            throw new UserNotFoundException("You can't pass a null email or password to verify for a user!"); 
+        }
 
 
         bool emailExists = await userDAO.emailExistsAsync(email);
         if (emailExists) {
-
-            bool athenticate = await userDAO.authenticateAsync(email, password);
-            return athenticate;
+            User user = await userDAO.authenticateAsync(email, password);
+            return user;
+        } else {
+            throw new UserNotFoundException("There was an error while getting the user.");
         }
-        return false;
     }
 
     public async Task<User> getUserByEmail(string email) {
         return await this.userDAO.getByEmailAsync(email);
     }
 
-    public async Task<bool> updateUser(int id, string email, string username, string password) {
-        var account = await userDAO.getByIdAsync(id);
+    public async Task<User> updateUser(int id, string email, string username, string password) {
+        User account = await userDAO.getByIdAsync(id);
         bool emailNoExists = await userDAO.emailNoOtherExistsAsync(id, email);
         bool usernameNoExists = await userDAO.usernameNoOtherExistsAsync(id, username);
         if ((account != null) && usernameNoExists && emailNoExists) {
@@ -59,9 +61,14 @@ public class UserFacade {
             account.username = username;
             account.userPassword = password;
 
-            bool result = await userDAO.updateAsync(account);
-            return result;
+            bool res = await userDAO.updateAsync(account);
+            if (res) {
+                return account;
+            } else {
+                throw new UserNotFoundException("Error while updating user info.");
+            }
+        } else {
+            throw new UserAlreadyExistsException("Another user has already the email or username given.");
         }
-        return false;
     }
 }

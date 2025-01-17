@@ -136,12 +136,12 @@ public class UserDAO {
         }
     }
 
-    public async Task<bool> authenticateAsync(string email, string password) {
+    public async Task<User> authenticateAsync(string email, string password) {
         using var connection = getConnection();
-        const string query = "SELECT COUNT(1) FROM Users WHERE email = @Email AND userPassword = @Password";
-        int count = await connection.ExecuteScalarAsync<int>(query, new { Email = email, Password = password });
-        if (count > 0) {
-            return true;
+        const string query = "SELECT id, username, userPassword FROM Users WHERE email = @Email AND userPassword = @Password";
+        User? user = await connection.ExecuteScalarAsync<User>(query, new { Email = email, Password = password });
+        if (user != null) {
+            return user!;
         } else {
             throw new UserNotAuthorizedException("Authentication failed: Invalid userPassword.");
         }
