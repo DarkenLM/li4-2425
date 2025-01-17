@@ -38,5 +38,9 @@ public class ConstructionFacade {
     public async Task<Dictionary<string,int>> getBlocksNeeded(int constructionPropertyID) {
         return await constructionDAO.getBlocksNeeded(constructionPropertyID);
     }
+
+    public async Task<Dictionary<string, int>> getConstructionsOfState(int userID, int state) {
+        return await constructionDAO.getConstructionsOfState(userID, state);
+    }
     #endregion
 }

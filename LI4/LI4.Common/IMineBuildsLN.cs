@@ -36,5 +36,11 @@ public interface IMineBuildsLN {
     public Task<bool> addConstructionToQueue(int userID, int constructionPropertyID);
 
     public Task<Dictionary<string, int>> calculateMissingBlocks(int userdID, int constructionPropertyID);
+
+    public Task<Dictionary<string, int>> getAwaitingConstructions(int userID);
+
+    public Task<Dictionary<string, int>> getCompletedConstructions(int userID);
+
+    public Task<Dictionary<string, int>> getBuildingConstructions(int userID);
     #endregion
 }

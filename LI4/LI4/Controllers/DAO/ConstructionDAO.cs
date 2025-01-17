@@ -80,4 +80,18 @@ public class ConstructionDAO {
         var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id = constructionPropertyID });
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
+
+    public async Task<Dictionary<string, int>> getConstructionsOfState(int userID, int state) {
+        using var connection = getConnection();
+        string? dbState = Enum.GetName(typeof(ConstructionState), state);
+        const string query = @"
+            SELECT cp.name, COUNT(c.idConstructionProperties)
+            FROM Constructions c 
+            INNER JOIN ConstructionProperties cp ON c.idConstructionProperties = cp.id 
+            WHERE c.state = @dbState AND c.idUser = @userID
+            GROUP BY (cp.name);
+        ";
+        var res = await connection.QueryAsync<(string name, int quantity)>(query, new { dbState, userID});
+        return res.ToDictionary(r => r.name, r => r.quantity);
+    }
 }

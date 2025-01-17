@@ -93,5 +93,17 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         }
         return missingBlocks;
     }
+
+    public async Task<Dictionary<string, int>> getAwaitingConstructions(int userID) {
+        return await constructionFacade.getConstructionsOfState(userID, (int) ConstructionState.WAITING);
+    }
+
+    public async Task<Dictionary<string, int>> getCompletedConstructions(int userID) {
+        return await constructionFacade.getConstructionsOfState(userID, (int) ConstructionState.COMPLETED);
+    }
+
+    public async Task<Dictionary<string, int>> getBuildingConstructions(int userID) {
+        return await constructionFacade.getConstructionsOfState(userID, (int) ConstructionState.BUILDING);
+    }
     #endregion
 }
