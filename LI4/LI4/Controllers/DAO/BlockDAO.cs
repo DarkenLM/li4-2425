@@ -56,7 +56,7 @@ public class BlockDAO {
     public async Task<Block?> getBlockByIdAsync(int id) {
         using var connection = getConnection();
         const string query = @"
-            SELECT b.id, bp.name, bp.rarity, bp.timeToAcquire
+            SELECT b.id, b.quantity, bp.name, bp.rarity, bp.timeToAcquire
             FROM Blocks b
             INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id
             WHERE b.id = @id;";
@@ -66,19 +66,19 @@ public class BlockDAO {
     public async Task<IEnumerable<Block>> getAllBlockInstancesAsync() {
         using var connection = getConnection();
         const string query = @"
-            SELECT b.id, name, rarity, timeToAcquire 
+            SELECT b.id, b.quantity, name, rarity, timeToAcquire 
             FROM Blocks b
             INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id;";
         return await connection.QueryAsync<Block>(query);
     }
 
-    public async Task<bool> updateBlockPropertyAsync(int id, string name, BlockRarity rarity, int timeToAcquire) {
+    public async Task<bool> updateBlockPropertyAsync(int id, int quantity, string name, BlockRarity rarity, int timeToAcquire) {
         using var connection = getConnection();
         const string query = @"
             UPDATE BlockProperties
-            SET name = @Name, rarity = @Rarity, timeToAcquire = @TimeToAcquire
+            SET quantity = @Quantity, name = @Name, rarity = @Rarity, timeToAcquire = @TimeToAcquire
             WHERE id = @Id";
-        int rowsAffected = await connection.ExecuteAsync(query, new { Id = id, Name = name, Rarity = rarity.ToString(), TimeToAcquire = timeToAcquire});
+        int rowsAffected = await connection.ExecuteAsync(query, new { Id = id, Quantity = quantity, Name = name, Rarity = rarity.ToString(), TimeToAcquire = timeToAcquire});
         return rowsAffected > 0;
     }
 
@@ -93,7 +93,7 @@ public class BlockDAO {
     public async Task<Dictionary<string, int>> getAllBlocksUser(int idUser) {
         using var connection = getConnection();
         const string query = @"
-            SELECT bp.name, COALESCE(COUNT(b.id), 0) AS quantity
+            SELECT bp.name, COALESCE(SUM(b.quantity), 0)
             FROM BlockProperties bp
             LEFT JOIN Blocks b ON bp.id = b.idBlockProperty AND (b.idUser = @idUser OR b.idUser IS NULL)
             GROUP BY bp.name;

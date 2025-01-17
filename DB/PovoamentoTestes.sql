@@ -138,8 +138,8 @@ SET IDENTITY_INSERT Blocks ON
 INSERT INTO Blocks (id, quantity, idBlockProperty, idUser)
 	VALUES
 	('1', '14', '1', '1'),
-	('2', '2', '1', '1'),
-	('3', '6', '1', '1'),
+	('2', '2', '2', '1'),
+	('3', '6', '3', '1'),
     ('4', '21', '2', '2'),
     ('5', '52', '3', '3'),
     ('6', '12', '4', '4'),
