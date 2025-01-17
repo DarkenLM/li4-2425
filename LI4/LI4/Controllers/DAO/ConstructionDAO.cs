@@ -149,15 +149,26 @@ public class ConstructionDAO {
 
             // add blocks to user
             foreach (var block in blocks) {
-                for (int i = 0; i < block.quantity; i++) {
-                    const string insertBlockQuery = @"
-                        INSERT INTO Blocks (idUser, idBlockProperty)
-                        VALUES (@IdUser, @IdBlockProperty)
-                    ";
+                const string updateStockQuery = @"
+                UPDATE Blocks 
+                SET quantity = quantity + @Quantity 
+                WHERE idUser = @IdUser AND idBlockProperty = @IdBlockProperty";
+
+                int rowsAffected = await connection.ExecuteAsync(
+                    updateStockQuery,
+                    new { IdUser = idUser, Quantity = block.quantity, IdBlockProperty = block.idBlockProperty },
+                    transaction
+                );
+
+                // If no rows were updated, it means the block doesn't exist; insert it
+                if (rowsAffected == 0) {
+                    const string insertStockQuery = @"
+                    INSERT INTO Blocks (idUser, idBlockProperty, quantity)
+                    VALUES (@IdUser, @IdBlockProperty, @Quantity)";
 
                     await connection.ExecuteAsync(
-                        insertBlockQuery,
-                        new { IdUser = idUser, IdBlockProperty = block.idBlockProperty },
+                        insertStockQuery,
+                        new { IdUser = idUser, IdBlockProperty = block.idBlockProperty, Quantity = block.quantity },
                         transaction
                     );
                 }
