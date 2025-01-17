@@ -41,7 +41,7 @@ public class BlockDAO {
             INSERT INTO BlockProperties (name, rarity, timeToAcquire)
             Values (@Name, @Rarity, @TimeToAcquire);
             SELECT CAST(SCOPE_IDENTITY() as int);";
-        return await connection.ExecuteScalarAsync<int>(query, new { Name = name, Rarity = rarity, TimeToAcquire = timeToAcquire });
+        return await connection.ExecuteScalarAsync<int>(query, new { Name = name, Rarity = rarity.ToString(), TimeToAcquire = timeToAcquire });
     }
 
     public async Task<int?> addBlockInstanceAsync(int userID, int idBlockProperty) {
@@ -78,7 +78,7 @@ public class BlockDAO {
             UPDATE BlockProperties
             SET name = @Name, rarity = @Rarity, timeToAcquire = @TimeToAcquire
             WHERE id = @Id";
-        int rowsAffected = await connection.ExecuteAsync(query, new { Id = id, Name = name, Rarity = rarity, TimeToAcquire = timeToAcquire});
+        int rowsAffected = await connection.ExecuteAsync(query, new { Id = id, Name = name, Rarity = rarity.ToString(), TimeToAcquire = timeToAcquire});
         return rowsAffected > 0;
     }
 
