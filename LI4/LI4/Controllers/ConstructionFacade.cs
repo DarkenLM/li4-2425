@@ -43,4 +43,9 @@ public class ConstructionFacade {
         return await constructionDAO.getConstructionsOfState(userID, state);
     }
     #endregion
+
+    public async Task<Dictionary<string, int>> getCompletedConstruction(int userId, int constructionId) {
+        return await constructionDAO.getCompletedConstructionBlocks(userId, constructionId);
+    }
+
 }

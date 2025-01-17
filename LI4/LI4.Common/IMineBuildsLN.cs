@@ -42,5 +42,7 @@ public interface IMineBuildsLN {
     public Task<Dictionary<string, int>> getCompletedConstructions(int userID);
 
     public Task<Dictionary<string, int>> getBuildingConstructions(int userID);
+
+    public Task<Dictionary<string, int>> viewCompletedConstruction(int userId, int constructionId);
     #endregion
 }
