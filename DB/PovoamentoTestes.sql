@@ -1,5 +1,5 @@
 -- Universidade do Minho
--- Laboratorios de Informática IV
+-- Laboratorios de Informï¿½tica IV
 -- Grupo: 1
 
 -- ----------------------------------------------------
@@ -135,13 +135,13 @@ INSERT INTO BlocksInOrder (idOrder, idBlockProperty, quantity)
 -- VALUES FOR Blocks
 -- ---------------------------------------------------
 SET IDENTITY_INSERT Blocks ON
-INSERT INTO Blocks (id, idBlockProperty, idUser)
+INSERT INTO Blocks (id, quantity, idBlockProperty, idUser)
 	VALUES
-	('1', '1', '1'),
-	('2', '1', '1'),
-	('3', '1', '1'),
-    ('4', '2', '2'),
-    ('5', '3', '3'),
-    ('6', '4', '4'),
-    ('7', '5', '4');
+	('1', '14', '1', '1'),
+	('2', '2', '1', '1'),
+	('3', '6', '1', '1'),
+    ('4', '21', '2', '2'),
+    ('5', '52', '3', '3'),
+    ('6', '12', '4', '4'),
+    ('7', '17', '5', '4');
 SET IDENTITY_INSERT Blocks OFF

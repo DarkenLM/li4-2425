@@ -1,5 +1,5 @@
 -- Universidade do Minho
--- Laboratorios de Informática IV
+-- Laboratorios de Informï¿½tica IV
 -- Grupo: 1
 
 -- ----------------------------------------------------
@@ -122,6 +122,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Blocks')
 BEGIN
 	CREATE TABLE Blocks(
 		id INT IDENTITY(1,1) PRIMARY KEY,
+		quantity INT NOT NULL,
 		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperties(id),
 		idUser INT NOT NULL FOREIGN KEY REFERENCES Users(id),
 	)
