@@ -44,13 +44,20 @@ public class BlockDAO {
         return await connection.ExecuteScalarAsync<int>(query, new { Name = name, Rarity = rarity.ToString(), TimeToAcquire = timeToAcquire });
     }
 
-    public async Task<int?> addBlockInstanceAsync(int userID, int idBlockProperty) {
+    public async Task<int?> addBlockInstanceAsync(int idUser, int idBlockProperty, int quantity) {
         using var connection = getConnection();
         const string query = @"
-            INSERT INTO Blocks (idBlockProperty, idUser)
-            Values (@UserID, @IDBlockProperty);
-            SELECT CAST(SCOPE_IDENTITY() as int);";
-        return await connection.ExecuteScalarAsync<int>(query, new { UserID = userID, IDBlockProperty = idBlockProperty });
+            MERGE INTO Blocks AS target
+                USING (VALUES (@idBlockProperty, @idUser, @quantity)) AS source (idBlockProperty, idUser, quantity)
+                ON target.idBlockProperty = source.idBlockProperty AND target.idUser = source.idUser
+            WHEN MATCHED THEN 
+                UPDATE SET quantity = target.quantity + source.quantity
+            WHEN NOT MATCHED THEN
+                INSERT (idBlockProperty, idUser, quantity) 
+                VALUES (source.idBlockProperty, source.idUser, source.quantity);
+        ";
+
+        return await connection.ExecuteScalarAsync<int>(query, new { quantity, idUser, idBlockProperty });
     }
 
     public async Task<Block?> getBlockByIdAsync(int id) {

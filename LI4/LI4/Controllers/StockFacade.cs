@@ -1,7 +1,7 @@
 ﻿using LI4.Common.Dados;
 using LI4.Controllers.DAO;
 using LI4.Dados;
-using System.Diagnostics.Contracts;
+
 
 namespace LI4.Controllers;
 
@@ -36,6 +36,17 @@ public class StockFacade {
         return await orderDAO.getOrderContentAsync(id);
     }
 
+
+    private async Task addStockFromOrder(int idUser, Dictionary<int, int> blocks) {
+        // Console.WriteLine($"Encomenda do jogador '{idUser}' processada em: {DateTime.Now}");
+        foreach (var entry in blocks) {
+            await blockDAO.addBlockInstanceAsync(idUser, entry.Key, entry.Value);
+            // Console.WriteLine("Adicionado ao Stock: ");
+            // Console.WriteLine($"Propriedade do Bloco: {entry.Key}. Quantidade: {entry.Value}.");
+        }
+    }
+
+
     public async Task<int> makeOrderAsync(int idUser, Dictionary<int, int> blocks) {
         int estimatedTime = 0;
         Order order = new Order(idUser, DateTime.Now);
@@ -49,8 +60,13 @@ public class StockFacade {
             estimatedTime += blockQuantity * timeToAcquire;
 
             await orderDAO.addBlocksInOrder(orderId, idBlockProperties, blockQuantity);
-            // TODO: Add to Blocks table, but needs control time (estimatedTime)
         }
+        // Console.WriteLine("Tempo que vai demorar: " + estimatedTime * 1000 + " milisegundos.");
+        // Console.WriteLine("Comecei em: " + DateTime.Now);
+
+        TimerWrapper tw = new TimerWrapper(estimatedTime * 1000, async () => await addStockFromOrder(idUser, blocks), false);
+        tw.start();
+
         return estimatedTime;
     }
 
