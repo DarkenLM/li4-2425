@@ -73,6 +73,29 @@ INSERT INTO Constructions (id, state, idConstructionProperties, idUser)
 	('6', 'COMPLETED','1','9');
 SET IDENTITY_INSERT Constructions OFF
 
+-- ----------------------------------------------------
+-- VALUES FOR ConstructionStages
+-- ---------------------------------------------------
+INSERT INTO ConstructionStages (idConstructionProperties, stage, time)
+	VALUES
+	('1','1','5'),
+	('1','2','10'),
+	('1','3','2'),
+
+	('2','1','5'),
+	('2','2','10'),
+	('2','3','8'),
+	('2','4','6'),
+	('2','5','10'),
+	
+	('3','1','5'),
+	('3','2','15'),
+	('3','3','10'),
+	('3','4','8'),
+	('3','5','3'),
+	('3','6','4'),
+	('3','7','10');
+
 -- ---------------------------------------------------
 -- VALUES FOR BlocksToConstruction
 -- ---------------------------------------------------

@@ -78,6 +78,19 @@ BEGIN
 END
 
 -- ----------------------------------------------------
+-- TABLE LI4.ConstructionStates
+-- ----------------------------------------------------
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='ConstructionStages')
+BEGIN
+    CREATE TABLE ConstructionStages(
+        idConstructionProperties INT NOT NULL FOREIGN KEY REFERENCES ConstructionProperties(id),
+        stage INT NOT NULL,
+        time INT NOT NULL,
+        CONSTRAINT PK_ConstructionStates PRIMARY KEY (idConstructionProperties,stage)
+    )
+END
+
+-- ----------------------------------------------------
 -- TABLE LI4.BlocksToConstruction
 -- ----------------------------------------------------
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='BlocksToConstruction')
