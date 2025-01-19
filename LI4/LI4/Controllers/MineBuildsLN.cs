@@ -2,6 +2,8 @@
 using LI4.Controllers.DAO;
 using LI4.Dados;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
+using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient.DataClassification;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks.Dataflow;
 
@@ -85,8 +87,17 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         if (!await this.hasStock(userID, constructionPropertyID)) {
             throw new UserHasNotEnoughBlocksException($"User has not enough blocks to build construction with id: {constructionPropertyID}");
         }
-        int? instanceID = await constructionFacade.addConstructionInstanceAsync(ConstructionState.WAITING, constructionPropertyID, userID);
-        //It adds that instance to the queue
+
+        Dictionary<string, int> blocksNeededByName = await constructionFacade.getBlocksNeeded(constructionPropertyID);
+        Dictionary<int, int> blocksNeededByID = new Dictionary<int, int>();
+
+        foreach (KeyValuePair<string, int> block in blocksNeededByName) {
+            int id = stockFacade.getBlockPropertiesIDbyName(block.Key);
+            blocksNeededByID[id] = block.Value;
+        }
+
+        int? instance = await constructionFacade.addConstructionToQueue(blocksNeededByID, userID, constructionPropertyID);
+
         Console.WriteLine("Here we should had the build to the queue!!");
         return true;
     }

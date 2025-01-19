@@ -29,6 +29,15 @@ public class StockFacade {
     public BlockProperties getBlockProperties(int blockPropertiesID) {
         return this.blockProperties[blockPropertiesID];
     }
+
+    public int getBlockPropertiesIDbyName(string name) {
+        foreach (var blockProperties in this.blockProperties.Values) { 
+            if(blockProperties.name == name){
+                return blockProperties.id;
+            }
+        }
+        return -1;
+    }
     #endregion
 
     #region//---- ORDER METHODS ----//

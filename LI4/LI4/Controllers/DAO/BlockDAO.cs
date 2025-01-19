@@ -21,12 +21,23 @@ namespace LI4.Controllers.DAO;
 /// See LI4.Client#Pages.Blocks for more examples.
 /// </summary>
 public class BlockDAO {
+    /// <summary>
+    ///  The connection string used to connect to the database.
+    /// </summary>
     private readonly string connectionString;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BlockDAO"/> class with the specified connection string.
+    /// </summary>
+    /// <param name="conStr">The connnection string to the database</param>
     public BlockDAO(string conStr) {
         this.connectionString = conStr;
     }
 
+    /// <summary>
+    /// Creates and returns a new SQL connection using the configured connection string.
+    /// </summary>
+    /// <returns>A new <see cref="SqlConnection"/> instance.</returns>
     private SqlConnection getConnection() => new SqlConnection(this.connectionString);
 
     #region//---- CRUD OPERATIONS ----//
@@ -128,5 +139,17 @@ public class BlockDAO {
         ";
 
         return await connection.QueryFirstAsync<int>(query, new { Id = idBlockProperties });
+    }
+
+    public async Task removeBlocksFromUserAsync(int idUser, int idBlockProperty, int quantity) {
+        using var connection = getConnection();
+        const string query = @"
+            UPDATE Blocks
+            SET quantity = CASE 
+                               WHEN quantity >= @quantity THEN quantity - @quantity
+                               ELSE 0
+                           END
+            WHERE idUser = @idUser AND idBlockProperty = @idBlockProperty;";
+        await connection.ExecuteAsync(query, new { quantity, idUser, idBlockProperty });
     }
 }

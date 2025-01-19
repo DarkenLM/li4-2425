@@ -206,6 +206,51 @@ public class ConstructionDAO {
         }
     }
 
+    public async Task<int?> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertyID) {
+        using var connection = getConnection();
+        await connection.OpenAsync();
+        using var transaction = connection.BeginTransaction();
+
+        try {
+            const string removeBlocksQuery = @"
+                UPDATE Blocks
+                SET quantity = quantity - @quantity
+                WHERE idUser = @userID AND idBlockProperty = @blockPropertyID
+                AND quantity >= @quantity;";
+
+            foreach (var block in blocksNeeded) {
+                var affectedRows = await connection.ExecuteAsync(
+                    removeBlocksQuery,
+                    new { quantity = block.Value, userID, blockPropertyID = block.Key },
+                    transaction
+                );
+
+                if (affectedRows == 0) {
+                    throw new InvalidOperationException($"Not enough stock for block {block.Key}.");
+                }
+            }
+
+            const string addConstructionQuery = @"
+                INSERT INTO Constructions (state, idConstructionProperties, idUser)
+                VALUES (@state, @constructionPropertyID, @userID);
+                SELECT SCOPE_IDENTITY();";
+
+            var instanceID = await connection.ExecuteScalarAsync<int?>(
+                addConstructionQuery,
+                new { state = ConstructionState.WAITING.ToString(), constructionPropertyID, userID },
+                transaction
+            );
+
+            await transaction.CommitAsync();
+            return instanceID;
+        } catch (Exception ex) {
+            await transaction.RollbackAsync();
+            Console.WriteLine($"Transaction failed: {ex.Message}");
+            throw;
+        }
+    }
+
+
     public async Task<Dictionary<int, string>> getConstructionsAsync() {
         using var connection = getConnection();
         const string query = @"

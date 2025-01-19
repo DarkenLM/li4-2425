@@ -45,6 +45,10 @@ public class ConstructionFacade {
     #endregion
 
     #region//---- XXX METHODS ----//
+    public async Task<int?> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertyID) {
+        return await constructionDAO.addConstructionToQueue(blocksNeeded, userID, constructionPropertyID);
+    }
+
     public async Task<int?> addConstructionInstanceAsync(ConstructionState state, int constructionPropertiesID, int userID) {
         return await constructionDAO.addConstructionInstanceAsync(state, constructionPropertiesID, userID);
     }
