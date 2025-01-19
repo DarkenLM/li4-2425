@@ -87,7 +87,7 @@ public class ConstructionDAO {
     }
     #endregion
 
-    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertyID) {
+    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertiesID) {
         using var connection = getConnection();
         const string query = @"
             SELECT bp.name, bc.quantity
@@ -95,7 +95,7 @@ public class ConstructionDAO {
             INNER JOIN ConstructionProperties cp ON cp.id = bc.idConstructionProperties
             INNER JOIN BlockProperties bp ON bp.id = bc.idBlockProperty
             WHERE cp.id = @Id;";
-        var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id = constructionPropertyID });
+        var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id = constructionPropertiesID });
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 
@@ -116,12 +116,12 @@ public class ConstructionDAO {
     public async Task<Dictionary<string, int>> getCompletedConstructionBlocks(int userId, int constructionId) {
         using var connection = getConnection();
         const string query = @"
-        SELECT bp.name, btc.quantity
-        FROM Constructions c
-        INNER JOIN BlocksToConstruction btc ON c.idConstructionProperties = btc.idConstructionProperties
-        INNER JOIN BlockProperties bp ON btc.idBlockProperty = bp.id
-        WHERE c.id = @constructionId AND c.idUser = @userId;
-        ";
+            SELECT bp.name, btc.quantity
+            FROM Constructions c
+            INNER JOIN BlocksToConstruction btc ON c.idConstructionProperties = btc.idConstructionProperties
+            INNER JOIN BlockProperties bp ON btc.idBlockProperty = bp.id
+            WHERE c.id = @constructionId AND c.idUser = @userId;
+            ";
 
         var res = await connection.QueryAsync<(string name, int quantity)>(query, new { userId, constructionId });
         return res.ToDictionary(r => r.name, r => r.quantity);
@@ -206,7 +206,7 @@ public class ConstructionDAO {
         }
     }
 
-    public async Task<int?> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertyID) {
+    public async Task<int?> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
         using var connection = getConnection();
         await connection.OpenAsync();
         using var transaction = connection.BeginTransaction();
@@ -232,12 +232,12 @@ public class ConstructionDAO {
 
             const string addConstructionQuery = @"
                 INSERT INTO Constructions (state, idConstructionProperties, idUser)
-                VALUES (@state, @constructionPropertyID, @userID);
+                VALUES (@state, @constructionPropertiesID, @userID);
                 SELECT SCOPE_IDENTITY();";
 
             var instanceID = await connection.ExecuteScalarAsync<int?>(
                 addConstructionQuery,
-                new { state = ConstructionState.WAITING.ToString(), constructionPropertyID, userID },
+                new { state = ConstructionState.WAITING.ToString(), constructionPropertiesID, userID },
                 transaction
             );
 

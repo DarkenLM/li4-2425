@@ -45,8 +45,8 @@ public class ConstructionFacade {
     #endregion
 
     #region//---- XXX METHODS ----//
-    public async Task<int?> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertyID) {
-        return await constructionDAO.addConstructionToQueue(blocksNeeded, userID, constructionPropertyID);
+    public async Task<int?> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
+        return await constructionDAO.addConstructionToQueue(blocksNeeded, userID, constructionPropertiesID);
     }
 
     public async Task<int?> addConstructionInstanceAsync(ConstructionState state, int constructionPropertiesID, int userID) {
@@ -69,8 +69,8 @@ public class ConstructionFacade {
         return await constructionDAO.deleteConstructionInstanceAsync(id);
     }
 
-    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertyID) {
-        return await constructionDAO.getBlocksNeeded(constructionPropertyID);
+    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertiesID) {
+        return await constructionDAO.getBlocksNeeded(constructionPropertiesID);
     }
 
     public async Task<Dictionary<string, int>> getConstructionsOfState(int userID, int state) {

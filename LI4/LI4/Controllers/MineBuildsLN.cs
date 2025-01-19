@@ -1,11 +1,6 @@
 ﻿using LI4.Common.Dados;
-using LI4.Controllers.DAO;
+using LI4.Common.Exceptions.ConstructionExceptions;
 using LI4.Dados;
-using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
-using Microsoft.Data.SqlClient;
-using Microsoft.Data.SqlClient.DataClassification;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks.Dataflow;
 
 namespace LI4.Controllers;
 
@@ -78,17 +73,17 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getAllConstructionInstancesAsync();
     }
 
-    public async Task<bool> hasStock(int userID, int constructionPropertyID) {
-        var result = await this.calculateMissingBlocks(userID, constructionPropertyID);
+    public async Task<bool> hasStock(int userID, int constructionPropertiesID) {
+        var result = await this.calculateMissingBlocks(userID, constructionPropertiesID);
         return (result.ToDictionary().Count()==0);
     }
 
-    public async Task<bool> addConstructionToQueue(int userID, int constructionPropertyID) {
-        if (!await this.hasStock(userID, constructionPropertyID)) {
-            throw new UserHasNotEnoughBlocksException($"User has not enough blocks to build construction with id: {constructionPropertyID}");
+    public async Task<bool> addConstructionToQueue(int userID, int constructionPropertiesID) {
+        if (!await this.hasStock(userID, constructionPropertiesID)) {
+            throw new UserHasNotEnoughBlocksException($"User has not enough blocks to build construction with id: {constructionPropertiesID}");
         }
 
-        Dictionary<string, int> blocksNeededByName = await constructionFacade.getBlocksNeeded(constructionPropertyID);
+        Dictionary<string, int> blocksNeededByName = await constructionFacade.getBlocksNeeded(constructionPropertiesID);
         Dictionary<int, int> blocksNeededByID = new Dictionary<int, int>();
 
         foreach (KeyValuePair<string, int> block in blocksNeededByName) {
@@ -96,15 +91,15 @@ public class MineBuildsLN : Common.IMineBuildsLN {
             blocksNeededByID[id] = block.Value;
         }
 
-        int? instance = await constructionFacade.addConstructionToQueue(blocksNeededByID, userID, constructionPropertyID);
+        int? instance = await constructionFacade.addConstructionToQueue(blocksNeededByID, userID, constructionPropertiesID);
 
         Console.WriteLine("Here we should had the build to the queue!!");
         return true;
     }
 
-    public async Task<Dictionary<string, int>> calculateMissingBlocks(int userdID, int constructionPropertyID) {
+    public async Task<Dictionary<string, int>> calculateMissingBlocks(int userdID, int constructionPropertiesID) {
         Dictionary<string, int> missingBlocks = new Dictionary<string, int>();
-        Dictionary<string, int> quantityByName = await constructionFacade.getBlocksNeeded(constructionPropertyID);
+        Dictionary<string, int> quantityByName = await constructionFacade.getBlocksNeeded(constructionPropertiesID);
         Dictionary<string, int> userStock = await stockFacade.getStockUser(userdID);
         foreach (string blockName in quantityByName.Keys) {
             int quantityNeeded = quantityByName[blockName];
