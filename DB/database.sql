@@ -134,9 +134,9 @@ END
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name='Blocks')
 BEGIN
 	CREATE TABLE Blocks(
-		id INT IDENTITY(1,1) PRIMARY KEY,
 		quantity INT NOT NULL,
 		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperties(id),
 		idUser INT NOT NULL FOREIGN KEY REFERENCES Users(id),
+		CONSTRAINT PK_Blocks PRIMARY KEY (idBlockProperty, idUser)
 	)
 END

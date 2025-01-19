@@ -157,14 +157,18 @@ INSERT INTO BlocksInOrder (idOrder, idBlockProperty, quantity)
 -- ----------------------------------------------------
 -- VALUES FOR Blocks
 -- ---------------------------------------------------
-SET IDENTITY_INSERT Blocks ON
-INSERT INTO Blocks (id, quantity, idBlockProperty, idUser)
+INSERT INTO Blocks (quantity, idBlockProperty, idUser)
 	VALUES
-	('1', '14', '1', '1'),
-	('2', '2', '2', '1'),
-	('3', '6', '3', '1'),
-    ('4', '21', '2', '2'),
-    ('5', '52', '3', '3'),
-    ('6', '12', '4', '4'),
-    ('7', '17', '5', '4');
-SET IDENTITY_INSERT Blocks OFF
+	('14', '1', '1'),
+	('2', '2', '1'),
+	('6', '3', '1'),
+    ('52', '3', '3'),
+    ('12', '4', '4'),
+	('47', '3', '2'),
+	('10', '7', '2'),
+	('3', '10', '2'),
+	('40', '12', '2'),
+	('60', '13', '2'),
+	('80', '14', '2'),
+	('10', '1', '2'),
+    ('17', '5', '4');
