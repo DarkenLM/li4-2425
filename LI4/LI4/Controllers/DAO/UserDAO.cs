@@ -161,7 +161,7 @@ public class UserDAO {
     public async Task<User> authenticateAsync(string email, string password) {
         using var connection = getConnection();
         const string query = "SELECT id, username, userPassword FROM Users WHERE email = @Email AND userPassword = @Password";
-        User? user = await connection.ExecuteScalarAsync<User>(query, new { Email = email, Password = password });
+        User? user = await connection.QuerySingleOrDefaultAsync<User>(query, new { Email = email, Password = password });
         if (user != null) {
             return user!;
         } else {

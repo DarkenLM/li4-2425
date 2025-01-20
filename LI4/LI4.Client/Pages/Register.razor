@@ -1,6 +1,7 @@
 @page "/register"
 @rendermode InteractiveServer
 @inject IMineBuildsLN facade;
+@inject NavigationManager NavigationManager
 @inject IJSRuntime js;
 
 <h3>Create Account</h3>
@@ -78,8 +79,7 @@
 
     {
 
-        //NavigationManager.NavigateTo("/login");
-
+        NavigationManager.NavigateTo("/login");
         message = "to login";
 
     }

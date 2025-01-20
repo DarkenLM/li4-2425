@@ -1,0 +1,55 @@
+﻿@page "/login"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+
+@using Util;
+
+<h3 class="text-center">Login</h3>
+
+<div class="login-container">
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input id="email" type="email" @bind="email" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input id="password" type="password" @bind="password" />
+    </div>
+
+    <div class="button-group">
+        <button class="btn btn-primary" @onclick="AuthenticateUser">Confirm</button>
+        <button class="btn btn-secondary" @onclick="NavigateToRegister">Create account</button>
+    </div>
+</div>
+
+<p>@message</p>
+
+@code {
+    private string email = string.Empty;
+    private string password = string.Empty;
+    private string message = string.Empty;
+
+    private async Task AuthenticateUser(){
+        try
+        {
+            User user = await facade.authenticate(email, password);
+            if (user != null)
+            {
+                message = "Login successful!";
+                // NavigationManager.NavigateTo("/home");
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"{ex.Message}";
+        }
+    }
+
+    private void NavigateToRegister()
+    {
+        NavigationManager.NavigateTo("/register");
+        message = "to register";
+    }
+}
