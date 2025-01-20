@@ -19,10 +19,10 @@ public class UserFacade {
         if (email == null || username == null || password == null) { return false; }
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) { return false; }
 
-        bool emailInUse = await userDAO.emailExistsAsync(email);
-        bool usernameInUse = await userDAO.usernameExistsAsync(username);
+        bool emailInUse = await userDAO.emailNoExistsAsync(email);
+        bool usernameInUse = await userDAO.usernameNoExistsAsync(username);
 
-        if (!emailInUse && !usernameInUse) {
+        if (emailInUse && usernameInUse) {
             User tmpUser = new User(username, email, password);
             await userDAO.addAsync(tmpUser);
             return true;

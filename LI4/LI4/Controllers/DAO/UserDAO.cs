@@ -104,6 +104,28 @@ public class UserDAO {
         }
     }
 
+    public async Task<bool> emailNoExistsAsync(string email) {
+        using var connection = getConnection();
+        const string query = "SELECT COUNT(1) FROM Users WHERE email = @Email";
+        bool count = await connection.ExecuteScalarAsync<int>(query, new { Email = email }) > 0;
+        if (!count) {
+            return true;
+        } else {
+            throw new UserNotFoundException($"User with email: {email} already exists");
+        }
+    }
+
+    public async Task<bool> usernameNoExistsAsync(string username) {
+        using var connection = getConnection();
+        const string query = "SELECT COUNT(1) FROM Users WHERE username = @Username";
+        bool count = await connection.ExecuteScalarAsync<int>(query, new { Username = username }) > 0;
+        if (!count) {
+            return true;
+        } else {
+            throw new UserNotFoundException($"User with username: {username} already exists");
+        }
+    }
+
     public async Task<bool> usernameNoOtherExistsAsync(int id, string username) {
         using var connection = getConnection();
         const string query = @"

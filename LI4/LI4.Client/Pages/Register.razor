@@ -1,0 +1,86 @@
+@page "/register"
+@rendermode InteractiveServer
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js;
+
+<h3>Create Account</h3>
+
+<div>
+    <label for="username">Username:</label>
+    <input id="username" type="text" @bind="username" />
+</div>
+<div>
+    <label for="email">Email:</label>
+    <input id="email" type="email" @bind="email" />
+</div>
+<div>
+    <label for="password">Password:</label>
+    <input id="password" type="password" @bind="password" />
+</div>
+<div>
+    <button @onclick="RegisterUser">Confirm</button>
+    <button @onclick="NavigateToLogin">Login</button>
+</div>
+
+<p>@message</p>
+
+@code {
+    private string username = string.Empty;
+
+    private string email = string.Empty;
+
+    private string password = string.Empty;
+
+    private string message = string.Empty;
+
+
+
+    private async Task RegisterUser()
+
+    {
+        try
+
+        {
+
+            bool success = await facade.registerUser(email, username, password);
+
+            if (success)
+
+            {
+
+                message = "Account created successfully!";
+
+            }
+
+            else
+
+            {
+
+                message = "Registration failed!";
+
+            }
+
+        }
+
+        catch (Exception ex)
+
+        {
+
+            message = $"{ex.Message}";
+
+        }
+
+    }
+
+
+
+    private void NavigateToLogin()
+
+    {
+
+        //NavigationManager.NavigateTo("/login");
+
+        message = "to login";
+
+    }
+}
