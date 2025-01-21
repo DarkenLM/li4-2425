@@ -1,0 +1,70 @@
+@page "/profile"
+@rendermode InteractiveServer
+@inject IMineBuildsLN facade;
+@inject NavigationManager NavigationManager
+@inject IJSRuntime js;
+
+<h3>Perfil</h3>
+
+<div>
+    <label>Email:</label>
+    <p>@email</p>
+</div>
+<div>
+    <label>Username:</label>
+    <p>@username</p>
+</div>
+<div>
+    <label>Password:</label>
+    <p>@password</p>
+</div>
+
+<div>
+    <button @onclick="NavigateToEditProfile">Editar Perfil</button>
+</div>
+
+@code {
+    private string email = string.Empty;
+
+    private string username = string.Empty;
+
+    private string password = string.Empty;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+
+        var user = await facade.getUserByEmail("paulo@example.com");
+
+        if (user != null)
+
+        {
+
+            email = user.email;
+
+            username = user.username;
+
+            password = user.userPassword;
+
+
+
+        }
+
+        await InvokeAsync(StateHasChanged);
+
+
+
+    }
+
+
+
+    private void NavigateToEditProfile()
+
+    {
+
+        NavigationManager.NavigateTo("/edit-profile");
+
+    }
+}

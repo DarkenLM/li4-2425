@@ -1,0 +1,131 @@
+@page "/edit-profile"
+@rendermode InteractiveServer
+@inject IMineBuildsLN facade;
+@inject NavigationManager NavigationManager
+@inject IJSRuntime js;
+
+<h3>Editar Perfil</h3>
+
+<div>
+    <label>Email:</label>
+    <input type="email" @bind="email" />
+</div>
+<div>
+    <label>Username:</label>
+    <input type="text" @bind="username" />
+</div>
+<div>
+    <label>Password:</label>
+    <input type="password" @bind="password" />
+</div>
+
+<div>
+    <button @onclick="UpdateProfile">Confirmar</button>
+    <button @onclick="CancelEdit">Cancelar</button>
+</div>
+
+<p>@message</p>
+
+@code {
+
+    private int id;
+
+    private string email = string.Empty;
+
+    private string username = string.Empty;
+
+    private string password = string.Empty;
+
+    private string message = string.Empty;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+
+        try
+
+        {
+
+            var user = await facade.getUserByEmail("paulo@example.com"); // Substituir pela função correta
+
+
+
+            if (user != null)
+
+            {
+
+                id = user.id;
+
+                email = user.email;
+
+                username = user.username;
+
+                password = user.userPassword;
+
+            }
+
+        }
+
+        catch (Exception ex)
+
+        {
+
+            message = $"Erro ao carregar perfil: {ex.Message}";
+
+        }
+
+    }
+
+
+
+    private async Task UpdateProfile()
+
+    {
+
+        try
+
+        {
+
+            var success = await facade.updateUtilizador(id, email, username, password);
+
+
+            if (success!= null)
+
+            {
+
+                message = "Perfil atualizado com sucesso!";
+
+            }
+
+            else
+
+            {
+
+                message = "Erro ao atualizar perfil.";
+
+            }
+
+        }
+
+        catch (Exception ex)
+
+        {
+
+            message = $"Erro: {ex.Message}";
+
+        }
+
+    }
+
+
+
+    private void CancelEdit()
+
+    {
+
+        NavigationManager.NavigateTo("/profile");
+
+    }
+}
