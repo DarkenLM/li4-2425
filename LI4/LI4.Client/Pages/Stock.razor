@@ -43,7 +43,7 @@ else
 
 
 
-        var user = await facade.getUserByEmail("paulo@example.com");
+        var user = await facade.getUserByEmailAsync("paulo@example.com");
 
 
 
@@ -55,7 +55,7 @@ else
 
 
 
-        stock = await facade.getStock(id);
+        stock = await facade.getUserStockAsync(id);
 
         await InvokeAsync(StateHasChanged);
 

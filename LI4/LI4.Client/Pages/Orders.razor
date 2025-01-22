@@ -50,7 +50,7 @@ else
 
         int userId = 1; // Substituir pelo ID do utilizador autenticado
 
-        var o = await facade.getOrders(userId);
+        var o = await facade.getUserOrdersAsync(userId);
 
         orders = o;
 

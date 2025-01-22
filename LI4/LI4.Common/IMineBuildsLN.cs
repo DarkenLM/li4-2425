@@ -206,7 +206,7 @@ public interface IMineBuildsLN {
     /// <returns>A <see cref="BlocksToConstruction"/> object containing the block properties and their quantities required for the construction.</returns>
     public BlocksToConstruction getBlocksToConstruction(int constructionPropertiesID, int blockPropertiesID);
 
-    public Task<Dictionary<string, int>> getAllBlocksConstruction(int constructionPropertiesID);
+    public Task<Dictionary<string, int>> getAllBlocksConstructionAsync(int constructionPropertiesID);
 
     #endregion
 }

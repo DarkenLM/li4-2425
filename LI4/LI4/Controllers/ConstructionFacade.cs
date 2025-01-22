@@ -102,13 +102,13 @@ public class ConstructionFacade {
         }
 
         // Comportamento
-        addConstructionWaiting(idConstruction, this.assemblyLines[idUser][idConstructionProperties]);
+        addConstructionWaitingAsync(idConstruction, this.assemblyLines[idUser][idConstructionProperties]);
     }
 
-    private async void addConstructionWaiting(int idConstruction, LinhaDeMontagem linha) {
+    private async void addConstructionWaitingAsync(int idConstruction, LinhaDeMontagem linha) {
         if (linha.stages[0].idConstruction == null) {
             linha.stages[0].idConstruction = idConstruction;
-            linha.stages[0].tw = new TimerWrapper(linha.stages[0].tempo * 1000, () => this.changeConstructionStage(0, linha), false);
+            linha.stages[0].tw = new TimerWrapper(linha.stages[0].tempo * 1000, () => this.changeConstructionStageAsync(0, linha), false);
             linha.stages[0].tw.start();
             await updateConstructionStateAsync(idConstruction, (int) ConstructionState.BUILDING);
         } else {
@@ -116,7 +116,7 @@ public class ConstructionFacade {
         }
     }
 
-    private async void changeConstructionStage(int index, LinhaDeMontagem linha) {
+    private async void changeConstructionStageAsync(int index, LinhaDeMontagem linha) {
         if (index < 0 || index >= linha.nStages) return;
         linha.stages[index].tw = null!;
 
@@ -125,7 +125,7 @@ public class ConstructionFacade {
             await updateConstructionStateAsync((int) linha.stages[index].idConstruction!, (int) ConstructionState.COMPLETED);
             if (linha.stages[index - 1].tw == null && linha.stages[index - 1].idConstruction != null) {
                 linha.stages[index].idConstruction = linha.stages[index - 1].idConstruction;
-                linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStage(index, linha), false);
+                linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStageAsync(index, linha), false);
                 linha.stages[index].tw.start();
                 linha.stages[index - 1].idConstruction = null;
                 // Console.WriteLine("Timer iniciado no último estágio, após a anterior já ter validado se podia avançar.");
@@ -135,7 +135,7 @@ public class ConstructionFacade {
         } else {
             if (linha.stages[index + 1].idConstruction == null) {
                 linha.stages[index + 1].idConstruction = linha.stages[index].idConstruction;
-                linha.stages[index + 1].tw = new TimerWrapper(linha.stages[index + 1].tempo * 1000, () => this.changeConstructionStage(index + 1, linha), false);
+                linha.stages[index + 1].tw = new TimerWrapper(linha.stages[index + 1].tempo * 1000, () => this.changeConstructionStageAsync(index + 1, linha), false);
                 linha.stages[index + 1].tw.start();
                 linha.stages[index].idConstruction = null;
                 // Console.WriteLine($"Timer iniciado no estágio {index + 1}, após mover de posição. Construção: {linha.stages[index + 1].idConstruction}");
@@ -144,7 +144,7 @@ public class ConstructionFacade {
                     int tmpId = linha.waitingConstructions[0];
                     linha.waitingConstructions.RemoveAt(0);
                     linha.stages[index].idConstruction = tmpId;
-                    linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStage(index, linha), false);
+                    linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStageAsync(index, linha), false);
                     linha.stages[index].tw.start();
                     await updateConstructionStateAsync(tmpId, (int) ConstructionState.BUILDING);
                     // Console.WriteLine($"Timer iniciado no primeiro estágio, após retirar construção da fila de espera. Construção: {linha.stages[index].idConstruction}");
@@ -152,7 +152,7 @@ public class ConstructionFacade {
                 
                 if (index != 0 && linha.stages[index - 1].tw == null && linha.stages[index - 1].idConstruction != null) {
                     linha.stages[index].idConstruction = linha.stages[index - 1].idConstruction;
-                    linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStage(index, linha), false);
+                    linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStageAsync(index, linha), false);
                     linha.stages[index].tw.start();
                     linha.stages[index - 1].idConstruction = null;
                     // Console.WriteLine($"Timer iniciado num estágio do meio, após o anterior já ter validado se podia avançar. Construção: {linha.stages[index].idConstruction}");

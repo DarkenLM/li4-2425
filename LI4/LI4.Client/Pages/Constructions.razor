@@ -55,14 +55,14 @@
     private string message = string.Empty;
 
     protected override async Task OnInitializedAsync(){
-        catalog = await facade.getCatalog();
+        catalog = await facade.getCatalogAsync();
     }
 
 	#region//---- CATALOG METHODS ----//
 
     private async Task userHasStock(int idConstructionProperties){
         try{
-            bool construct = await facade.hasStock(idConstructionProperties, 3); // change to user real id
+            bool construct = await facade.hasStockAsync(idConstructionProperties, 3); // change to user real id
             if(construct){
                 NavigationManager.NavigateTo($"/catalog/construction/{idConstructionProperties}");
             }

@@ -92,11 +92,7 @@
                 @foreach (var construction in constructions)
                 {
                     <tr>
-                        <td>@construction.id</td>
-                        <td>@construction.name</td>
-                        <td>@construction.state</td>
-                        <td>@construction.dificulty</td>
-                        <td>@construction.nStages</td>
+                        <td>@construction.id</td
                     </tr>
                 }
             </tbody>
@@ -129,7 +125,7 @@
 
     private async Task LoadConstructions()
     {
-        constructions = (await MineBuilds.getAllConstructionInstancesAsync()).ToList();
+        //constructions = (await MineBuilds.getAllConstructionInstancesAsync()).ToList();
     }
 
     private async Task LoadBlocks()

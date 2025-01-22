@@ -93,7 +93,7 @@
     protected override async Task OnInitializedAsync(){
 
         if(source == "catalog" || source == "completedConstructions"){ // idConstructionProperties
-            blocksForConstruction = await facade.getAllBlocksConstruction(id);
+            blocksForConstruction = await facade.getAllBlocksConstructionAsync(id);
             constructionProperties = facade.getConstructionProperties(id);
         }
         if(source == "completedConstructions"){
@@ -116,10 +116,10 @@
                 bool hasStock;
 
                 while(inputNumber > currentNumber){
-                    hasStock = await facade.hasStock(id,3);
+                    hasStock = await facade.hasStockAsync(id,3);
                     if(hasStock){
                         currentNumber++;
-                        await facade.addConstructionToQueue(3, id);
+                        await facade.addConstructionToQueueAsync(3, id);
                     }
                     else{
                         message = "Cannot add more. User does not have enough stock.";
@@ -140,10 +140,10 @@
 
     private async Task addConstruction(){
 
-        bool hasStock = await facade.hasStock(id,3);
+        bool hasStock = await facade.hasStockAsync(id, 3);
         if(hasStock){
             currentNumber++;
-            await facade.addConstructionToQueue(3, id);
+            await facade.addConstructionToQueueAsync(3, id);
         }
         else{
             message = "Cannot add more. User does not have enough stock.";
@@ -165,13 +165,13 @@
     #region//---- COMPLETED CONSTRUCTIONS METHODS ----//
 
     private async Task<int> numCompletedConstructions(){
-        Dictionary<string, int> completed = await facade.getCompletedConstructions(3);
+        Dictionary<string, int> completed = await facade.getCompletedConstructionsAsync(3);
         return completed.Count;
     }
 
     private async Task<int> numOfnonCompletedConstructions(){
-        Dictionary<string, int> awaiting = await facade.getAwaitingConstructions(3);
-        Dictionary<string, int> building = await facade.getBuildingConstructions(3);
+        Dictionary<string, int> awaiting = await facade.getAwaitingConstructionsAsync(3);
+        Dictionary<string, int> building = await facade.getBuildingConstructionsAsync(3);
         int result = awaiting.Count + building.Count; 
         return result;
     }
