@@ -1,0 +1,177 @@
+@* @page "/order"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+
+@using Util;
+
+<h3>Encomendar Blocos</h3>
+
+<div>
+    @if (availableBlocks != null && availableBlocks.Any())
+
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Bloco</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var block in availableBlocks)
+
+                {
+                    <tr>
+                        <td>@block.Key</td>
+                        <td>
+                            <input type="number" style="width: 100px; padding: 5px;" @bind="orderQuantities[block.Key]" @oninput="ValidateInput(block.Key, $event)" />
+                        </td>
+                        <td>
+                            <button @onclick="() => IncrementBlock(block.Key)">+</button>
+                            <button @onclick="() => DecrementBlock(block.Key)">-</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else
+
+    {
+        <p>Loading available blocks...</p>
+    }
+</div>
+
+<button @onclick="ConfirmOrder">Confirmar Encomenda</button>
+<button @onclick="NavigateToStock">Voltar ao Stock</button>
+
+<p>@message</p>
+
+@code {
+    private Dictionary<int, int>? availableBlocks;  // Alterado para int como chave
+
+    private Dictionary<int, int> orderQuantities = new();  // A chave aqui é int
+
+    private string message = string.Empty;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+
+        // Alterado para utilizar inteiros como chave
+
+        availableBlocks = (await facade.getAllBlocksAsync())
+
+            .ToDictionary(block => int.Parse(block.name), block => block.quantity);
+
+
+
+        if (availableBlocks != null)
+
+        {
+
+            foreach (var block in availableBlocks)
+
+            {
+
+                orderQuantities[block.Key] = 0;  // Inicializa a quantidade do bloco
+
+            }
+
+        }
+
+    }
+
+
+
+    private void ValidateInput(int blockKey, ChangeEventArgs e)  // Alterado para int
+
+    {
+
+        if (int.TryParse(e.Value.ToString(), out int quantity) && quantity >= 0)
+
+        {
+
+            orderQuantities[blockKey] = quantity;
+
+        }
+
+        else
+
+        {
+
+            message = "Quantidade inválida.";
+
+        }
+
+    }
+
+
+
+    private void IncrementBlock(int blockKey)  // Alterado para int
+
+    {
+
+        orderQuantities[blockKey]++;
+
+    }
+
+
+
+    private void DecrementBlock(int blockKey)  // Alterado para int
+
+    {
+
+        if (orderQuantities[blockKey] > 0)
+
+        {
+
+            orderQuantities[blockKey]--;
+
+        }
+
+    }
+
+
+
+    private async Task ConfirmOrder()
+
+    {
+
+        var orderId = await facade.createOrderAsync(1, orderQuantities);
+
+        if (orderId > 0)
+
+        {
+
+            message = $"Encomenda criada com sucesso! ID: {orderId}";
+
+        }
+
+        else
+
+        {
+
+            message = "Erro ao criar encomenda.";
+
+        }
+
+    }
+
+
+
+    private void NavigateToStock()
+
+    {
+
+        NavigationManager.NavigateTo("/stock");
+
+    }
+} *@
+
