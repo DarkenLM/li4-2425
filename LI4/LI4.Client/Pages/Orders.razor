@@ -1,0 +1,67 @@
+@page "/orders"
+@rendermode InteractiveServer
+@inject IMineBuildsLN facade;
+@inject NavigationManager NavigationManager
+@inject IJSRuntime js;
+
+<h3>Minhas Encomendas</h3>
+
+@if (orders == null)
+{
+    <p>A carregar encomendas...</p>
+}
+else if (!orders.Any())
+{
+    <p>Não há encomendas.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Data</th>
+                <th>Entregue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.id</td>
+                    <td>@order.orderDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@(order.delivered ? "Sim" : "Não")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<button class="btn btn-primary" @onclick="GoToStock">Voltar ao Stock</button>
+
+@code {
+
+    private List<LI4.Dados.Order> orders = new();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        int userId = 1; // Substituir pelo ID do utilizador autenticado
+
+        var o = await facade.getOrders(userId);
+
+        orders = o;
+
+    }
+
+
+
+    private void GoToStock()
+    {
+
+        NavigationManager.NavigateTo("/stock");
+
+    }
+}

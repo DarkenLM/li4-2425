@@ -71,6 +71,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public BlockProperties getBlockProperties(int blockPropertiesID) {
         return stockFacade.getBlockProperties(blockPropertiesID);
     }
+
+    public Dictionary<int, BlockProperties> getAllBlockProperties() {
+        return stockFacade.getAllBlockProperties();
+    }
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//
@@ -153,5 +157,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         Tuple<int,int> blockToConstructionID = Tuple.Create(constructionPropertiesID, blockPropertiesID);
         return constructionFacade.getBlocksToConstruction(blockToConstructionID);
     }
+
+    public async Task<Dictionary<string, int>> getAllBlocksConstruction(int constructionPropertiesID) {
+        return await constructionFacade.getBlocksNeeded(constructionPropertiesID);
+    }
+
     #endregion
 }

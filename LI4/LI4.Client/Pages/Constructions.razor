@@ -1,0 +1,95 @@
+﻿@page "/constructions/{route}"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+
+@using Util;
+
+
+<div>
+    @if(catalog != null && catalog.Any()){
+		@if (route == "catalog")
+        {
+            <h3 class="text-center">Catalog</h3>
+
+            @for (int index = 0; index < catalog.Count; index++){ <!-- to not print repeated values -->
+                var item = catalog.ElementAt(index);
+                var itemKey = item.Key;
+                var itemValue = item.Value;
+
+                <button @onclick="() => userHasStock(itemKey)">@itemValue</button>
+            }
+        }
+        @if(route == "completedConstructions")
+        {
+		    <h3 class="text-center">Completed Constructions</h3>
+
+		    @for (int index = 0; index < catalog.Count; index++){ <!-- to not print repeated values -->
+                var item = catalog.ElementAt(index);
+                var itemKey = item.Key;
+                var itemValue = item.Value;
+
+                <button @onclick="() => NavigateToCompletedConstruction(itemKey)">@itemValue</button>
+            }
+        }
+        @if(route == "assemblyLine")
+        {
+
+        }
+        @if(route == "waitingQueue"){
+
+        }
+    }
+    else{
+        <p>Loading...</p>
+    }
+</div>
+
+
+<p>@message</p>
+
+@code {
+    [Parameter] public string route { get; set; }
+    private Dictionary<int, string>? catalog;
+    private string message = string.Empty;
+
+    protected override async Task OnInitializedAsync(){
+        catalog = await facade.getCatalog();
+    }
+
+	#region//---- CATALOG METHODS ----//
+
+    private async Task userHasStock(int idConstructionProperties){
+        try{
+            bool construct = await facade.hasStock(idConstructionProperties, 3); // change to user real id
+            if(construct){
+                NavigationManager.NavigateTo($"/catalog/construction/{idConstructionProperties}");
+            }
+            else{
+				NavigationManager.NavigateTo($"/catalog/construction/{idConstructionProperties}");
+            }
+        }
+        catch(Exception ex){
+            message = $"{ex.Message}"; /// not sure
+        }
+    }
+
+    #endregion
+
+	#region//---- COMPLETED CONSTRUCTIONS METHODS ----//
+
+	private void NavigateToCompletedConstruction(int idConstructionProperties){
+        NavigationManager.NavigateTo($"/completedConstructions/construction/{idConstructionProperties}");
+    }
+
+	#endregion
+
+	#region//---- ASSEMBLY LINE METHODS ----//
+
+	#endregion
+
+	#region//---- WAITING QUEUE METHODS ----//
+
+	#endregion
+}

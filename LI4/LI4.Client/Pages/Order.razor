@@ -1,0 +1,164 @@
+@page "/order"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
+@using Util;
+
+<h3>Encomendar Blocos</h3>
+
+<div>
+    @if (blockProperties != null && blockProperties.Any())
+
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Bloco</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var block in blockProperties.Values)
+
+                {
+                    <tr>
+                        <td>@block.name</td>
+                        <td>
+                            <input type="number" style="width: 100px; padding: 5px;" @bind="orderQuantities[block.id]" />
+                        </td>
+                        <td>
+                            <button @onclick="() => IncrementBlock(block.id)">+</button>
+                            <button @onclick="() => DecrementBlock(block.id)">-</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else
+
+    {
+        <p>Loading available blocks...</p>
+    }
+</div>
+
+<button @onclick="ConfirmOrder">Confirmar Encomenda</button>
+<button @onclick="NavigateToStock">Voltar ao Stock</button>
+
+<p>@message</p>
+
+@code {
+    private Dictionary<int, BlockProperties> blockProperties = new();  // Inicializa o dicionário como vazio
+
+
+
+    private Dictionary<int, int> orderQuantities = new();  // A chave aqui é int (usando o Id do bloco)
+
+
+
+    private string message = string.Empty;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+
+        // Inicializar os BlockProperties a partir da tabela carregada no facade
+
+        blockProperties = facade.getAllBlockProperties();  // Corrigido para utilizar o método assíncrono
+
+
+
+        if (blockProperties != null)
+
+        {
+
+            foreach (var block in blockProperties.Values)
+
+            {
+
+                orderQuantities[block.id] = 0;  // Inicializa a quantidade do bloco com 0
+
+            }
+
+        }
+
+    }
+
+
+
+    private void IncrementBlock(int blockId)  // Incrementa a quantidade de um bloco
+
+    {
+
+        if (orderQuantities.ContainsKey(blockId))
+
+        {
+
+            orderQuantities[blockId]++;
+
+        }
+
+    }
+
+
+
+    private void DecrementBlock(int blockId)  // Decrementa a quantidade de um bloco
+
+    {
+
+        if (orderQuantities.ContainsKey(blockId) && orderQuantities[blockId] > 0)
+
+        {
+
+            orderQuantities[blockId]--;
+
+        }
+
+    }
+
+
+
+    private async Task ConfirmOrder()
+
+    {
+
+        var orderId = await facade.createOrderAsync(1, orderQuantities);  // Criar pedido
+
+        if (orderId > 0)
+
+        {
+
+            message = $"Encomenda criada com sucesso! ID: {orderId}";
+
+        }
+
+        else
+
+        {
+
+            message = "Erro ao criar encomenda.";
+
+        }
+
+    }
+
+
+
+    private void NavigateToStock()
+
+    {
+
+        NavigationManager.NavigateTo("/stock");
+
+    }
+}
+
+

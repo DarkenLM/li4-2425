@@ -83,6 +83,11 @@ public class StockFacade {
         return this.blockProperties[blockPropertiesID];
     }
 
+    public Dictionary<int, BlockProperties> getAllBlockProperties() {
+        return this.blockProperties;
+    }
+
+
     public int getBlockPropertiesIDbyName(string name) {
         foreach (var blockProperties in this.blockProperties.Values) { 
             if(blockProperties.name == name){
