@@ -69,6 +69,15 @@ public class ConstructionDAO {
         return result.ToDictionary(r => Tuple.Create(r.constructionPropertiesID, r.blockPropertiesID), r => r);
     }
 
+    public async Task<List<(int, int, int)>> getAllConstructionStagesPropertiesAsync() {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT * FROM ConstructionStages;
+        ";
+        var result = await connection.QueryAsync<(int idConstructionProperties, int stage, int time)>(query);
+        return result.ToList();
+    }
+
     public async Task<bool> updateConstructionInstanceAsync(int constructionID, ConstructionState state, int constructionPropertiesID, int userID) {
         using var connection = getConnection();
         const string query = @"
@@ -99,6 +108,30 @@ public class ConstructionDAO {
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 
+    public async Task<List<int>> getConstructionsOfStateIds(int userID, int state) {
+        using var connection = getConnection();
+        string? dbState = Enum.GetName(typeof(ConstructionState), state);
+        const string query = @"
+            SELECT id
+            FROM Constructions
+            WHERE state = @dbState AND idUser = @userID;
+        ";
+        var res = await connection.QueryAsync<int>(query, new {dbState, userID});
+        return res.ToList();
+    }
+
+    public async Task<List<(int, int, int)>> getUserIdAndConstructionsIdOfState(int state) {
+        using var connection = getConnection();
+        string? dbState = Enum.GetName(typeof(ConstructionState), state);
+        const string query = @"
+            SELECT id, idConstructionProperties, idUser
+            FROM Constructions
+            WHERE state = @dbState;
+        ";
+        var res = await connection.QueryAsync<(int idConstruction, int idConstructionProperties, int idUser)>(query, new { dbState });
+        return res.ToList();
+    }
+
     public async Task<Dictionary<string, int>> getConstructionsOfState(int userID, int state) {
         using var connection = getConnection();
         string? dbState = Enum.GetName(typeof(ConstructionState), state);
@@ -125,6 +158,19 @@ public class ConstructionDAO {
 
         var res = await connection.QueryAsync<(string name, int quantity)>(query, new { userId, constructionId });
         return res.ToDictionary(r => r.name, r => r.quantity);
+    }
+
+    public async Task<bool> updateConstructionState(int idConstruction, int state) {
+        using var connection = getConnection();
+        string? dbState = Enum.GetName(typeof(ConstructionState), state);
+        const string query = @"
+            UPDATE Constructions
+            SET state = @state
+            WHERE id = @idConstruction;
+        ";
+
+        int rowsAffected = await connection.ExecuteAsync(query, new { state = dbState, idConstruction });
+        return rowsAffected > 0;
     }
 
     public async Task<bool> removeConstructionInWaitingAsync(int idUser, int idConstruction) {
@@ -206,7 +252,7 @@ public class ConstructionDAO {
         }
     }
 
-    public async Task<int?> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
+    public async Task<int> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
         using var connection = getConnection();
         await connection.OpenAsync();
         using var transaction = connection.BeginTransaction();
@@ -242,7 +288,7 @@ public class ConstructionDAO {
             );
 
             await transaction.CommitAsync();
-            return instanceID;
+            return (int) instanceID;
         } catch (Exception ex) {
             await transaction.RollbackAsync();
             Console.WriteLine($"Transaction failed: {ex.Message}");

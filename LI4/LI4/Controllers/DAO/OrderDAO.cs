@@ -68,6 +68,31 @@ public class OrderDAO {
     }
     #endregion
 
+    public async Task<List<(int, int, int, int)>> getRemainingOrders() {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT o.id, o.idUser, bo.idBlockProperty, bo.quantity
+            FROM Orders o
+            INNER JOIN BlocksInOrder bo ON bo.idOrder = o.id
+            WHERE delivered = 0
+        ";
+
+        var remainingOrders = await connection.QueryAsync<(int, int, int, int)>(query);
+        return remainingOrders.ToList();
+    }
+
+    public async Task<bool> updateOrderDelivered(int idOrder, bool delivered) {
+        using var connection = getConnection();
+        const string query = @"
+            UPDATE Orders
+            SET delivered = @delivered
+            WHERE id = @idOrder
+        ";
+
+        int rowsAffected = await connection.ExecuteAsync(query, new { delivered, idOrder });
+        return rowsAffected > 0;
+    }
+
     public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
         using var connection = getConnection();
         const string query = @"
