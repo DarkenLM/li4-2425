@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace LI4.Controllers;
+namespace LI4.Common.Dados;
 
 /// <summary>
 /// A wrapper class around <see cref="System.Threading.Timer"/> to provide controlled timer functionality.
