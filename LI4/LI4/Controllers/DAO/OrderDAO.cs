@@ -81,7 +81,7 @@ public class OrderDAO {
         return remainingOrders.ToList();
     }
 
-    public async Task<bool> updateOrderDelivered(int idOrder, bool delivered) {
+    public async Task<bool> updateOrderDeliveredAsync(int idOrder, bool delivered) {
         using var connection = getConnection();
         const string query = @"
             UPDATE Orders
@@ -105,7 +105,7 @@ public class OrderDAO {
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 
-    public async Task<bool> addBlocksInOrder(int idOrder, int idBlockProperty, int quantity) {
+    public async Task<bool> addBlocksInOrderAsync(int idOrder, int idBlockProperty, int quantity) {
         using var connection = getConnection();
         const string query = @"
             INSERT INTO BlocksInOrder (idOrder, idBlockProperty, quantity)

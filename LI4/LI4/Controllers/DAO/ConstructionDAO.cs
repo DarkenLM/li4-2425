@@ -96,7 +96,7 @@ public class ConstructionDAO {
     }
     #endregion
 
-    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertiesID) {
+    public async Task<Dictionary<string, int>> getBlocksNeededAsync(int constructionPropertiesID) {
         using var connection = getConnection();
         const string query = @"
             SELECT bp.name, bc.quantity
@@ -108,7 +108,7 @@ public class ConstructionDAO {
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 
-    public async Task<List<int>> getConstructionsOfStateIds(int userID, int state) {
+    public async Task<List<int>> getConstructionsOfStateIdsAsync(int userID, int state) {
         using var connection = getConnection();
         string? dbState = Enum.GetName(typeof(ConstructionState), state);
         const string query = @"
@@ -120,7 +120,7 @@ public class ConstructionDAO {
         return res.ToList();
     }
 
-    public async Task<List<(int, int, int)>> getUserIdAndConstructionsIdOfState(int state) {
+    public async Task<List<(int, int, int)>> getUserIdAndConstructionsIdOfStateAsync(int state) {
         using var connection = getConnection();
         string? dbState = Enum.GetName(typeof(ConstructionState), state);
         const string query = @"
@@ -132,7 +132,7 @@ public class ConstructionDAO {
         return res.ToList();
     }
 
-    public async Task<Dictionary<string, int>> getConstructionsOfState(int userID, int state) {
+    public async Task<Dictionary<string, int>> getConstructionsOfStateAsync(int userID, int state) {
         using var connection = getConnection();
         string? dbState = Enum.GetName(typeof(ConstructionState), state);
         const string query = @"
@@ -146,7 +146,7 @@ public class ConstructionDAO {
         return res.ToDictionary(r => r.name, r => r.quantity);
     }
 
-    public async Task<Dictionary<string, int>> getCompletedConstructionBlocks(int userId, int constructionId) {
+    public async Task<Dictionary<string, int>> getCompletedConstructionBlocksAsync(int userId, int constructionId) {
         using var connection = getConnection();
         const string query = @"
             SELECT bp.name, btc.quantity
@@ -160,7 +160,7 @@ public class ConstructionDAO {
         return res.ToDictionary(r => r.name, r => r.quantity);
     }
 
-    public async Task<bool> updateConstructionState(int idConstruction, int state) {
+    public async Task<bool> updateConstructionStateAsync(int idConstruction, int state) {
         using var connection = getConnection();
         string? dbState = Enum.GetName(typeof(ConstructionState), state);
         const string query = @"
@@ -252,7 +252,7 @@ public class ConstructionDAO {
         }
     }
 
-    public async Task<int> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
+    public async Task<int> addConstructionToQueueAsync(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
         using var connection = getConnection();
         await connection.OpenAsync();
         using var transaction = connection.BeginTransaction();

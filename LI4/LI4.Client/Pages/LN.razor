@@ -1,47 +1,204 @@
 ﻿@page "/ln"
 @rendermode InteractiveServer
-@inject IMineBuildsLN facade;
+@inject IMineBuildsLN MineBuilds;
 @inject IJSRuntime js
 
+@using LI4.Common.Dados
 @using Util;
 
-<h3>LN</h3>
+<!-- Display Users -->
+<div class="construction-container">
+    <h4>Users</h4>
+    @if (users != null && users.Any())
+    {
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in users)
+                {
+                    <tr>
+                        <td>@user.id</td>
+                        <td>@user.username</td>
+                        <td>@user.email</td>
+                        <td>@user.userPassword</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="no-data-message">No users found. Create some users!</p>
+    }
+</div>
+
+<!-- Display Blocks -->
+<div class="construction-container">
+    <h4>Blocks</h4>
+    @if (blocks != null && blocks.Any())
+    {
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Rarity</th>
+                    <th>Time to Acquire</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var block in blocks)
+                {
+                    <tr>
+                        <td>@block.id</td>
+                        <td>@block.name</td>
+                        <td>@block.rarity</td>
+                        <td>@block.timeToAcquire</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="no-data-message">No blocks found. Start creating blocks!</p>
+    }
+</div>
 
 
-<p>@message</p>
+<!-- Display Constructions -->
+<div class="construction-container">
+    <h4>Constructions</h4>
+    @if (constructions != null && constructions.Any())
+    {
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>State</th>
+                    <th>Difficulty</th>
+                    <th>Number of Stages</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var construction in constructions)
+                {
+                    <tr>
+                        <td>@construction.id</td>
+                        <td>@construction.name</td>
+                        <td>@construction.state</td>
+                        <td>@construction.dificulty</td>
+                        <td>@construction.nStages</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="no-data-message">No constructions found. Start building something amazing!</p>
+    }
+</div>
+
 
 @code {
+    private List<User> users = new();
+    private List<Construction> constructions = new();
+    private List<Block> blocks = new List<Block>();
+
     private string message;
 
     protected override async Task OnInitializedAsync() {
-        // bool isAuthenticated = await facade.authenticate("joao@example.com", "password3");
-        // message = "AUTHENTICATE: " + isAuthenticated;
-        // bool isUpdated = await facade.updateUtilizador("joao@example.com", "joao@example.com", "TheMan", "123");
-        // message = "UPDATED: " + isUpdated;
-        // List<Order> orders = await facade.getOrders(3);
-        // if (orders != null && orders.Count > 0)
-        // {
-        //     message = "Orders: \n";
-        //     foreach (var order in orders)
-        //     {
-        //         message += $"Order ID: {order.id}, User ID: {order.idUser}, Order Date: {order.orderDate}\n";
-        //     }
-        // }
-        // else
-        // {
-        //     message = "No orders found for the user.";
-        // }
-		// bool a = await facade.removeConstruction(3, 4);
-		// var catalog = await facade.getCatalog();
+        await LoadConstructions();
+        await LoadBlocks();
+        await LoadUsers();
 
-  //       // Build the message string
-  //       if (catalog != null && catalog.Count > 0) {
-  //           message = "Catalog:\n";
-  //           foreach (var item in catalog) {
-  //               message += $"ID: {item.Key}, Name: {item.Value}\n";
-  //           }
-  //       } else {
-  //           message = "No constructions found in the catalog.";
-  //       }
+        Console.WriteLine("LOAD DAS PROPRIEDADES ESTÁTICAS:");
+
+        Console.WriteLine((await MineBuilds.addConstructionToQueueAsync(2, 2)) ? "Ela construiu a coisa" : "Ela nao pode construir isto");
+
+    }
+
+    private async Task LoadConstructions()
+    {
+        constructions = (await MineBuilds.getAllConstructionInstancesAsync()).ToList();
+    }
+
+    private async Task LoadBlocks()
+    {
+        blocks = (await MineBuilds.getAllBlocksAsync()).ToList();
+    }
+
+    private async Task LoadUsers()
+    {
+        users = (await MineBuilds.getAllUsersAsync()).ToList();
     }
 }
+
+<style>
+    /* Styling for the container */
+    .construction-container {
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 800px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        /* Styling for the heading */
+        .construction-container h4 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+    /* Styling for the table */
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+        .styled-table th,
+        .styled-table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .styled-table th {
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .styled-table tr:hover {
+            background-color: #e6f7ff;
+        }
+
+    /* Styling for the message */
+    .no-data-message {
+        font-size: 1.1em;
+        color: #777;
+        text-align: center;
+        margin-top: 20px;
+        font-style: italic;
+    }
+</style>
+

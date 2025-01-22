@@ -9,18 +9,18 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     private static StockFacade stockFacade;
     private static ConstructionFacade constructionFacade;
 
-    static public async Task initStaticData(ConfigurationManager config) {
+    static public async Task initStaticDataAsync(ConfigurationManager config) {
         stockFacade = new StockFacade(config);
         userFacade = new UserFacade(config);
         constructionFacade = new ConstructionFacade(config);
         await stockFacade.initializeBlockPropertiesAsync();
         await constructionFacade.initializeConstructionPropertiesAsync();
-        await constructionFacade.initializeBlocksToConstructions();
+        await constructionFacade.initializeBlocksToConstructionsAsync();
     }
 
-    static public async Task initDynamicData(ConfigurationManager config) {
-        await constructionFacade.initializeAssemblyLines();
-        await stockFacade.initializeOrders();
+    static public async Task initDynamicDataAsync(ConfigurationManager config) {
+        await constructionFacade.initializeAssemblyLinesAsync();
+        await stockFacade.initializeOrdersAsync();
     }
 
     public MineBuildsLN(ConfigurationManager config) {
@@ -31,20 +31,20 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await userFacade.getAllAsync();
     }
 
-    public async Task<User> authenticate(string email, string password) {
-        return await userFacade.validateUser(email, password);
+    public async Task<User> authenticateAsync(string email, string password) {
+        return await userFacade.validateUserAsync(email, password);
     }
 
-    public async Task<User> getUserByEmail(string email) {
-        return await userFacade.getUserByEmail(email);
+    public async Task<User> getUserByEmailAsync(string email) {
+        return await userFacade.getUserByEmailAsync(email);
     }
 
-    public async Task<User> updateUtilizador(int id, string email, string username, string password) {
-        return await userFacade.updateUser(id, email, username, password);
+    public async Task<User> updateUserAsync(int id, string email, string username, string password) {
+        return await userFacade.updateUserAsync(id, email, username, password);
     }
 
-    public async Task<bool> registerUser(string email, string username, string password) {
-        return await userFacade.createUser(email, username, password);
+    public async Task<bool> registerUserAsync(string email, string username, string password) {
+        return await userFacade.registerUserAsync(email, username, password);
     }
     #endregion
 
@@ -56,16 +56,16 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
         return await stockFacade.getOrderContentAsync(id);
     }
-    public async Task<List<Order>> getOrders(int id) {
-        return await stockFacade.getOrdersUser(id);
+    public async Task<List<Order>> getUserOrdersAsync(int id) {
+        return await stockFacade.getUserOrdersAsync(id);
     }
 
-    public async Task<Dictionary<string, int>> getStock(int id) {
-        return await stockFacade.getStockUser(id);
+    public async Task<Dictionary<string, int>> getUserStockAsync(int id) {
+        return await stockFacade.getUserStockAsync(id);
     }
 
     public async Task<int> createOrderAsync(int id, Dictionary<int, int> blocks) {
-        return await stockFacade.makeOrderAsync(id, blocks);
+        return await stockFacade.createOrderAsync(id, blocks);
     }
 
     public BlockProperties getBlockProperties(int blockPropertiesID) {
@@ -78,17 +78,17 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getAllConstructionInstancesAsync();
     }
 
-    public async Task<bool> hasStock(int userID, int constructionPropertiesID) {
-        var result = await this.calculateMissingBlocks(userID, constructionPropertiesID);
+    public async Task<bool> hasStockAsync(int userID, int constructionPropertiesID) {
+        var result = await this.calculateMissingBlocksAsync(userID, constructionPropertiesID);
         return (result.ToDictionary().Count()==0);
     }
 
-    public async Task<bool> addConstructionToQueue(int userID, int constructionPropertiesID) {
-        if (!await this.hasStock(userID, constructionPropertiesID)) {
+    public async Task<bool> addConstructionToQueueAsync(int userID, int constructionPropertiesID) {
+        if (!await this.hasStockAsync(userID, constructionPropertiesID)) {
             throw new UserHasNotEnoughBlocksException($"User has not enough blocks to build construction with id: {constructionPropertiesID}");
         }
 
-        Dictionary<string, int> blocksNeededByName = await constructionFacade.getBlocksNeeded(constructionPropertiesID);
+        Dictionary<string, int> blocksNeededByName = await constructionFacade.getBlocksNeededAsync(constructionPropertiesID);
         Dictionary<int, int> blocksNeededByID = new Dictionary<int, int>();
 
         foreach (KeyValuePair<string, int> block in blocksNeededByName) {
@@ -96,17 +96,17 @@ public class MineBuildsLN : Common.IMineBuildsLN {
             blocksNeededByID[id] = block.Value;
         }
 
-        return await constructionFacade.addConstructionToQueue(blocksNeededByID, userID, constructionPropertiesID);
+        return await constructionFacade.addConstructionToQueueAsync(blocksNeededByID, userID, constructionPropertiesID);
     }
 
     public async Task<bool> updateConstructionStateToBuilding(int idConstruction) {
-        return await constructionFacade.updateConstructionState(idConstruction, (int) ConstructionState.BUILDING);
+        return await constructionFacade.updateConstructionStateAsync(idConstruction, (int) ConstructionState.BUILDING);
     }
 
-    public async Task<Dictionary<string, int>> calculateMissingBlocks(int userdID, int constructionPropertiesID) {
+    public async Task<Dictionary<string, int>> calculateMissingBlocksAsync(int userdID, int constructionPropertiesID) {
         Dictionary<string, int> missingBlocks = new Dictionary<string, int>();
-        Dictionary<string, int> quantityByName = await constructionFacade.getBlocksNeeded(constructionPropertiesID);
-        Dictionary<string, int> userStock = await stockFacade.getStockUser(userdID);
+        Dictionary<string, int> quantityByName = await constructionFacade.getBlocksNeededAsync(constructionPropertiesID);
+        Dictionary<string, int> userStock = await stockFacade.getUserStockAsync(userdID);
         foreach (string blockName in quantityByName.Keys) {
             int quantityNeeded = quantityByName[blockName];
             int quantityInStock = userStock.TryGetValue(blockName, out int stock) ? stock : 0;
@@ -118,31 +118,31 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     }
 
     public async Task<List<int>> getAwaitingConstructionsIds(int userID) {
-        return await constructionFacade.getConstructionsOfStateIds(userID, (int) ConstructionState.WAITING);
+        return await constructionFacade.getConstructionsOfStateIdsAsync(userID, (int) ConstructionState.WAITING);
     }
 
-    public async Task<Dictionary<string, int>> getAwaitingConstructions(int userID) {
-        return await constructionFacade.getConstructionsOfState(userID, (int) ConstructionState.WAITING);
+    public async Task<Dictionary<string, int>> getAwaitingConstructionsAsync(int userID) {
+        return await constructionFacade.getConstructionsOfStateAsync(userID, (int) ConstructionState.WAITING);
     }
 
-    public async Task<Dictionary<string, int>> getCompletedConstructions(int userID) {
-        return await constructionFacade.getConstructionsOfState(userID, (int) ConstructionState.COMPLETED);
+    public async Task<Dictionary<string, int>> getCompletedConstructionsAsync(int userID) {
+        return await constructionFacade.getConstructionsOfStateAsync(userID, (int) ConstructionState.COMPLETED);
     }
 
-    public async Task<Dictionary<string, int>> getBuildingConstructions(int userID) {
-        return await constructionFacade.getConstructionsOfState(userID, (int) ConstructionState.BUILDING);
+    public async Task<Dictionary<string, int>> getBuildingConstructionsAsync(int userID) {
+        return await constructionFacade.getConstructionsOfStateAsync(userID, (int) ConstructionState.BUILDING);
     }
 
-    public async Task<Dictionary<string, int>> viewCompletedConstruction(int userId, int constructionId) {
-        return await constructionFacade.getCompletedConstruction(userId, constructionId);
+    public async Task<Dictionary<string, int>> viewCompletedConstructionAsync(int userId, int constructionId) {
+        return await constructionFacade.getCompletedConstructionAsync(userId, constructionId);
     }
 
-    public async Task<bool> removeConstruction(int idUser, int idConstruction) {
-        return await constructionFacade.removeConstructionInWaiting(idUser, idConstruction);
+    public async Task<bool> removeConstructionAsync(int idUser, int idConstruction) {
+        return await constructionFacade.removeConstructionInWaitingAsync(idUser, idConstruction);
     }
 
-    public async Task<Dictionary<int,string>> getCatalog() {
-        return await constructionFacade.getConstructions();
+    public async Task<Dictionary<int,string>> getCatalogAsync() {
+        return await constructionFacade.getConstructionsAsync();
     }
 
     public ConstructionProperties getConstructionProperties(int constructionPropertiesID) {

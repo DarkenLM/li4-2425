@@ -50,7 +50,7 @@ public class ConstructionFacade {
         }
     }
 
-    public async Task initializeBlocksToConstructions() {
+    public async Task initializeBlocksToConstructionsAsync() {
         try {
             var blocksToConstruction = await constructionDAO.getAllBlocksToConstructionAsync();
             this.blocksToConstruction = blocksToConstruction.ToDictionary(r => r.Key, r => r.Value);
@@ -59,11 +59,11 @@ public class ConstructionFacade {
         }
     }
 
-    public async Task initializeAssemblyLines() {
+    public async Task initializeAssemblyLinesAsync() {
         try {
             this.assemblyLines = new();
 
-            var constructionsBuilding = await constructionDAO.getUserIdAndConstructionsIdOfState((int) ConstructionState.BUILDING);
+            var constructionsBuilding = await constructionDAO.getUserIdAndConstructionsIdOfStateAsync((int) ConstructionState.BUILDING);
             foreach(var consWaiting in constructionsBuilding) {
                 int idConstruction = consWaiting.Item1;
                 int idConstructionProperties = consWaiting.Item2;
@@ -73,7 +73,7 @@ public class ConstructionFacade {
                 addConstructionWaitingList(idConstructionProperties, idConstruction, idUser);
             }
 
-            var constructionsWaiting = await constructionDAO.getUserIdAndConstructionsIdOfState((int) ConstructionState.WAITING);
+            var constructionsWaiting = await constructionDAO.getUserIdAndConstructionsIdOfStateAsync((int) ConstructionState.WAITING);
             foreach(var consWaiting in constructionsWaiting) {
                 int idConstruction = consWaiting.Item1;
                 int idConstructionProperties = consWaiting.Item2;
@@ -110,7 +110,7 @@ public class ConstructionFacade {
             linha.stages[0].idConstruction = idConstruction;
             linha.stages[0].tw = new TimerWrapper(linha.stages[0].tempo * 1000, () => this.changeConstructionStage(0, linha), false);
             linha.stages[0].tw.start();
-            await updateConstructionState(idConstruction, (int) ConstructionState.BUILDING);
+            await updateConstructionStateAsync(idConstruction, (int) ConstructionState.BUILDING);
         } else {
             linha.waitingConstructions.Add(idConstruction);
         }
@@ -122,7 +122,7 @@ public class ConstructionFacade {
 
         // Último estágio
         if (index == linha.nStages - 1) {
-            await updateConstructionState((int) linha.stages[index].idConstruction!, (int) ConstructionState.COMPLETED);
+            await updateConstructionStateAsync((int) linha.stages[index].idConstruction!, (int) ConstructionState.COMPLETED);
             if (linha.stages[index - 1].tw == null && linha.stages[index - 1].idConstruction != null) {
                 linha.stages[index].idConstruction = linha.stages[index - 1].idConstruction;
                 linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStage(index, linha), false);
@@ -146,7 +146,7 @@ public class ConstructionFacade {
                     linha.stages[index].idConstruction = tmpId;
                     linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStage(index, linha), false);
                     linha.stages[index].tw.start();
-                    await updateConstructionState(tmpId, (int) ConstructionState.BUILDING);
+                    await updateConstructionStateAsync(tmpId, (int) ConstructionState.BUILDING);
                     // Console.WriteLine($"Timer iniciado no primeiro estágio, após retirar construção da fila de espera. Construção: {linha.stages[index].idConstruction}");
                 }
                 
@@ -180,8 +180,8 @@ public class ConstructionFacade {
     #endregion
 
     #region//---- XXX METHODS ----//
-    public async Task<bool> addConstructionToQueue(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
-        int idConstruction = await constructionDAO.addConstructionToQueue(blocksNeeded, userID, constructionPropertiesID);
+    public async Task<bool> addConstructionToQueueAsync(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID) {
+        int idConstruction = await constructionDAO.addConstructionToQueueAsync(blocksNeeded, userID, constructionPropertiesID);
         addConstructionWaitingList(constructionPropertiesID, idConstruction, userID);
         return idConstruction >= 0;
     }
@@ -206,31 +206,31 @@ public class ConstructionFacade {
         return await constructionDAO.deleteConstructionInstanceAsync(id);
     }
 
-    public async Task<Dictionary<string, int>> getBlocksNeeded(int constructionPropertiesID) {
-        return await constructionDAO.getBlocksNeeded(constructionPropertiesID);
+    public async Task<Dictionary<string, int>> getBlocksNeededAsync(int constructionPropertiesID) {
+        return await constructionDAO.getBlocksNeededAsync(constructionPropertiesID);
     }
 
-    public async Task<List<int>> getConstructionsOfStateIds(int userID, int state) {
-        return await constructionDAO.getConstructionsOfStateIds(userID, state);
+    public async Task<List<int>> getConstructionsOfStateIdsAsync(int userID, int state) {
+        return await constructionDAO.getConstructionsOfStateIdsAsync(userID, state);
     }
 
-    public async Task<Dictionary<string, int>> getConstructionsOfState(int userID, int state) {
-        return await constructionDAO.getConstructionsOfState(userID, state);
+    public async Task<Dictionary<string, int>> getConstructionsOfStateAsync(int userID, int state) {
+        return await constructionDAO.getConstructionsOfStateAsync(userID, state);
     }
 
-    public async Task<Dictionary<string, int>> getCompletedConstruction(int userId, int constructionId) {
-        return await constructionDAO.getCompletedConstructionBlocks(userId, constructionId);
+    public async Task<Dictionary<string, int>> getCompletedConstructionAsync(int userId, int constructionId) {
+        return await constructionDAO.getCompletedConstructionBlocksAsync(userId, constructionId);
     }
 
-    public async Task<bool> updateConstructionState(int idConstruction, int state) {
-        return await constructionDAO.updateConstructionState(idConstruction, state);
+    public async Task<bool> updateConstructionStateAsync(int idConstruction, int state) {
+        return await constructionDAO.updateConstructionStateAsync(idConstruction, state);
     }
 
-    public async Task<bool> removeConstructionInWaiting(int idUser, int idConstruction) {
+    public async Task<bool> removeConstructionInWaitingAsync(int idUser, int idConstruction) {
         return await constructionDAO.removeConstructionInWaitingAsync(idUser, idConstruction);
     }
 
-    public async Task<Dictionary<int, string>> getConstructions() {
+    public async Task<Dictionary<int, string>> getConstructionsAsync() {
         return await constructionDAO.getConstructionsAsync();
     }
 

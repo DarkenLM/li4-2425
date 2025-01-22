@@ -117,7 +117,7 @@ public class BlockDAO {
     }
     #endregion
 
-    public async Task<Dictionary<string, int>> getAllBlocksUser(int idUser) {
+    public async Task<Dictionary<string, int>> getAllUserBlocksAsync(int idUser) {
         using var connection = getConnection();
         const string query = @"
             SELECT bp.name, COALESCE(SUM(b.quantity), 0)
@@ -130,7 +130,7 @@ public class BlockDAO {
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
 
-    public async Task<int> getTimeToAcquireById(int idBlockProperties) {
+    public async Task<int> getTimeToAcquireByIdAsync(int idBlockProperties) {
         using var connection = getConnection();
         const string query = @"
             SELECT timeToAcquire

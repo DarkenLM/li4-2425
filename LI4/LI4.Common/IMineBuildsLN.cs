@@ -25,7 +25,7 @@ public interface IMineBuildsLN {
     /// This method checks if a user with the given email and password exists in the system.
     /// If successful, the user details are returned; otherwise, an exception is thrown.
     /// </summary>
-    /// <param name="email">The email address of the user to authenticate.</param>
+    /// <param name="email">The email address of the user to authenticateAsync.</param>
     /// <param name="password">The password associated with the user's account.</param>
     /// <returns>
     /// A task that represents the asynchronous operation. The task result is a <see cref="User"/>
@@ -34,7 +34,7 @@ public interface IMineBuildsLN {
     /// <exception cref="LI4.Common.Exceptions.UserExceptions.UserNotFoundException">
     /// Thrown when no user is found with the provided email and password.
     /// </exception>
-    public Task<User> authenticate(string email, string password);
+    public Task<User> authenticateAsync(string email, string password);
 
     /// <summary>
     /// Updates the details of an existing user in the system.
@@ -51,14 +51,14 @@ public interface IMineBuildsLN {
     /// <exception cref="LI4.Common.Exceptions.UserExceptions.UserAlreadyExistsException">
     /// Thrown when the new email or username already exists in the system, causing a conflict.
     /// </exception>
-    public Task<User> updateUtilizador(int id, string email, string username,string password);
+    public Task<User> updateUserAsync(int id, string email, string username,string password);
 
     /// <summary>
     /// Retrieves the user information based on the provided email.
     /// </summary>
     /// <param name="email">The email address of the user to retrieve.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing the user object if found.</returns>
-    public Task<User> getUserByEmail(string email);
+    public Task<User> getUserByEmailAsync(string email);
 
     /// <summary>
     /// Registers a new user with the provided email, username, and password.
@@ -68,7 +68,7 @@ public interface IMineBuildsLN {
     /// <param name="password">The password for the new user account.</param>
     /// <returns>A task representing the asynchronous operation. Returns <c>true</c> if the registration is successful, <c>false</c> if the registration 
     /// fails (e.g., if the email or username is already taken).</returns>
-    public Task<bool> registerUser(string email, string username, string password);
+    public Task<bool> registerUserAsync(string email, string username, string password);
     #endregion
 
     #region//---- STOCK METHODS----//
@@ -90,14 +90,14 @@ public interface IMineBuildsLN {
     /// </summary>
     /// <param name="id"> The ID of the user.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a list of orders for the specified user.</returns>
-    public Task<List<Order>> getOrders(int id);
+    public Task<List<Order>> getUserOrdersAsync(int id);
 
     /// <summary>
     /// Retrieves the current stock of blocks associated with a user.
     /// </summary>
     /// <param name="id">The id of the user.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of block names and their respective quantities in the stock</returns>
-    public Task<Dictionary<string, int>> getStock(int id);
+    public Task<Dictionary<string, int>> getUserStockAsync(int id);
 
     /// <summary>
     /// Creates a new order for the user with the specified blocks and quantities.
@@ -128,7 +128,7 @@ public interface IMineBuildsLN {
     /// <param name="constructionPropertiesID">The ID of the construction properties.</param>
     /// <param name="userID">The ID of the user.</param>
     /// <returns>A task representing the asynchronous operation, with a result indicating whether the user has enough blocks (true if they have enough stock, false otherwise).</returns>
-    public Task<bool> hasStock(int constructionPropertiesID, int userID);
+    public Task<bool> hasStockAsync(int constructionPropertiesID, int userID);
 
     /// <summary>
     /// Adds a construction to the user's construction queue.
@@ -136,7 +136,7 @@ public interface IMineBuildsLN {
     /// <param name="userID">The ID of the user placing the construction order.</param>
     /// <param name="constructionPropertyID">The ID of the construction property to add to the queue.</param>
     /// <returns>A task representing the asynchronous operation, with a result indicating whether the construction was successfully added to the queue.</returns>
-    public Task<bool> addConstructionToQueue(int userID, int constructionPropertiesID);
+    public Task<bool> addConstructionToQueueAsync(int userID, int constructionPropertiesID);
 
     /// <summary>
     /// Calculates the missing blocks needed for a specific construction by a user.
@@ -144,28 +144,28 @@ public interface IMineBuildsLN {
     /// <param name="userdID">The ID of the user.</param>
     /// <param name="constructionPropertyID">The ID of the construction property.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of missing blocks (block names and quantities).</returns>
-    public Task<Dictionary<string, int>> calculateMissingBlocks(int userdID, int constructionPropertiesID);
+    public Task<Dictionary<string, int>> calculateMissingBlocksAsync(int userdID, int constructionPropertiesID);
 
     /// <summary>
     /// Retrieves the constructions that are currently on the waiting queue for the specified user.
     /// </summary>
     /// <param name="userID">The ID of the user whose waiting constructions are to be retrieved.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of constructions in the queue (keyed by construction names and the corresponding quantities).</returns>
-    public Task<Dictionary<string, int>> getAwaitingConstructions(int userID);
+    public Task<Dictionary<string, int>> getAwaitingConstructionsAsync(int userID);
 
     /// <summary>
     /// Retrieves the list of completed constructions for the user.
     /// </summary>
     /// <param name="userID">The ID of the user.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of completed constructions (keyed by construction names and the corresponding quantities).</returns>
-    public Task<Dictionary<string, int>> getCompletedConstructions(int userID);
+    public Task<Dictionary<string, int>> getCompletedConstructionsAsync(int userID);
 
     /// <summary>
     /// Retrieves the constructions that are currently being built by the specified user.
     /// </summary>
     /// <param name="userID">The ID of the user whose building constructions are to be retrieved.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of constructions in the assembly line (keyed by construction names and the corresponding quantities).</returns>
-    public Task<Dictionary<string, int>> getBuildingConstructions(int userID);
+    public Task<Dictionary<string, int>> getBuildingConstructionsAsync(int userID);
 
     /// <summary>
     /// Views the details of a completed construction by the user.
@@ -173,7 +173,7 @@ public interface IMineBuildsLN {
     /// <param name="userId">The ID of the user.</param>
     /// <param name="constructionId">The ID of the completed construction.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of completed constructions (keyed by construction names and the corresponding quantities).</returns>
-    public Task<Dictionary<string, int>> viewCompletedConstruction(int userId, int constructionId);
+    public Task<Dictionary<string, int>> viewCompletedConstructionAsync(int userId, int constructionId);
 
     /// <summary>
     /// Removes a construction instance from the user's construction queue.
@@ -181,13 +181,13 @@ public interface IMineBuildsLN {
     /// <param name="idUser">The ID of the user.</param>
     /// <param name="idConstruction">The ID of the construction to remove from the queue.</param>
     /// <returns>A task representing the asynchronous operation, with a result indicating whether the construction was successfully removed.</returns>
-    public Task<bool> removeConstruction(int idUser, int idConstruction);
+    public Task<bool> removeConstructionAsync(int idUser, int idConstruction);
 
     /// <summary>
     /// Retrieves the catalog of available construction.
     /// </summary>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of construction property IDs and their respective names.</returns>
-    public Task<Dictionary<int, string>> getCatalog();
+    public Task<Dictionary<int, string>> getCatalogAsync();
 
     /// <summary>
     /// Retrieves the properties of a specific construction type by its ID.

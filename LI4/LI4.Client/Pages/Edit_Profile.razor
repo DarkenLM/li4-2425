@@ -48,7 +48,7 @@
 
         {
 
-            var user = await facade.getUserByEmail("paulo@example.com"); // Substituir pela função correta
+            var user = await facade.getUserByEmailAsync("paulo@example.com"); // Substituir pela função correta
 
 
 
@@ -88,7 +88,7 @@
 
         {
 
-            var success = await facade.updateUtilizador(id, email, username, password);
+            var success = await facade.updateUserAsync(id, email, username, password);
 
 
             if (success!= null)

@@ -15,7 +15,7 @@ public class UserFacade {
         return await userDAO.getAllAsync();
     }
 
-    public async Task<bool> createUser(string email, string username, string password) {
+    public async Task<bool> registerUserAsync(string email, string username, string password) {
         if (email == null || username == null || password == null) { return false; }
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password)) { return false; }
 
@@ -31,7 +31,7 @@ public class UserFacade {
         return false;
     }
 
-    public async Task<User> validateUser(string email, string password) {
+    public async Task<User> validateUserAsync(string email, string password) {
 
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) {
             throw new UserNotFoundException("You can't pass a null email or password to verify for a user!"); 
@@ -47,11 +47,11 @@ public class UserFacade {
         }
     }
 
-    public async Task<User> getUserByEmail(string email) {
+    public async Task<User> getUserByEmailAsync(string email) {
         return await this.userDAO.getByEmailAsync(email);
     }
 
-    public async Task<User> updateUser(int id, string email, string username, string password) {
+    public async Task<User> updateUserAsync(int id, string email, string username, string password) {
         User account = await userDAO.getByIdAsync(id);
         bool emailNoExists = await userDAO.emailNoOtherExistsAsync(id, email);
         bool usernameNoExists = await userDAO.usernameNoOtherExistsAsync(id, username);

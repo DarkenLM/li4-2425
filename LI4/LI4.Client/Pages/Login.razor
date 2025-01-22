@@ -34,7 +34,7 @@
     private async Task AuthenticateUser(){
         try
         {
-            User user = await facade.authenticate(email, password);
+            User user = await facade.authenticateAsync(email, password);
             if (user != null)
             {
                 message = "Login successful!";
