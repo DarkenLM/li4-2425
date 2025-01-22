@@ -141,6 +141,15 @@ public interface IMineBuildsLN {
     public Task<bool> addConstructionToQueueAsync(int userID, int constructionPropertiesID);
 
     /// <summary>
+    /// Gets the current assembly line stage number of the construction.
+    /// </summary>
+    /// <param name="idConstruction">The ID of the construction to get the current stage position.</param>
+    /// <param name="idUser">The ID of the user that owns the construction.</param>
+    /// <param name="idConstructionProperties">The ID of the construction property to filter the assembly line.</param>
+    /// <returns>A integer with the current stage number.</returns>
+    public int getConstructionCurrentStage(int idConstruction, int idUser, int idConstructionProperties);
+
+    /// <summary>
     /// Calculates the missing blocks needed for a specific construction by a user.
     /// </summary>
     /// <param name="userdID">The ID of the user.</param>

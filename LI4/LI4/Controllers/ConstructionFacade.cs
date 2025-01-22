@@ -198,6 +198,17 @@ public class ConstructionFacade {
         return await constructionDAO.getAllConstructionInstancesAsync();
     }
 
+    public int getConstructionStage(int idConstruction, int idUser, int idConstructionProperties) {
+        if (this.assemblyLines.ContainsKey(idUser) && this.assemblyLines[idUser].ContainsKey(idConstructionProperties)) {
+            for (int i = 0 ; i < this.assemblyLines[idUser][idConstructionProperties].nStages ; i++) {
+                if (this.assemblyLines[idUser][idConstructionProperties].stages[i].idConstruction == idConstruction)
+                    return i+1;
+            }
+        }
+        
+        throw new ConstructionNotFoundException("Couldn't find current stage of the construction.");
+    }
+
     public async Task<bool> updateConstructionInstanceAsync(int constructionID, ConstructionState state, int constructionPropertiesID, int userID) {
         return await constructionDAO.updateConstructionInstanceAsync(constructionID, state, constructionPropertiesID, userID);
     }

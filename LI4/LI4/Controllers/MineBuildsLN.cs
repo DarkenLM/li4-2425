@@ -103,6 +103,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.addConstructionToQueueAsync(blocksNeededByID, userID, constructionPropertiesID);
     }
 
+    public int getConstructionCurrentStage(int idConstruction, int idUser, int idConstructionProperties) {
+        return constructionFacade.getConstructionStage(idConstruction, idUser, idConstructionProperties);
+    }
+
     public async Task<bool> updateConstructionStateToBuilding(int idConstruction) {
         return await constructionFacade.updateConstructionStateAsync(idConstruction, (int) ConstructionState.BUILDING);
     }
