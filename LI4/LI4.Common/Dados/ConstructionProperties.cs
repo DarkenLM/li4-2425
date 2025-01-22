@@ -17,6 +17,7 @@ public class ConstructionProperties {
     public string name { get; }
     public ConstructionDificulty dificulty { get; }
     public int nStages { get; }
+    public Estagio[] stages { get; set; }
 
     public ConstructionProperties() { }
 
