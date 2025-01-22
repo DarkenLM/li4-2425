@@ -32,8 +32,8 @@ public class OrderDAO {
     public async Task<int> addAsync(Order order) {
         using var connection = getConnection();
         const string query = @"
-            INSERT INTO Orders (idUser, orderDate)
-            VALUES (@idUser, @orderDate);
+            INSERT INTO Orders (idUser, orderDate, delivered)
+            VALUES (@idUser, @orderDate, @delivered);
             SELECT CAST(SCOPE_IDENTITY() as int)";
         return await connection.ExecuteScalarAsync<int>(query, order);
     }
