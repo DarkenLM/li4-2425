@@ -25,6 +25,59 @@ public class StockFacade {
         }
     }
 
+    public async Task initializeOrders() {
+        try {
+            List<(int idOrder, int idUser, int idBlockProperties, int quantity)> orderLines = await orderDAO.getRemainingOrders();
+            //Dictionary<idOrder, (idUser, Dictionary<idBlockProperties, quantity>)> 
+            Dictionary<int, KeyValuePair<int, Dictionary<int, int>>> remainingOrders = new();
+
+            // Tratamento do output da query
+            foreach(var line in orderLines) {
+                if (remainingOrders.ContainsKey(line.idOrder)) {
+                    remainingOrders[line.idOrder].Value.Add(line.idBlockProperties, line.quantity);
+                } else {
+                    Dictionary<int, int> blocks = new();
+                    blocks.Add(line.idBlockProperties, line.quantity);
+                    KeyValuePair<int, Dictionary<int, int>> remainingBlocksForUser = new(line.idUser, blocks);
+                    remainingOrders.Add(line.idOrder, remainingBlocksForUser);
+                }
+            }
+
+            // foreach (var entry in remainingOrders) {
+            //     int idOrder = entry.Key;
+            //     int idUser = entry.Value.Key;
+            //     Dictionary<int, int> blocks = entry.Value.Value;
+
+            //     Console.WriteLine($"idOrder: {idOrder}, idUser: {idUser}, blocks:");
+            //     foreach(var block in blocks) {
+            //         Console.WriteLine($"BlockProperties: {block.Key}, Quantity: {block.Value}");
+            //     }
+            // }
+
+            // Inicialização do comportamento
+            foreach (var entry in remainingOrders) {
+                int idOrder = entry.Key;
+                int idUser = entry.Value.Key;
+                Dictionary<int, int> blocks = entry.Value.Value;
+                int estimatedTime = 0;
+
+                foreach (KeyValuePair<int, int> blockPair in blocks) { 
+                    int idBlockProperties = blockPair.Key;
+                    int blockQuantity = blockPair.Value;
+
+                    int timeToAcquire = blockProperties[idBlockProperties].timeToAcquire;
+                    estimatedTime += blockQuantity * timeToAcquire;
+                }
+
+                // Console.WriteLine($"Iniciado timer para order {idOrder} de {estimatedTime} segundos.");
+                TimerWrapper tw = new TimerWrapper(estimatedTime * 1000, async () => await addStockFromOrder(idUser, blocks, idOrder), false);
+                tw.start();
+            }
+        } catch (Exception ex) {
+            throw new Exception("Failed to initialize orders", ex);
+        }
+    }
+
     #region//---- INTERNAL STRUCTS ----//
     public BlockProperties getBlockProperties(int blockPropertiesID) {
         return this.blockProperties[blockPropertiesID];
@@ -46,26 +99,28 @@ public class StockFacade {
     }
 
 
-    private async Task addStockFromOrder(int idUser, Dictionary<int, int> blocks) {
+    private async Task addStockFromOrder(int idUser, Dictionary<int, int> blocks, int idOrder) {
         // Console.WriteLine($"Encomenda do jogador '{idUser}' processada em: {DateTime.Now}");
         foreach (var entry in blocks) {
             await blockDAO.addBlockInstanceAsync(idUser, entry.Key, entry.Value);
             // Console.WriteLine("Adicionado ao Stock: ");
             // Console.WriteLine($"Propriedade do Bloco: {entry.Key}. Quantidade: {entry.Value}.");
         }
+
+        await orderDAO.updateOrderDelivered(idOrder, true);
     }
 
 
     public async Task<int> makeOrderAsync(int idUser, Dictionary<int, int> blocks) {
         int estimatedTime = 0;
-        Order order = new Order(idUser, DateTime.Now);
+        Order order = new Order(idUser, DateTime.Now, false);
         int orderId = await orderDAO.addAsync(order);
 
         foreach (KeyValuePair<int, int> entry in blocks) { 
             int idBlockProperties = entry.Key;
             int blockQuantity = entry.Value;
 
-            int timeToAcquire = await blockDAO.getTimeToAcquireById(idBlockProperties);
+            int timeToAcquire = blockProperties[idBlockProperties].timeToAcquire;
             estimatedTime += blockQuantity * timeToAcquire;
 
             await orderDAO.addBlocksInOrder(orderId, idBlockProperties, blockQuantity);
@@ -73,7 +128,7 @@ public class StockFacade {
         // Console.WriteLine("Tempo que vai demorar: " + estimatedTime * 1000 + " milisegundos.");
         // Console.WriteLine("Comecei em: " + DateTime.Now);
 
-        TimerWrapper tw = new TimerWrapper(estimatedTime * 1000, async () => await addStockFromOrder(idUser, blocks), false);
+        TimerWrapper tw = new TimerWrapper(estimatedTime * 1000, async () => await addStockFromOrder(idUser, blocks, orderId), false);
         tw.start();
 
         return estimatedTime;

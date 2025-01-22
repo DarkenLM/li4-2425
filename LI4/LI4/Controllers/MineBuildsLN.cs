@@ -18,6 +18,11 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         await constructionFacade.initializeBlocksToConstructions();
     }
 
+    static public async Task initDynamicData(ConfigurationManager config) {
+        await constructionFacade.initializeAssemblyLines();
+        await stockFacade.initializeOrders();
+    }
+
     public MineBuildsLN(ConfigurationManager config) {
     }
 
@@ -91,10 +96,11 @@ public class MineBuildsLN : Common.IMineBuildsLN {
             blocksNeededByID[id] = block.Value;
         }
 
-        int? instance = await constructionFacade.addConstructionToQueue(blocksNeededByID, userID, constructionPropertiesID);
+        return await constructionFacade.addConstructionToQueue(blocksNeededByID, userID, constructionPropertiesID);
+    }
 
-        Console.WriteLine("Here we should had the build to the queue!!");
-        return true;
+    public async Task<bool> updateConstructionStateToBuilding(int idConstruction) {
+        return await constructionFacade.updateConstructionState(idConstruction, (int) ConstructionState.BUILDING);
     }
 
     public async Task<Dictionary<string, int>> calculateMissingBlocks(int userdID, int constructionPropertiesID) {
@@ -109,6 +115,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
             }
         }
         return missingBlocks;
+    }
+
+    public async Task<List<int>> getAwaitingConstructionsIds(int userID) {
+        return await constructionFacade.getConstructionsOfStateIds(userID, (int) ConstructionState.WAITING);
     }
 
     public async Task<Dictionary<string, int>> getAwaitingConstructions(int userID) {
