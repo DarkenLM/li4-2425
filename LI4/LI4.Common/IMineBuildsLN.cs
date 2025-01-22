@@ -113,6 +113,8 @@ public interface IMineBuildsLN {
     /// <param name="blockPropertiesID">The ID of the block properties to retrieve.</param>
     /// <returns>A <see cref="BlockProperties"/> object containing the details of the specified block.</returns>
     public BlockProperties getBlockProperties(int blockPropertiesID);
+
+    Dictionary<int, BlockProperties> getAllBlockProperties();
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//

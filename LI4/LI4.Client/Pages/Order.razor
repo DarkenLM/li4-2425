@@ -11,7 +11,7 @@
 <h3>Encomendar Blocos</h3>
 
 <div>
-    @if (availableBlocks != null && availableBlocks.Any())
+    @if (blockProperties != null && blockProperties.Any())
 
     {
         <table>
@@ -23,11 +23,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var block in availableBlocks)
+                @foreach (var block in blockProperties.Values)
 
                 {
                     <tr>
-                        <td>@block.name</td>  <!-- Exibe o nome do bloco -->
+                        <td>@block.name</td>
                         <td>
                             <input type="number" style="width: 100px; padding: 5px;" @bind="orderQuantities[block.id]" />
                         </td>
@@ -54,8 +54,7 @@
 <p>@message</p>
 
 @code {
-
-    private IEnumerable<Block>? availableBlocks;
+    private Dictionary<int, BlockProperties> blockProperties = new();  // Inicializa o dicionário como vazio
 
 
 
@@ -71,23 +70,21 @@
 
     {
 
-        // Obtém todos os blocos
+        // Inicializar os BlockProperties a partir da tabela carregada no facade
 
-        availableBlocks = await facade.getAllBlocksAsync();
+        blockProperties = facade.getAllBlockProperties();  // Corrigido para utilizar o método assíncrono
 
 
 
-        if (availableBlocks != null)
+        if (blockProperties != null)
 
         {
 
-            foreach (var block in availableBlocks)
+            foreach (var block in blockProperties.Values)
 
             {
 
                 orderQuantities[block.id] = 0;  // Inicializa a quantidade do bloco com 0
-
-                Console.WriteLine(block.id);
 
             }
 
@@ -133,7 +130,7 @@
 
     {
 
-        var orderId = await facade.createOrderAsync(1, orderQuantities);
+        var orderId = await facade.createOrderAsync(1, orderQuantities);  // Criar pedido
 
         if (orderId > 0)
 
@@ -163,4 +160,5 @@
 
     }
 }
+
 

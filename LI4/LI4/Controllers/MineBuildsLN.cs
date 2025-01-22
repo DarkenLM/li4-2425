@@ -71,6 +71,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public BlockProperties getBlockProperties(int blockPropertiesID) {
         return stockFacade.getBlockProperties(blockPropertiesID);
     }
+
+    public Dictionary<int, BlockProperties> getAllBlockProperties() {
+        return stockFacade.getAllBlockProperties();
+    }
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//

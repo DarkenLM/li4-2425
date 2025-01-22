@@ -84,7 +84,7 @@ public class BlockDAO {
     public async Task<IEnumerable<Block>> getAllBlockInstancesAsync() {
         using var connection = getConnection();
         const string query = @"
-            SELECT b.idBlockProperty, b.quantity, name, rarity, timeToAcquire 
+            SELECT b.idUser, b.quantity, name, rarity, timeToAcquire 
             FROM Blocks b
             INNER JOIN BlockProperties bp ON b.idBlockProperty = bp.id;";
         return await connection.QueryAsync<Block>(query);
