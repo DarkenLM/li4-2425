@@ -1,0 +1,184 @@
+﻿@page "/{source}/construction/{id:int}"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+
+@using Util;
+@using Common.Dados;
+
+
+<h3>Construction Details</h3>
+
+<div>
+    @if (blocksForConstruction != null)
+    {
+        <p><strong>Construction Name:</strong> @constructionProperties.name</p>
+        <p><strong>Difficulty:</strong> @constructionProperties.dificulty</p>
+        <p><strong>Stages:</strong> @constructionProperties.nStages</p>
+
+        <div>
+            @if(source == "catalog"){
+                <div style="width: 200px; height: 150px; overflow-y: scroll; border: 1px solid black; padding: 10px;">
+                    @for (int index = 0; index < blocksForConstruction.Count; index++)
+                    {
+                        var item = blocksForConstruction.ElementAt(index);
+                        var itemKey = item.Key;
+                        var itemValue = item.Value;
+
+                        <div style="margin-bottom: 10px; border: 1px solid gray; padding: 5px;">
+                            <strong>Block Name:</strong> @itemKey <br />
+                            <strong>Block Quantity:</strong> @itemValue
+                        </div>
+                    }
+                </div>
+
+                <input type="number" style="width: 100px; padding: 5px; margin-right: 10px;" @bind="currentNumber" @oninput="validateInput"/>
+                <button @onclick="addConstruction">+</button>
+
+                <button @onclick="NavigateToCatalog">back</button>
+            }
+            @if(source == "assemblyLine"){
+
+            }
+            @if(source == "completedConstructions"){
+                <div style="width: 200px; height: 150px; overflow-y: scroll; border: 1px solid black; padding: 10px;">
+                    @for (int index = 0; index < blocksForConstruction.Count; index++)
+                    {
+                        var item = blocksForConstruction.ElementAt(index);
+                        var itemKey = item.Key;
+                        var itemValue = item.Value;
+
+                        <div style="margin-bottom: 10px; border: 1px solid gray; padding: 5px;">
+                            <strong>Block Name:</strong> @itemKey <br />
+                            <strong>Block Quantity:</strong> @itemValue
+                        </div>
+                    }
+                </div>
+
+                @if(total > 0){
+                    <p>@($"{completed}/{total} constructions")</p>
+                }
+                else{
+                    <p>Loading construction data...</p>
+                }
+
+                <button @onclick="NavigateToCompletedConstructions">back</button>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Loading construction details...</p>
+    }
+</div>
+
+
+<p>@message</p>
+
+@code {
+    [Parameter] public int id { get; set; }
+    [Parameter] public string source { get; set; }
+    private ConstructionProperties? constructionProperties;
+    private Dictionary<string, int>? blocksForConstruction;
+    private string message = string.Empty;
+
+    private int currentNumber = 0;
+
+    private int nonCompleted = 0;
+    private int completed = 0;
+    private int total = 0;
+
+
+    protected override async Task OnInitializedAsync(){
+
+        if(source == "catalog" || source == "completedConstructions"){ // idConstructionProperties
+            blocksForConstruction = await facade.getAllBlocksConstruction(id);
+            constructionProperties = facade.getConstructionProperties(id);
+        }
+        if(source == "completedConstructions"){
+            completed = await numCompletedConstructions();
+            nonCompleted = await numOfnonCompletedConstructions();
+            total = completed + nonCompleted;
+        }
+        if(source == "assemblyLine"){ // id of construction
+
+        }
+    }  
+
+    #region//---- CATALOG METHODS ----//
+
+    private async Task validateInput(ChangeEventArgs e){
+
+        if (int.TryParse(e.Value.ToString(), out int inputNumber)){
+
+            if (inputNumber >= 0){
+                bool hasStock;
+
+                while(inputNumber > currentNumber){
+                    hasStock = await facade.hasStock(id,3);
+                    if(hasStock){
+                        currentNumber++;
+                        await facade.addConstructionToQueue(3, id);
+                    }
+                    else{
+                        message = "Cannot add more. User does not have enough stock.";
+                        break;
+                    }
+                }
+            }
+            else{
+                message = "Quantity cannot be negative.";
+                currentNumber = 0;
+            }
+        }
+        else{
+            message = "Invalid input. Please enter a valid number.";
+            currentNumber = 0;
+        }
+    }
+
+    private async Task addConstruction(){
+
+        bool hasStock = await facade.hasStock(id,3);
+        if(hasStock){
+            currentNumber++;
+            await facade.addConstructionToQueue(3, id);
+        }
+        else{
+            message = "Cannot add more. User does not have enough stock.";
+        }
+    }
+
+    private void NavigateToCatalog(){
+        NavigationManager.NavigateTo("/constructions/catalog");
+    }
+
+    #endregion
+
+    #region//---- ASSEMBLY LINE METHODS ----//
+
+
+
+    #endregion
+
+    #region//---- COMPLETED CONSTRUCTIONS METHODS ----//
+
+    private async Task<int> numCompletedConstructions(){
+        Dictionary<string, int> completed = await facade.getCompletedConstructions(3);
+        return completed.Count;
+    }
+
+    private async Task<int> numOfnonCompletedConstructions(){
+        Dictionary<string, int> awaiting = await facade.getAwaitingConstructions(3);
+        Dictionary<string, int> building = await facade.getBuildingConstructions(3);
+        int result = awaiting.Count + building.Count; 
+        return result;
+    }
+
+	private void NavigateToCompletedConstructions(){
+        NavigationManager.NavigateTo("/constructions/completedConstructions");
+    }
+
+	#endregion
+}

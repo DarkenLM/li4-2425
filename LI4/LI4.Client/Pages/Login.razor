@@ -38,7 +38,7 @@
             if (user != null)
             {
                 message = "Login successful!";
-                // NavigationManager.NavigateTo("/home");
+                NavigationManager.NavigateTo("/initial");
             }
         }
         catch (Exception ex)
@@ -50,6 +50,5 @@
     private void NavigateToRegister()
     {
         NavigationManager.NavigateTo("/register");
-        message = "to register";
     }
 }

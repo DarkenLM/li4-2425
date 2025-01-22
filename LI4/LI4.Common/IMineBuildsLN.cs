@@ -203,5 +203,8 @@ public interface IMineBuildsLN {
     /// <param name="blockPropertiesID">The ID of the block property needed for the construction.</param>
     /// <returns>A <see cref="BlocksToConstruction"/> object containing the block properties and their quantities required for the construction.</returns>
     public BlocksToConstruction getBlocksToConstruction(int constructionPropertiesID, int blockPropertiesID);
+
+    public Task<Dictionary<string, int>> getAllBlocksConstruction(int constructionPropertiesID);
+
     #endregion
 }
