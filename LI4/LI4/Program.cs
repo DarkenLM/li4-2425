@@ -41,6 +41,12 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(LI4.Client._Imports).Assembly);
 
+Console.WriteLine("Starting to load static data...");
 await MineBuildsLN.initStaticData(builder.Configuration);
+Console.WriteLine("Loaded static data!");
+
+Console.WriteLine("Starting to recover orders and assembly lines...");
+await MineBuildsLN.initDynamicData(builder.Configuration);
+Console.WriteLine("Loaded orders and assembly lines!");
 
 app.Run();
