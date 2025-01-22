@@ -130,15 +130,15 @@ INSERT INTO BlocksToConstruction (idConstructionProperties, idBlockProperty, qua
 -- VALUES FOR Orders
 -- ---------------------------------------------------
 SET IDENTITY_INSERT Orders ON
-INSERT INTO Orders (id, idUser, orderDate)
+INSERT INTO Orders (id, idUser, orderDate, delivered)
 	VALUES
-    ('1', '1', '2025-01-01 10:30:00'),
-    ('2', '2', '2025-01-02 14:45:00'),
-    ('3', '3', '2025-01-03 09:15:00'),
-    ('4', '4', '2025-01-04 16:00:00'),
-    ('5', '5', '2025-01-05 12:00:00'),
-    ('6', '6', '2025-01-06 18:20:00'),
-    ('7', '7', '2025-01-07 08:00:00');
+    ('1', '1', '2025-01-01 10:30:00', 'false'),
+    ('2', '2', '2025-01-02 14:45:00', 'false'),
+    ('3', '3', '2025-01-03 09:15:00', 'false'),
+    ('4', '4', '2025-01-04 16:00:00', 'false'),
+    ('5', '5', '2025-01-05 12:00:00', 'false'),
+    ('6', '6', '2025-01-06 18:20:00', 'false'),
+    ('7', '7', '2025-01-07 08:00:00', 'false');
 SET IDENTITY_INSERT Orders OFF
 
 -- ----------------------------------------------------
@@ -147,6 +147,7 @@ SET IDENTITY_INSERT Orders OFF
 INSERT INTO BlocksInOrder (idOrder, idBlockProperty, quantity)
 	VALUES
     ('1', '1','3'),
+	('1', '2', '50'),
     ('2', '2','1'),
     ('3', '3','1'),
     ('4', '4','1'),
