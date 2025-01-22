@@ -1,9 +1,11 @@
-@* @page "/order"
+@page "/order"
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 @inject IMineBuildsLN facade;
 @inject IJSRuntime js
-
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
 @using Util;
 
 <h3>Encomendar Blocos</h3>
@@ -25,13 +27,13 @@
 
                 {
                     <tr>
-                        <td>@block.Key</td>
+                        <td>@block.name</td>  <!-- Exibe o nome do bloco -->
                         <td>
-                            <input type="number" style="width: 100px; padding: 5px;" @bind="orderQuantities[block.Key]" @oninput="ValidateInput(block.Key, $event)" />
+                            <input type="number" style="width: 100px; padding: 5px;" @bind="orderQuantities[block.id]" />
                         </td>
                         <td>
-                            <button @onclick="() => IncrementBlock(block.Key)">+</button>
-                            <button @onclick="() => DecrementBlock(block.Key)">-</button>
+                            <button @onclick="() => IncrementBlock(block.id)">+</button>
+                            <button @onclick="() => DecrementBlock(block.id)">-</button>
                         </td>
                     </tr>
                 }
@@ -52,9 +54,14 @@
 <p>@message</p>
 
 @code {
-    private Dictionary<int, int>? availableBlocks;  // Alterado para int como chave
 
-    private Dictionary<int, int> orderQuantities = new();  // A chave aqui é int
+    private IEnumerable<Block>? availableBlocks;
+
+
+
+    private Dictionary<int, int> orderQuantities = new();  // A chave aqui é int (usando o Id do bloco)
+
+
 
     private string message = string.Empty;
 
@@ -64,11 +71,9 @@
 
     {
 
-        // Alterado para utilizar inteiros como chave
+        // Obtém todos os blocos
 
-        availableBlocks = (await facade.getAllBlocksAsync())
-
-            .ToDictionary(block => int.Parse(block.name), block => block.quantity);
+        availableBlocks = await facade.getAllBlocksAsync();
 
 
 
@@ -80,7 +85,9 @@
 
             {
 
-                orderQuantities[block.Key] = 0;  // Inicializa a quantidade do bloco
+                orderQuantities[block.id] = 0;  // Inicializa a quantidade do bloco com 0
+
+                Console.WriteLine(block.id);
 
             }
 
@@ -90,23 +97,15 @@
 
 
 
-    private void ValidateInput(int blockKey, ChangeEventArgs e)  // Alterado para int
+    private void IncrementBlock(int blockId)  // Incrementa a quantidade de um bloco
 
     {
 
-        if (int.TryParse(e.Value.ToString(), out int quantity) && quantity >= 0)
+        if (orderQuantities.ContainsKey(blockId))
 
         {
 
-            orderQuantities[blockKey] = quantity;
-
-        }
-
-        else
-
-        {
-
-            message = "Quantidade inválida.";
+            orderQuantities[blockId]++;
 
         }
 
@@ -114,25 +113,15 @@
 
 
 
-    private void IncrementBlock(int blockKey)  // Alterado para int
+    private void DecrementBlock(int blockId)  // Decrementa a quantidade de um bloco
 
     {
 
-        orderQuantities[blockKey]++;
-
-    }
-
-
-
-    private void DecrementBlock(int blockKey)  // Alterado para int
-
-    {
-
-        if (orderQuantities[blockKey] > 0)
+        if (orderQuantities.ContainsKey(blockId) && orderQuantities[blockId] > 0)
 
         {
 
-            orderQuantities[blockKey]--;
+            orderQuantities[blockId]--;
 
         }
 
@@ -173,5 +162,5 @@
         NavigationManager.NavigateTo("/stock");
 
     }
-} *@
+}
 
