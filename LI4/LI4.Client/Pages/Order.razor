@@ -126,11 +126,38 @@
 
 
 
+
+
+
+
     private async Task ConfirmOrder()
 
     {
 
-        var orderId = await facade.createOrderAsync(1, orderQuantities);  // Criar pedido
+
+        var validOrder = orderQuantities
+
+            .Where(kv => kv.Value > 0)
+
+            .ToDictionary(kv => kv.Key, kv => kv.Value);
+
+
+
+        if (!validOrder.Any())
+
+        {
+
+            message = "Erro: Não pode encomendar sem selecionar blocos!";
+
+            return;
+
+        }
+
+
+
+        var orderId = await facade.createOrderAsync(1, validOrder);
+
+
 
         if (orderId > 0)
 
@@ -149,6 +176,12 @@
         }
 
     }
+
+
+
+
+
+
 
 
 

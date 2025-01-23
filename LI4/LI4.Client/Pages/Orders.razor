@@ -14,7 +14,7 @@ else if (!orders.Any())
 {
     <p>Não há encomendas.</p>
 }
-else
+else if (selectedOrder == null)
 {
     <table class="table">
         <thead>
@@ -22,6 +22,7 @@ else
                 <th>ID</th>
                 <th>Data</th>
                 <th>Entregue</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -31,37 +32,83 @@ else
                     <td>@order.id</td>
                     <td>@order.orderDate.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>@(order.delivered ? "Sim" : "Não")</td>
+                    <td>
+                        <button class="btn btn-info" @onclick="() => LoadOrderDetails(order.id)">Ver Encomenda</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 }
+else
+{
+    <h4>Detalhes da Encomenda @selectedOrder.id</h4>
+
+    @if (selectedOrderBlocks == null)
+    {
+        <p>A carregar detalhes da encomenda...</p>
+    }
+    else if (!selectedOrderBlocks.Any())
+    {
+        <p>Esta encomenda não contém blocos.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Bloco</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var block in selectedOrderBlocks)
+                {
+                    <tr>
+                        <td>@block.Key</td>
+                        <td>@block.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <button class="btn btn-secondary" @onclick="BackToOrders">Voltar às Encomendas</button>
+}
 
 <button class="btn btn-primary" @onclick="GoToStock">Voltar ao Stock</button>
 
 @code {
-
     private List<LI4.Dados.Order> orders = new();
-
-
+    private Dictionary<string, int>? selectedOrderBlocks = null;
+    private LI4.Dados.Order? selectedOrder = null;
 
     protected override async Task OnInitializedAsync()
     {
-
         int userId = 1; // Substituir pelo ID do utilizador autenticado
-
-        var o = await facade.getUserOrdersAsync(userId);
-
-        orders = o;
-
+        orders = await facade.getUserOrdersAsync(userId);
     }
 
+    private async Task LoadOrderDetails(int orderId)
+    {
+        selectedOrder = orders.FirstOrDefault(o => o.id == orderId);
+        selectedOrderBlocks = null; // Para mostrar "A carregar detalhes..."
 
+        if (selectedOrder != null)
+        {
+            selectedOrderBlocks = await facade.getOrderContentAsync(orderId);
+        }
+    }
+
+    private void BackToOrders()
+    {
+        selectedOrder = null;
+        selectedOrderBlocks = null;
+    }
 
     private void GoToStock()
     {
-
         NavigationManager.NavigateTo("/stock");
-
     }
 }
+
