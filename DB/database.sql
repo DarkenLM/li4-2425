@@ -98,8 +98,9 @@ BEGIN
 	CREATE TABLE BlocksToConstruction(
 		idConstructionProperties INT NOT NULL FOREIGN KEY REFERENCES ConstructionProperties(id),
 		idBlockProperty INT NOT NULL FOREIGN KEY REFERENCES BlockProperties(id),
+		stage INT NOT NULL,
 		quantity INT NOT NULL,
-		CONSTRAINT PK_BlocksToConstruction PRIMARY KEY (idConstructionProperties, idBlockProperty)
+		CONSTRAINT PK_BlocksToConstruction PRIMARY KEY (idConstructionProperties, idBlockProperty, stage)
 	)
 END
 
