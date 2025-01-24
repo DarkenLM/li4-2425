@@ -1,0 +1,28 @@
+@page "/home"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+<h3>MineBuilds</h3>
+
+<div>
+    <button @onclick="GoToAssemblyLines">Assembly Lines</button>
+    <button @onclick="GoToEditProfile">Edit Profile</button>
+    <button @onclick="GoToCatalog">Catalog</button>
+    <button @onclick="GoToStock">Stock</button>
+    <button @onclick="GoToWaitingLine">Waiting Line</button>
+    <button @onclick="GoToCompletedConstructions">Completed Constructions</button>
+</div>
+
+@code {
+    private void GoToAssemblyLines() => Navigation.NavigateTo("/constructions/assemblyLines");
+
+    private void GoToEditProfile() => Navigation.NavigateTo("/edit-profile");
+
+    private void GoToCatalog() => Navigation.NavigateTo("/constructions/catalog");
+
+    private void GoToStock() => Navigation.NavigateTo("/stock");
+
+    private void GoToWaitingLine() => Navigation.NavigateTo("/constructions/waitingLine");
+
+    private void GoToCompletedConstructions() => Navigation.NavigateTo("/constructions/completedConstructions");
+}

@@ -25,7 +25,7 @@
                         var item = blocksForConstruction.ElementAt(index);
                         var itemKey = item.Key;
                         var blockConstruction = item.Value;
-                        var blockStock = stock[itemKey];
+                        var blockStock = blocks[itemKey];
 
                         <div style="margin-bottom: 10px; border: 1px solid gray; padding: 5px;">
                             <strong>Block Name:</strong> @itemKey <br />
@@ -48,10 +48,11 @@
                         var item = blocksForConstruction.ElementAt(index);
                         var itemKey = item.Key;
                         var itemValue = item.Value;
+                        var itemUsed = blocks[itemKey];
 
                         <div style="margin-bottom: 10px; border: 1px solid gray; padding: 5px;">
                             <strong>Block Name:</strong> @itemKey <br />
-                            <strong>Block Quantity:</strong> @itemValue
+                            <strong>Block Quantity:</strong> @itemUsed/@itemValue <br/>
                         </div>
                     }
                 </div>
@@ -93,7 +94,7 @@
     [Parameter] public string source { get; set; }
     private ConstructionProperties? constructionProperties;
     private Dictionary<string, int>? blocksForConstruction;
-    private Dictionary<string, int>? stock;
+    private Dictionary<string, int>? blocks;
     private string message = string.Empty;
 
     private int currentNumber = 0;
@@ -102,6 +103,7 @@
     private int completed = 0;
 
     private int idp = 0; // idConstructionProperties
+    private int stage = 0;
 
 
     protected override async Task OnInitializedAsync(){
@@ -111,7 +113,7 @@
             constructionProperties = facade.getConstructionProperties(id);
         }
         if(source == "catalog"){
-            stock = await facade.getUserStockAsync(3);
+            blocks = await facade.getUserStockAsync(3); // stock
         }
         if(source == "completedConstructions"){
             total = await totalConstructions();
@@ -119,8 +121,10 @@
         }
         if(source == "assemblyLine"){ // id : id of construction
             idp = await facade.getConstructionPropertyIdAsync(id);
-			blocksForConstruction = await facade.getAllBlocksConstructionAsync(idp);
+            stage = getStage(id, 3, idp);
+            blocksForConstruction = await facade.getAllBlocksConstructionAsync(idp);
             constructionProperties = facade.getConstructionProperties(idp);
+            blocks = facade.getBlocksAtStageConstruction(idp, stage); // block used in the stage
         }
     }  
 
