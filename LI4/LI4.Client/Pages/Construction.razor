@@ -24,11 +24,12 @@
                     {
                         var item = blocksForConstruction.ElementAt(index);
                         var itemKey = item.Key;
-                        var itemValue = item.Value;
+                        var blockConstruction = item.Value;
+                        var blockStock = stock[itemKey];
 
                         <div style="margin-bottom: 10px; border: 1px solid gray; padding: 5px;">
                             <strong>Block Name:</strong> @itemKey <br />
-                            <strong>Block Quantity:</strong> @itemValue
+                            <strong>Block Quantity:</strong> @blockStock/@blockConstruction <br />
                         </div>
                     }
                 </div>
@@ -92,6 +93,7 @@
     [Parameter] public string source { get; set; }
     private ConstructionProperties? constructionProperties;
     private Dictionary<string, int>? blocksForConstruction;
+    private Dictionary<string, int>? stock;
     private string message = string.Empty;
 
     private int currentNumber = 0;
@@ -107,6 +109,9 @@
         if(source == "catalog" || source == "completedConstructions"){ // id : idConstructionProperties
             blocksForConstruction = await facade.getAllBlocksConstructionAsync(id);
             constructionProperties = facade.getConstructionProperties(id);
+        }
+        if(source == "catalog"){
+            stock = await facade.getUserStockAsync(3);
         }
         if(source == "completedConstructions"){
             total = await totalConstructions();
