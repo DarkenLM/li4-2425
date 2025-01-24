@@ -217,6 +217,8 @@ public interface IMineBuildsLN {
 
     public Task<Dictionary<string, int>> getAllBlocksConstructionAsync(int constructionPropertiesID);
 
+    public Dictionary<string, int> getBlocksAtStageConstruction(int constructionPropertiesID, int stage);
+
     public Task<List<int>> getBuildingIdsConstructionsAsync(int idUser, int idConstructionProperties);
 
     public int getEstimatedTime(int idUser, int idConstructionProperties, int stage);

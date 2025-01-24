@@ -8,17 +8,17 @@ namespace LI4.Common.Dados;
 public class BlocksToConstruction {
     public int constructionPropertiesID { get; }
     public int blockPropertiesID { get; }
-    public int blockQuantity { get; }
+    public Dictionary<int, int> stages { get; }
 
     public BlocksToConstruction() { }
 
-    public BlocksToConstruction(int constructionPropertiesID, int blockPropertiesID, int blockQuantity) {
+    public BlocksToConstruction(int constructionPropertiesID, int blockPropertiesID) {
         this.constructionPropertiesID = constructionPropertiesID;
         this.blockPropertiesID = blockPropertiesID;
-        this.blockQuantity = blockQuantity;
+        this.stages = new();
     }
 
     public string toString() {
-        return $"BlocksToConstruction [ConstructionPropertiesID: {constructionPropertiesID}, BlockPropertiesID: {blockPropertiesID}, BlockQuantity: {blockQuantity}]";
+        return $"BlocksToConstruction [ConstructionPropertiesID: {constructionPropertiesID}, BlockPropertiesID: {blockPropertiesID}, Stages: {stages}]";
     }
 }

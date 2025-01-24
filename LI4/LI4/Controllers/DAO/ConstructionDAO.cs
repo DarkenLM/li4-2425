@@ -60,13 +60,13 @@ public class ConstructionDAO {
         return result.ToDictionary(r => r.id, r => r);
     }
 
-    public async Task<Dictionary<Tuple<int,int>, BlocksToConstruction>> getAllBlocksToConstructionAsync() {
+    public async Task<List<(int, int, int, int)>> getAllBlocksToConstructionAsync() {
         using var connection = getConnection();
         const string query = @"
-            SELECT idConstructionProperties AS constructionPropertiesID, idBlockProperty AS blockPropertiesID, quantity as blockQuantity
+            SELECT idConstructionProperties AS constructionPropertiesID, idBlockProperty AS blockPropertiesID, stage, quantity as blockQuantity
             FROM BlocksToConstruction;";
-        var result = await connection.QueryAsync<BlocksToConstruction>(query);
-        return result.ToDictionary(r => Tuple.Create(r.constructionPropertiesID, r.blockPropertiesID), r => r);
+        var result = await connection.QueryAsync<(int idConstructionProperties, int idBlockProperty, int stage, int quantity)>(query);
+        return result.ToList();
     }
 
     public async Task<List<(int, int, int)>> getAllConstructionStagesPropertiesAsync() {
@@ -99,11 +99,12 @@ public class ConstructionDAO {
     public async Task<Dictionary<string, int>> getBlocksNeededAsync(int constructionPropertiesID) {
         using var connection = getConnection();
         const string query = @"
-            SELECT bp.name, bc.quantity
+            SELECT bp.name, SUM(bc.quantity)
             FROM BlocksToConstruction bc
             INNER JOIN ConstructionProperties cp ON cp.id = bc.idConstructionProperties
             INNER JOIN BlockProperties bp ON bp.id = bc.idBlockProperty
-            WHERE cp.id = @Id;";
+            WHERE cp.id = @Id
+            GROUP BY bp.name;";
         var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id = constructionPropertiesID });
         return result.ToDictionary(r => r.Name, r => r.Quantity);
     }
@@ -161,11 +162,12 @@ public class ConstructionDAO {
     public async Task<Dictionary<string, int>> getCompletedConstructionBlocksAsync(int userId, int constructionId) {
         using var connection = getConnection();
         const string query = @"
-            SELECT bp.name, btc.quantity
+            SELECT bp.name, SUM(btc.quantity)
             FROM Constructions c
             INNER JOIN BlocksToConstruction btc ON c.idConstructionProperties = btc.idConstructionProperties
             INNER JOIN BlockProperties bp ON btc.idBlockProperty = bp.id
-            WHERE c.id = @constructionId AND c.idUser = @userId;
+            WHERE c.id = @constructionId AND c.idUser = @userId
+            GROUP BY bp.name;
             ";
 
         var res = await connection.QueryAsync<(string name, int quantity)>(query, new { userId, constructionId });
@@ -212,9 +214,10 @@ public class ConstructionDAO {
 
             // get blocks of the construction
             const string blocksQuery = @"
-                SELECT idBlockProperty, quantity 
+                SELECT idBlockProperty, SUM(quantity) 
                 FROM BlocksToConstruction 
                 WHERE idConstructionProperties = @IdConstructionProperties
+                GROUP BY idBlockProperty
             ";
             var blocks = await connection.QueryAsync<(int idBlockProperty, int quantity)>(
                 blocksQuery,

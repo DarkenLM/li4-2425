@@ -167,6 +167,17 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getBlocksNeededAsync(constructionPropertiesID);
     }
 
+    public Dictionary<string, int> getBlocksAtStageConstruction(int constructionPropertiesID, int stage) {
+        Dictionary<int, int> blocksQuantity = constructionFacade.getBlocksAtStageConstruction(constructionPropertiesID, stage);
+        Dictionary<string, int> quantity = new();
+        foreach(var entry in blocksQuantity) {
+            string name = stockFacade.getBlockNameById(entry.Key);
+            quantity.Add(name, entry.Value);
+        }
+
+        return quantity;
+    }
+
     public async Task<List<int>> getBuildingIdsConstructionsAsync(int idUser, int idConstructionProperties) {
         return await constructionFacade.getBuildingIdsConstructionsAsync(idUser, idConstructionProperties);
     }

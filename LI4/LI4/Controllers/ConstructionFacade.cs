@@ -53,7 +53,17 @@ public class ConstructionFacade {
     public async Task initializeBlocksToConstructionsAsync() {
         try {
             var blocksToConstruction = await constructionDAO.getAllBlocksToConstructionAsync();
-            this.blocksToConstruction = blocksToConstruction.ToDictionary(r => r.Key, r => r.Value);
+            this.blocksToConstruction = new();
+            foreach (var line in blocksToConstruction) {
+                if (!this.blocksToConstruction.ContainsKey(new Tuple<int, int>(line.Item1, line.Item2))) {
+                    BlocksToConstruction blocks = new(line.Item1, line.Item2);
+                    blocks.stages.Add(line.Item3, line.Item4);
+                    this.blocksToConstruction.Add(Tuple.Create(line.Item1, line.Item2), blocks);
+                } else {
+                    if (this.blocksToConstruction[Tuple.Create(line.Item1, line.Item2)].stages != null)
+                        this.blocksToConstruction[Tuple.Create(line.Item1, line.Item2)].stages.Add(line.Item3, line.Item4);
+                }
+            }
         } catch (Exception ex) {
             throw new Exception("Failed to initialize Blocks To Construction", ex);
         }
@@ -219,6 +229,21 @@ public class ConstructionFacade {
 
     public async Task<Dictionary<string, int>> getBlocksNeededAsync(int constructionPropertiesID) {
         return await constructionDAO.getBlocksNeededAsync(constructionPropertiesID);
+    }
+
+    public Dictionary<int, int> getBlocksAtStageConstruction(int constructionPropertiesID, int stage) {
+        Dictionary<int, int> res = new();
+        foreach(KeyValuePair<Tuple<int, int>, BlocksToConstruction> entry in this.blocksToConstruction) {
+            if (entry.Key.Item1 == constructionPropertiesID) {
+                int quantity = 0;
+                foreach(KeyValuePair<int, int> constructionStage in this.blocksToConstruction[entry.Key].stages) {
+                    if (constructionStage.Key <= stage) quantity += constructionStage.Value;
+                }
+                res.Add(entry.Key.Item2, quantity);
+            }
+        }
+
+        return res;
     }
 
     public async Task<List<int>> getConstructionsOfStateIdsAsync(int userID, int state) {

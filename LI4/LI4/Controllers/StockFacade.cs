@@ -149,6 +149,10 @@ public class StockFacade {
         return await blockDAO.getBlockByIdAsync(id);
     }
 
+    public string getBlockNameById(int id) {
+        return this.blockProperties[id].name;
+    }
+
     public async Task<IEnumerable<Block>> getAllBlocksAsync() {
         return await blockDAO.getAllBlockInstancesAsync();
     }
