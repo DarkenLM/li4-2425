@@ -1,6 +1,7 @@
 ﻿using LI4.Common.Dados;
 using LI4.Common.Exceptions.ConstructionExceptions;
 using LI4.Dados;
+using System.Globalization;
 
 namespace LI4.Controllers;
 
@@ -129,15 +130,15 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getConstructionsOfStateIdsAsync(userID, (int) ConstructionState.WAITING);
     }
 
-    public async Task<Dictionary<string, int>> getAwaitingConstructionsAsync(int userID) {
+    public async Task<Dictionary<int, int>> getAwaitingConstructionsAsync(int userID) {
         return await constructionFacade.getConstructionsOfStateAsync(userID, (int) ConstructionState.WAITING);
     }
 
-    public async Task<Dictionary<string, int>> getCompletedConstructionsAsync(int userID) {
+    public async Task<Dictionary<int, int>> getCompletedConstructionsAsync(int userID) {
         return await constructionFacade.getConstructionsOfStateAsync(userID, (int) ConstructionState.COMPLETED);
     }
 
-    public async Task<Dictionary<string, int>> getBuildingConstructionsAsync(int userID) {
+    public async Task<Dictionary<int, int>> getBuildingConstructionsAsync(int userID) {
         return await constructionFacade.getConstructionsOfStateAsync(userID, (int) ConstructionState.BUILDING);
     }
 
@@ -145,12 +146,12 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getCompletedConstructionAsync(userId, constructionId);
     }
 
-    public async Task<bool> removeConstructionAsync(int idUser, int idConstruction) {
-        return await constructionFacade.removeConstructionInWaitingAsync(idUser, idConstruction);
+    public async Task<bool> removeConstructionAsync(int idUser, int idConstructionProperties) {
+        return await constructionFacade.removeConstructionInWaitingAsync(idUser, idConstructionProperties);
     }
 
-    public async Task<Dictionary<int,string>> getCatalogAsync() {
-        return await constructionFacade.getConstructionsAsync();
+    public List<int> getCatalog() {
+        return constructionFacade.getConstructions();
     }
 
     public ConstructionProperties getConstructionProperties(int constructionPropertiesID) {
@@ -164,6 +165,18 @@ public class MineBuildsLN : Common.IMineBuildsLN {
 
     public async Task<Dictionary<string, int>> getAllBlocksConstructionAsync(int constructionPropertiesID) {
         return await constructionFacade.getBlocksNeededAsync(constructionPropertiesID);
+    }
+
+    public async Task<List<int>> getBuildingIdsConstructionsAsync(int idUser, int idConstructionProperties) {
+        return await constructionFacade.getBuildingIdsConstructionsAsync(idUser, idConstructionProperties);
+    }
+
+    public int getEstimatedTime(int idUser, int idConstructionProperties, int stage) {
+        return constructionFacade.getEstimatedTime(idUser, idConstructionProperties, stage);
+    }
+
+    public async Task<int> getConstructionPropertyIdAsync(int idConstruction) {
+        return await constructionFacade.getConstructionPropertyIdAsync(idConstruction);
     }
 
     #endregion

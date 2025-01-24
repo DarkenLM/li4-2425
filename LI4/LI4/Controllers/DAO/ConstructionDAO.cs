@@ -132,18 +132,30 @@ public class ConstructionDAO {
         return res.ToList();
     }
 
-    public async Task<Dictionary<string, int>> getConstructionsOfStateAsync(int userID, int state) {
+    public async Task<Dictionary<int, int>> getConstructionsOfStateAsync(int userID, int state) {
         using var connection = getConnection();
         string? dbState = Enum.GetName(typeof(ConstructionState), state);
         const string query = @"
-            SELECT cp.name, COUNT(c.idConstructionProperties)
+            SELECT cp.id, COUNT(c.idConstructionProperties) AS quantity
             FROM Constructions c 
             INNER JOIN ConstructionProperties cp ON c.idConstructionProperties = cp.id 
             WHERE c.state = @dbState AND c.idUser = @userID
-            GROUP BY (cp.name);
+            GROUP BY (cp.id);
         ";
-        var res = await connection.QueryAsync<(string name, int quantity)>(query, new { dbState, userID});
-        return res.ToDictionary(r => r.name, r => r.quantity);
+        var res = await connection.QueryAsync<(int id, int quantity)>(query, new { dbState, userID});
+        return res.ToDictionary(r => r.id, r => r.quantity);
+    }
+
+    public async Task<List<int>> getBuildingIdsConstructionsAsync(int idUser, int idConstructionProperties) {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT c.id
+            FROM Constructions c 
+            INNER JOIN ConstructionProperties cp ON c.idConstructionProperties = cp.id 
+            WHERE c.state = 'BUILDING' AND c.idUser = @IdUser AND c.idConstructionProperties = @IdConstructionProperties;
+        ";
+        var res = await connection.QueryAsync<int>(query, new { idUser, idConstructionProperties });
+        return res.ToList();
     }
 
     public async Task<Dictionary<string, int>> getCompletedConstructionBlocksAsync(int userId, int constructionId) {
@@ -173,7 +185,7 @@ public class ConstructionDAO {
         return rowsAffected > 0;
     }
 
-    public async Task<bool> removeConstructionInWaitingAsync(int idUser, int idConstruction) {
+    public async Task<bool> removeConstructionInWaitingAsync(int idUser, int idConstructionProperties) {
         using var connection = getConnection();
         await connection.OpenAsync(); // Ensure connection is explicitly opened
         using var transaction = await connection.BeginTransactionAsync();
@@ -183,19 +195,19 @@ public class ConstructionDAO {
             const string checkQuery = @"
                 SELECT state, idConstructionProperties 
                 FROM Constructions 
-                WHERE id = @IdConstruction AND idUser = @IdUser AND state = 'WAITING'
+                WHERE idConstructionProperties  = @IdConstruction AND idUser = @IdUser AND state = 'WAITING'
             ";
             var construction = await connection.QueryFirstOrDefaultAsync<(string, int)>(
                 checkQuery,
-                new { IdConstruction = idConstruction, IdUser = idUser },
+                new { IdConstruction = idConstructionProperties, IdUser = idUser },
                 transaction
             );
 
-            if (construction.Equals(default((string state, int idConstructionProperties)))) {
-                throw new InvalidOperationException("The user does not have the construction."); ///???
+            if (construction == (null, 0)) {
+                throw new InvalidOperationException("The user does not have the construction.");
             }
             if (construction.Item1 != "WAITING") {
-                throw new InvalidOperationException("Construction is not in 'waiting' state or does not exist."); ///???
+                throw new InvalidOperationException("Construction is not in 'waiting' state or does not exist.");
             }
 
             // get blocks of the construction
@@ -238,8 +250,11 @@ public class ConstructionDAO {
             }
 
             // remove the construction
-            const string deleteQuery = "DELETE FROM Constructions WHERE id = @IdConstruction AND idUser = @IdUser";
-            await connection.ExecuteAsync(deleteQuery, new { IdConstruction = idConstruction, IdUser = idUser }, transaction);
+            const string deleteQuery = @"
+                DELETE TOP(1) 
+                FROM Constructions 
+                WHERE idConstructionProperties = @IdConstruction AND state = 'WAITING' AND idUser = @IdUser";
+            await connection.ExecuteAsync(deleteQuery, new { IdConstruction = idConstructionProperties, IdUser = idUser }, transaction);
 
             // Commit the transaction
             await transaction.CommitAsync();
@@ -296,14 +311,24 @@ public class ConstructionDAO {
         }
     }
 
-
-    public async Task<Dictionary<int, string>> getConstructionsAsync() {
+    public async Task<int> getConstructionPropertyIdAsync(int idConstruction) {
         using var connection = getConnection();
         const string query = @"
-        SELECT id, name
-        FROM ConstructionProperties
+            SELECT idConstructionProperties 
+            FROM Constructions 
+            WHERE id = @ConstructionId;
         ";
-        var res = await connection.QueryAsync<(int id, string name)>(query);
-        return res.ToDictionary(r => r.id, r => r.name);
+        return await connection.QuerySingleAsync<int>(query, new { ConstructionId = idConstruction });
     }
+
+
+    //public async Task<Dictionary<int, string>> getConstructionsAsync() {
+    //    using var connection = getConnection();
+    //    const string query = @"
+    //    SELECT id, name
+    //    FROM ConstructionProperties
+    //    ";
+    //    var res = await connection.QueryAsync<(int id, string name)>(query);
+    //    return res.ToDictionary(r => r.id, r => r.name);
+    //}
 }

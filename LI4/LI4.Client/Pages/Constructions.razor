@@ -1,4 +1,5 @@
 ﻿@page "/constructions/{route}"
+@page "/constructions/{route}/{id:int}"
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 @inject IMineBuildsLN facade;
@@ -8,41 +9,90 @@
 
 
 <div>
-    @if(catalog != null && catalog.Any()){
-		@if (route == "catalog")
+    @if(constructions != null || catalog != null){
+        @if (route == "catalog")
         {
             <h3 class="text-center">Catalog</h3>
 
-            @for (int index = 0; index < catalog.Count; index++){ <!-- to not print repeated values -->
-                var item = catalog.ElementAt(index);
-                var itemKey = item.Key;
-                var itemValue = item.Value;
+            @for (int index = 0; index < catalog.Count; index++) { 
+                int itemKey = catalog[index];
+                var name = facade.getConstructionProperties(itemKey).name;
 
-                <button @onclick="() => userHasStock(itemKey)">@itemValue</button>
+                <button @onclick="() => userHasStock(itemKey)">@name</button>
             }
         }
         @if(route == "completedConstructions")
         {
-		    <h3 class="text-center">Completed Constructions</h3>
+            <h3 class="text-center">Completed Constructions</h3>
 
-		    @for (int index = 0; index < catalog.Count; index++){ <!-- to not print repeated values -->
-                var item = catalog.ElementAt(index);
+            @for (int index = 0; index < totalConstructionsMap.Count; index++){ 
+                <!-- to not print repeated values -->
+                var item = totalConstructionsMap.ElementAt(index);
                 var itemKey = item.Key;
                 var itemValue = item.Value;
+                var name = facade.getConstructionProperties(itemKey).name;
 
-                <button @onclick="() => NavigateToCompletedConstruction(itemKey)">@itemValue</button>
+                <button @onclick="() => NavigateToCompletedConstruction(itemKey)">@name</button>
+                <span>@getNumCompleted(itemKey)/@itemValue</span>
+            }
+        }
+        @if(route == "assemblyLines"){
+            <h3 class="text-center">Assembly Lines</h3>
+
+            @for (int index = 0; index < catalog.Count; index++){ 
+                int itemKey = catalog[index];
+                var name = facade.getConstructionProperties(itemKey).name;
+
+                <button @onclick="() => NavigateToAssemblyLine(itemKey)">@name Assembly Line</button>
             }
         }
         @if(route == "assemblyLine")
         {
+            // id == idConstructionProperties
+            var name = facade.getConstructionProperties(id).name;
 
+            <h3 class="text-center">@name Assembly Line</h3>
+            /// itemKey == idConstruction 
+            @for (int index = 0; index < catalog.Count; index++){ 
+                int itemKey = catalog[index];
+                var stage = getStage(itemKey, 3, id);
+
+                <button @onclick="() => NavigateToAssemblyLineConstruction(itemKey)">@name: @itemKey</button>
+                <span><strong>Stage:</strong> @stage</span>
+                <span><strong>Estimated Time:</strong> @getEstimatedTime(3, id, stage)</span>
+            }
         }
-        @if(route == "waitingQueue"){
+        @if(route == "waitingLine"){
+            <h3 class="text-center">Waiting Line</h3>
 
+            @for (int index = 0; index < constructions.Count; index++){ <!-- to not print repeated values -->
+                var item = constructions.ElementAt(index);
+                var itemKey = item.Key;
+                var itemValue = item.Value;
+                var name = facade.getConstructionProperties(item.Key).name;
+
+                <button @onclick="() => NavigateToWaitingLineConstruction(itemKey)">@name</button>
+                <span>@itemValue</span>
+
+                <div>
+                    <button @onclick="() => removeConstruction(itemKey)" style="margin-right: 5px;">-</button>
+                    <button @onclick="() => removeAllConstructions(itemKey, itemValue)" style="margin-left: 5px;">x</button>
+                </div>
+            }
         }
     }
     else{
-        <p>Loading...</p>
+        @if(route == "completedConstructions"){
+            <h3 class="text-center">Completed Constructions</h3>
+        }
+        @if(route ==  "assemblyLine"){
+            <h3 class="text-center">Assembly Line</h3>
+        }
+        @if(route == "waitingLine"){
+            <h3 class="text-center">Waiting Line</h3>
+        }
+
+        <p>No data available.</p>
     }
 </div>
 
@@ -51,45 +101,155 @@
 
 @code {
     [Parameter] public string route { get; set; }
-    private Dictionary<int, string>? catalog;
+    [Parameter] public int id { get; set; }
+    private Dictionary<int, int>? constructions;
+    private List<int>? catalog;
+    private Dictionary<int, int>? totalConstructionsMap;
     private string message = string.Empty;
 
     protected override async Task OnInitializedAsync(){
-        catalog = await facade.getCatalogAsync();
+        if(route == "catalog" || route == "assemblyLines"){
+            catalog = facade.getCatalog();
+        }
+        if(route == "completedConstructions"){
+            constructions = await facade.getCompletedConstructionsAsync(3);
+            totalConstructionsMap = new();
+            await initTotalConstructionMap();
+        }
+        if(route == "assemblyLine"){ /// id == idConstructionProperties
+            catalog = await facade.getBuildingIdsConstructionsAsync(3, id);
+        }
+        if(route == "waitingLine"){
+            constructions = await facade.getAwaitingConstructionsAsync(3);
+        }
     }
 
-	#region//---- CATALOG METHODS ----//
+    #region//---- CATALOG METHODS ----//
 
     private async Task userHasStock(int idConstructionProperties){
-        try{
-            bool construct = await facade.hasStockAsync(idConstructionProperties, 3); // change to user real id
-            if(construct){
-                NavigationManager.NavigateTo($"/catalog/construction/{idConstructionProperties}");
-            }
-            else{
-				NavigationManager.NavigateTo($"/catalog/construction/{idConstructionProperties}");
-            }
+        bool construct = await facade.hasStockAsync(3, idConstructionProperties); // change to user real id
+        if(!construct){
+            /// to darken things
         }
-        catch(Exception ex){
-            message = $"{ex.Message}"; /// not sure
-        }
+        NavigationManager.NavigateTo($"/catalog/construction/{idConstructionProperties}");
     }
 
     #endregion
 
-	#region//---- COMPLETED CONSTRUCTIONS METHODS ----//
+    #region//---- COMPLETED CONSTRUCTIONS METHODS ----//
 
-	private void NavigateToCompletedConstruction(int idConstructionProperties){
+    private async Task<int> numCompletedConstructions(int id){
+        Dictionary<int, int> completed = await facade.getCompletedConstructionsAsync(3);
+        int completedCount = completed.TryGetValue(id, out int completedValue) ? completedValue : 0;
+        return completedCount;
+    }
+
+    private async Task<int> numOfnonCompletedConstructions(int id){
+        Dictionary<int, int> awaiting = await facade.getAwaitingConstructionsAsync(3);
+        Dictionary<int, int> building = await facade.getBuildingConstructionsAsync(3);
+        int awaitingCount = awaiting.TryGetValue(id, out int awaitingValue) ? awaitingValue : 0;
+        int buildingCount = building.TryGetValue(id, out int buildingValue) ? buildingValue : 0;
+
+        return awaitingCount + buildingCount;
+    }
+
+    private async Task<int> totalConstructions(int id){
+        int a = await numOfnonCompletedConstructions(id);
+        int b = await numCompletedConstructions(id);
+        int result = a + b;
+
+        return result;
+    }
+
+    private async Task initTotalConstructionMap(){
+        catalog = facade.getCatalog();
+        foreach (var construction in catalog)
+        {
+            int id = construction;
+            int total = await totalConstructions(id);
+            if (total == 0) continue;
+            totalConstructionsMap[id] = total;
+        }
+    }
+
+    private int getNumCompleted(int id){
+        return constructions.TryGetValue(id, out int completedValue) ? completedValue : 0;
+    }
+
+    private void NavigateToCompletedConstruction(int idConstructionProperties){
         NavigationManager.NavigateTo($"/completedConstructions/construction/{idConstructionProperties}");
+    }
+
+    #endregion
+
+    #region//---- ASSEMBLY LINES METHODS ----//
+
+    private void NavigateToAssemblyLine(int idConstructionProperties){
+        NavigationManager.NavigateTo($"/constructions/assemblyLine/{idConstructionProperties}");
+    }
+
+    #endregion
+
+    #region//---- ASSEMBLY LINE METHODS ----//
+
+    private async Task<List<int>> getBuildingsAysnc(){
+        return await facade.getBuildingIdsConstructionsAsync(3, id);
+    }
+
+    private string getEstimatedTime(int idUser, int idConstructionProperties, int stage){
+        int seconds = facade.getEstimatedTime(idUser, idConstructionProperties, stage);
+        int minutes = seconds / 60;
+        int remainingSeconds = seconds % 60;
+        return $"{minutes:D2}:{remainingSeconds:D2}";
+    }
+
+    private int getStage(int idConstruction, int idUser, int idConstructionProperties){
+        try{
+            return facade.getConstructionCurrentStage(idConstruction, idUser, idConstructionProperties);
+        }
+        catch(Exception ex){
+            message = $"{ex.Message}";
+        }
+
+        return 0;
+    }
+
+	private void NavigateToAssemblyLineConstruction(int idConstruction){
+        NavigationManager.NavigateTo($"/assemblyLine/construction/{idConstruction}");
     }
 
 	#endregion
 
-	#region//---- ASSEMBLY LINE METHODS ----//
+	#region//---- WAITING LINE METHODS ----//
 
-	#endregion
+	    private async Task<bool> removeConstruction(int idConstructionProperties){
+        try{
+            if (constructions.ContainsKey(idConstructionProperties)){
+                await facade.removeConstructionAsync(3, idConstructionProperties);
+                constructions[idConstructionProperties] = Math.Max(constructions[idConstructionProperties] - 1, 0);
+			    if (constructions[idConstructionProperties] == 0){
+                    constructions.Remove(idConstructionProperties);
+                }
+                return true;
+            }
+        }
+        catch (Exception ex){
+            message = $"{ex.Message}";
+        }
 
-	#region//---- WAITING QUEUE METHODS ----//
+        return false;
+    }
+
+    private async Task removeAllConstructions(int idConstructionProperties, int N){
+        bool removed = true; 
+        for(int i = 0; i < N && removed; i++){
+			removed = await facade.removeConstructionAsync(3, idConstructionProperties);
+        }
+    }
+
+	private void NavigateToWaitingLineConstruction(int idConstructionProperties){
+        //NavigationManager.NavigateTo($"/waitingLine/construction/{idConstructionProperties}");
+    }
 
 	#endregion
 }

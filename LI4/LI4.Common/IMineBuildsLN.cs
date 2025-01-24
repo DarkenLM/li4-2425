@@ -130,13 +130,13 @@ public interface IMineBuildsLN {
     /// <param name="constructionPropertiesID">The ID of the construction properties.</param>
     /// <param name="userID">The ID of the user.</param>
     /// <returns>A task representing the asynchronous operation, with a result indicating whether the user has enough blocks (true if they have enough stock, false otherwise).</returns>
-    public Task<bool> hasStockAsync(int constructionPropertiesID, int userID);
+    public Task<bool> hasStockAsync(int userID, int constructionPropertiesID);
 
     /// <summary>
     /// Adds a construction to the user's construction queue.
     /// </summary>
     /// <param name="userID">The ID of the user placing the construction order.</param>
-    /// <param name="constructionPropertyID">The ID of the construction property to add to the queue.</param>
+    /// <param name="constructionPropertiesID">The ID of the construction property to add to the queue.</param>
     /// <returns>A task representing the asynchronous operation, with a result indicating whether the construction was successfully added to the queue.</returns>
     public Task<bool> addConstructionToQueueAsync(int userID, int constructionPropertiesID);
 
@@ -153,7 +153,7 @@ public interface IMineBuildsLN {
     /// Calculates the missing blocks needed for a specific construction by a user.
     /// </summary>
     /// <param name="userdID">The ID of the user.</param>
-    /// <param name="constructionPropertyID">The ID of the construction property.</param>
+    /// <param name="constructionPropertiesID">The ID of the construction property.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of missing blocks (block names and quantities).</returns>
     public Task<Dictionary<string, int>> calculateMissingBlocksAsync(int userdID, int constructionPropertiesID);
 
@@ -161,22 +161,22 @@ public interface IMineBuildsLN {
     /// Retrieves the constructions that are currently on the waiting queue for the specified user.
     /// </summary>
     /// <param name="userID">The ID of the user whose waiting constructions are to be retrieved.</param>
-    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of constructions in the queue (keyed by construction names and the corresponding quantities).</returns>
-    public Task<Dictionary<string, int>> getAwaitingConstructionsAsync(int userID);
+    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of constructions in the queue (keyed by construction property id and the corresponding quantities).</returns>
+    public Task<Dictionary<int, int>> getAwaitingConstructionsAsync(int userID);
 
     /// <summary>
     /// Retrieves the list of completed constructions for the user.
     /// </summary>
     /// <param name="userID">The ID of the user.</param>
-    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of completed constructions (keyed by construction names and the corresponding quantities).</returns>
-    public Task<Dictionary<string, int>> getCompletedConstructionsAsync(int userID);
+    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of completed constructions (keyed by constructio property id and the corresponding quantities).</returns>
+    public Task<Dictionary<int, int>> getCompletedConstructionsAsync(int userID);
 
     /// <summary>
     /// Retrieves the constructions that are currently being built by the specified user.
     /// </summary>
     /// <param name="userID">The ID of the user whose building constructions are to be retrieved.</param>
-    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of constructions in the assembly line (keyed by construction names and the corresponding quantities).</returns>
-    public Task<Dictionary<string, int>> getBuildingConstructionsAsync(int userID);
+    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of constructions in the assembly line (keyed by construction property id and the corresponding quantities).</returns>
+    public Task<Dictionary<int, int>> getBuildingConstructionsAsync(int userID);
 
     /// <summary>
     /// Views the details of a completed construction by the user.
@@ -190,15 +190,15 @@ public interface IMineBuildsLN {
     /// Removes a construction instance from the user's construction queue.
     /// </summary>
     /// <param name="idUser">The ID of the user.</param>
-    /// <param name="idConstruction">The ID of the construction to remove from the queue.</param>
+    /// <param name="idConstructionProperties">The ID of the construction to remove from the queue.</param>
     /// <returns>A task representing the asynchronous operation, with a result indicating whether the construction was successfully removed.</returns>
-    public Task<bool> removeConstructionAsync(int idUser, int idConstruction);
+    public Task<bool> removeConstructionAsync(int idUser, int idConstructionProperties);
 
     /// <summary>
     /// Retrieves the catalog of available construction.
     /// </summary>
-    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of construction property IDs and their respective names.</returns>
-    public Task<Dictionary<int, string>> getCatalogAsync();
+    /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of construction property IDs and their respective id.</returns>
+    public List<int> getCatalog();
 
     /// <summary>
     /// Retrieves the properties of a specific construction type by its ID.
@@ -216,6 +216,12 @@ public interface IMineBuildsLN {
     public BlocksToConstruction getBlocksToConstruction(int constructionPropertiesID, int blockPropertiesID);
 
     public Task<Dictionary<string, int>> getAllBlocksConstructionAsync(int constructionPropertiesID);
+
+    public Task<List<int>> getBuildingIdsConstructionsAsync(int idUser, int idConstructionProperties);
+
+    public int getEstimatedTime(int idUser, int idConstructionProperties, int stage);
+
+    public Task<int> getConstructionPropertyIdAsync(int idConstruction);
 
     #endregion
 }

@@ -39,7 +39,23 @@
                 <button @onclick="NavigateToCatalog">back</button>
             }
             @if(source == "assemblyLine"){
+                <p><strong>Stage:</strong> @getStage(id, 3, idp)</p>
 
+                <div style="width: 200px; height: 150px; overflow-y: scroll; border: 1px solid black; padding: 10px;">
+                    @for (int index = 0; index < blocksForConstruction.Count; index++)
+                    {
+                        var item = blocksForConstruction.ElementAt(index);
+                        var itemKey = item.Key;
+                        var itemValue = item.Value;
+
+                        <div style="margin-bottom: 10px; border: 1px solid gray; padding: 5px;">
+                            <strong>Block Name:</strong> @itemKey <br />
+                            <strong>Block Quantity:</strong> @itemValue
+                        </div>
+                    }
+                </div>
+
+                <button @onclick="NavigateToAssemblyLine">back</button>
             }
             @if(source == "completedConstructions"){
                 <div style="width: 200px; height: 150px; overflow-y: scroll; border: 1px solid black; padding: 10px;">
@@ -56,12 +72,7 @@
                     }
                 </div>
 
-                @if(total > 0){
-                    <p>@($"{completed}/{total} constructions")</p>
-                }
-                else{
-                    <p>Loading construction data...</p>
-                }
+                <p>@($"{completed}/{total} constructions")</p>
 
                 <button @onclick="NavigateToCompletedConstructions">back</button>
             }
@@ -85,24 +96,26 @@
 
     private int currentNumber = 0;
 
-    private int nonCompleted = 0;
-    private int completed = 0;
     private int total = 0;
+    private int completed = 0;
+
+    private int idp = 0; // idConstructionProperties
 
 
     protected override async Task OnInitializedAsync(){
 
-        if(source == "catalog" || source == "completedConstructions"){ // idConstructionProperties
+        if(source == "catalog" || source == "completedConstructions"){ // id : idConstructionProperties
             blocksForConstruction = await facade.getAllBlocksConstructionAsync(id);
             constructionProperties = facade.getConstructionProperties(id);
         }
         if(source == "completedConstructions"){
+            total = await totalConstructions();
             completed = await numCompletedConstructions();
-            nonCompleted = await numOfnonCompletedConstructions();
-            total = completed + nonCompleted;
         }
-        if(source == "assemblyLine"){ // id of construction
-
+        if(source == "assemblyLine"){ // id : id of construction
+            idp = await facade.getConstructionPropertyIdAsync(id);
+			blocksForConstruction = await facade.getAllBlocksConstructionAsync(idp);
+            constructionProperties = facade.getConstructionProperties(idp);
         }
     }  
 
@@ -116,7 +129,7 @@
                 bool hasStock;
 
                 while(inputNumber > currentNumber){
-                    hasStock = await facade.hasStockAsync(id,3);
+                    hasStock = await facade.hasStockAsync(3,id);
                     if(hasStock){
                         currentNumber++;
                         await facade.addConstructionToQueueAsync(3, id);
@@ -140,7 +153,7 @@
 
     private async Task addConstruction(){
 
-        bool hasStock = await facade.hasStockAsync(id, 3);
+        bool hasStock = await facade.hasStockAsync(3,id);
         if(hasStock){
             currentNumber++;
             await facade.addConstructionToQueueAsync(3, id);
@@ -158,21 +171,45 @@
 
     #region//---- ASSEMBLY LINE METHODS ----//
 
+    private int getStage(int idConstruction, int idUser, int idConstructionProperties){
+        try{
+            return facade.getConstructionCurrentStage(idConstruction, idUser, idConstructionProperties);
+        }
+        catch(Exception ex){
+            message = $"{ex.Message}";
+        }
 
+        return 0;
+    }
+
+	private void NavigateToAssemblyLine(){
+        NavigationManager.NavigateTo($"/constructions/assemblyLine/{idp}");
+    }
 
     #endregion
 
     #region//---- COMPLETED CONSTRUCTIONS METHODS ----//
 
     private async Task<int> numCompletedConstructions(){
-        Dictionary<string, int> completed = await facade.getCompletedConstructionsAsync(3);
-        return completed.Count;
+        Dictionary<int, int> completed = await facade.getCompletedConstructionsAsync(3);
+		int completedCount = completed.TryGetValue(id, out int completedValue) ? completedValue : 0;
+        return completedCount;
     }
 
     private async Task<int> numOfnonCompletedConstructions(){
-        Dictionary<string, int> awaiting = await facade.getAwaitingConstructionsAsync(3);
-        Dictionary<string, int> building = await facade.getBuildingConstructionsAsync(3);
-        int result = awaiting.Count + building.Count; 
+        Dictionary<int, int> awaiting = await facade.getAwaitingConstructionsAsync(3);
+        Dictionary<int, int> building = await facade.getBuildingConstructionsAsync(3);
+        int awaitingCount = awaiting.TryGetValue(id, out int awaitingValue) ? awaitingValue : 0;
+        int buildingCount = building.TryGetValue(id, out int buildingValue) ? buildingValue : 0;
+
+        return awaitingCount + buildingCount;
+    }
+
+    private async Task<int> totalConstructions(){
+        int a = await numOfnonCompletedConstructions();
+        int b = await numCompletedConstructions();
+        int result = a + b;
+
         return result;
     }
 

@@ -225,7 +225,7 @@ public class ConstructionFacade {
         return await constructionDAO.getConstructionsOfStateIdsAsync(userID, state);
     }
 
-    public async Task<Dictionary<string, int>> getConstructionsOfStateAsync(int userID, int state) {
+    public async Task<Dictionary<int, int>> getConstructionsOfStateAsync(int userID, int state) {
         return await constructionDAO.getConstructionsOfStateAsync(userID, state);
     }
 
@@ -237,12 +237,41 @@ public class ConstructionFacade {
         return await constructionDAO.updateConstructionStateAsync(idConstruction, state);
     }
 
-    public async Task<bool> removeConstructionInWaitingAsync(int idUser, int idConstruction) {
-        return await constructionDAO.removeConstructionInWaitingAsync(idUser, idConstruction);
+    public async Task<bool> removeConstructionInWaitingAsync(int idUser, int idConstructionProperties) {
+        return await constructionDAO.removeConstructionInWaitingAsync(idUser, idConstructionProperties);
     }
 
-    public async Task<Dictionary<int, string>> getConstructionsAsync() {
-        return await constructionDAO.getConstructionsAsync();
+    public List<int> getConstructions() {
+        return constructionProperties.Select(kvp => kvp.Value.id).ToList();
+    }
+
+    public async Task<List<int>> getBuildingIdsConstructionsAsync(int idUser, int idConstructionProperties) {
+        return await constructionDAO.getBuildingIdsConstructionsAsync(idUser, idConstructionProperties);
+    }
+
+    public int getEstimatedTime(int idUser, int idConstructionProperties, int stage) {
+        if (!assemblyLines.TryGetValue(idUser, out var temp)) {
+            return 0;
+        }
+        if (!temp.TryGetValue(idConstructionProperties, out var line)) {
+            return 0;
+        }
+
+        if (stage < 0 || stage >= line.stages.Length) {
+            return 0;
+        }
+        //Dictionary<int, LinhaDeMontagem> temp = assemblyLines[idUser];
+        //LinhaDeMontagem line = temp[idConstructionProperties];
+        int time = 0;
+        for (int index = stage; index < line.stages.Length; index++) {
+            time += line.stages[index].tempo;
+        }
+
+        return time;
+    }
+
+    public async Task<int> getConstructionPropertyIdAsync(int idConstruction) {
+        return await constructionDAO.getConstructionPropertyIdAsync(idConstruction);
     }
 
     #endregion
