@@ -88,6 +88,27 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return (result.ToDictionary().Count()==0);
     }
 
+    public async Task<bool> hasStockForBatchAsync(int userID, int constructionPropertiesID, int quantity) {
+        Dictionary<string, int> blocksNeededByName = await constructionFacade.getBlocksNeededAsync(constructionPropertiesID);
+        Dictionary<int, int> blocksNeededByID = new Dictionary<int, int>();
+
+        foreach (KeyValuePair<string, int> block in blocksNeededByName) {
+            int id = stockFacade.getBlockPropertiesIDbyName(block.Key);
+            blocksNeededByID[id] = block.Value * quantity;
+            blocksNeededByName[block.Key] = block.Value * quantity;
+        }
+
+        Dictionary<string, int> stock = await stockFacade.getUserStockAsync(userID);
+
+        foreach (KeyValuePair<string, int> block in blocksNeededByName) {
+            if (!stock.TryGetValue(block.Key, out int availableStock) || availableStock < block.Value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public async Task<bool> addConstructionToQueueAsync(int userID, int constructionPropertiesID) {
         if (!await this.hasStockAsync(userID, constructionPropertiesID)) {
             throw new UserHasNotEnoughBlocksException($"User has not enough blocks to build construction with id: {constructionPropertiesID}");
@@ -102,6 +123,22 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         }
 
         return await constructionFacade.addConstructionToQueueAsync(blocksNeededByID, userID, constructionPropertiesID);
+    }
+
+    public async Task<bool> addConstructionToQueueBatchAsync(int userID, int constructionPropertiesID, int quantiy) {
+        if (!await this.hasStockForBatchAsync(userID, constructionPropertiesID, quantiy)) {
+            throw new UserHasNotEnoughBlocksException($"User has not enough blocks to build construction with id: {constructionPropertiesID}");
+        }
+
+        Dictionary<string, int> blocksNeededByName = await constructionFacade.getBlocksNeededAsync(constructionPropertiesID);
+        Dictionary<int, int> blocksNeededByID = new Dictionary<int, int>();
+
+        foreach (KeyValuePair<string, int> block in blocksNeededByName) {
+            int id = stockFacade.getBlockPropertiesIDbyName(block.Key);
+            blocksNeededByID[id] = block.Value;
+        }
+
+        return await constructionFacade.addConstructionToQueueBatchAsync(blocksNeededByID, userID, constructionPropertiesID, quantiy);
     }
 
     public int getConstructionCurrentStage(int idConstruction, int idUser, int idConstructionProperties) {
