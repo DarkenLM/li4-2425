@@ -223,6 +223,8 @@ public interface IMineBuildsLN {
 
     public int getEstimatedTime(int idUser, int idConstructionProperties, int stage);
 
+    public Task<bool> addConstructionToQueueBatchAsync(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID, int quantity);
+
     public Task<int> getConstructionPropertyIdAsync(int idConstruction);
 
     #endregion

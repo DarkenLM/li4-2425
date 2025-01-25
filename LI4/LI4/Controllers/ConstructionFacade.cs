@@ -196,6 +196,17 @@ public class ConstructionFacade {
         return idConstruction >= 0;
     }
 
+    public async Task<bool> addConstructionToQueueBatchAsync(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID, int quantity) {
+        for (int i = 0; i < quantity; i++) {
+            int idConstruction = await constructionDAO.addConstructionToQueueAsync(blocksNeeded, userID, constructionPropertiesID);
+            addConstructionWaitingList(constructionPropertiesID, idConstruction, userID);
+            if (idConstruction < 0) {
+                throw new Exception();
+            }
+        }
+        return true;
+    }
+
     public async Task<int?> addConstructionInstanceAsync(ConstructionState state, int constructionPropertiesID, int userID) {
         return await constructionDAO.addConstructionInstanceAsync(state, constructionPropertiesID, userID);
     }
