@@ -227,5 +227,8 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await constructionFacade.getConstructionPropertyIdAsync(idConstruction);
     }
 
+    public async Task<bool> addConstructionToQueueBatchAsync(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID, int quantity) {
+        return await constructionFacade.addConstructionToQueueBatchAsync(blocksNeeded, userID, constructionPropertiesID, quantity);
+    }
     #endregion
 }

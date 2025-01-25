@@ -101,6 +101,7 @@
 
     private int total = 0;
     private int completed = 0;
+    private int pending = 0;
 
     private int idp = 0; // idConstructionProperties
     private int stage = 0;
@@ -118,6 +119,11 @@
         if(source == "completedConstructions"){
             total = await totalConstructions();
             completed = await numCompletedConstructions();
+        }
+        if (source == "pendingConstructions")
+        {
+            total = await totalConstructions();
+            pending = await numPendingConstructions();
         }
         if(source == "assemblyLine"){ // id : id of construction
             idp = await facade.getConstructionPropertyIdAsync(id);
@@ -193,6 +199,25 @@
 
 	private void NavigateToAssemblyLine(){
         NavigationManager.NavigateTo($"/constructions/assemblyLine/{idp}");
+    }
+
+    #endregion
+
+    #region//---- PENDING CONSTRUCTIONS METHODS ----//
+
+    private async Task<int> numPendingConstructions()
+    {
+        Dictionary<int, int> awaiting = await facade.getAwaitingConstructionsAsync(3);
+        Dictionary<int, int> building = await facade.getBuildingConstructionsAsync(3);
+        int awaitingCount = awaiting.TryGetValue(id, out int awaitingValue) ? awaitingValue : 0;
+        int buildingCount = building.TryGetValue(id, out int buildingValue) ? buildingValue : 0;
+
+        return awaitingCount + buildingCount;
+    }
+
+    private void NavigateToPendingConstructions()
+    {
+        NavigationManager.NavigateTo("/constructions/pendingConstructions");
     }
 
     #endregion
