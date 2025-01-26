@@ -124,4 +124,21 @@ public class OrderDAO {
         var orders = await connection.QueryAsync<Order>(query, new { Id = id });
         return orders.ToList();
     }
+
+    public async Task<int> getEstimatedTimeOrderAsync(int idOrder) {
+        using var connection = getConnection();
+        const string query = @"
+            SELECT 
+                (bio.quantity * b.timeToAcquire) AS TotalTimeToAcquire
+            FROM 
+                BlocksInOrder bio
+            INNER JOIN 
+                BlockProperties b ON bio.idBlockProperty = b.id
+            WHERE 
+                bio.idOrder = @OrderId;
+        ";
+
+        var times = await connection.QueryAsync<int>(query, new { OrderId = idOrder });
+        return times.Sum();
+    }
 }

@@ -76,6 +76,11 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public Dictionary<int, BlockProperties> getAllBlockProperties() {
         return stockFacade.getAllBlockProperties();
     }
+
+    public async Task<int> getEstimatedTimeOrderAsync(int id) {
+        return await stockFacade.getEstimatedTimeOrderAsync(id);
+    }
+
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//

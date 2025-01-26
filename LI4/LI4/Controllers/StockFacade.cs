@@ -146,6 +146,10 @@ public class StockFacade {
     public async Task<Order?> getOrderAsync(int id){
         return await orderDAO.getByIdAsync(id);
     }
+
+    public async Task<int> getEstimatedTimeOrderAsync(int id) {
+        return await orderDAO.getEstimatedTimeOrderAsync(id);
+    }
     #endregion
 
     #region//---- BLOCK METHODS----//

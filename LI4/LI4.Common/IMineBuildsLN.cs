@@ -118,6 +118,8 @@ public interface IMineBuildsLN {
 
     public Task<Order?> getOrderAsync(int id);
 
+    public Task<int> getEstimatedTimeOrderAsync(int id);
+
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//
