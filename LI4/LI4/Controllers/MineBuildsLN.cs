@@ -54,7 +54,7 @@ public class MineBuildsLN : Common.IMineBuildsLN {
         return await stockFacade.getAllBlocksAsync();
     }
 
-    public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
+    public async Task<Dictionary<int, int>> getOrderContentAsync(int id) {
         return await stockFacade.getOrderContentAsync(id);
     }
     public async Task<List<Order>> getUserOrdersAsync(int id) {
@@ -230,5 +230,10 @@ public class MineBuildsLN : Common.IMineBuildsLN {
     public async Task<bool> addConstructionToQueueBatchAsync(Dictionary<int, int> blocksNeeded, int userID, int constructionPropertiesID, int quantity) {
         return await constructionFacade.addConstructionToQueueBatchAsync(blocksNeeded, userID, constructionPropertiesID, quantity);
     }
+
+    public async Task<Order?> getOrderAsync(int id) {
+        return await stockFacade.getOrderAsync(id);
+    }
+
     #endregion
 }

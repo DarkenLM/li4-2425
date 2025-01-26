@@ -93,16 +93,16 @@ public class OrderDAO {
         return rowsAffected > 0;
     }
 
-    public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
+    public async Task<Dictionary<int, int>> getOrderContentAsync(int id) {
         using var connection = getConnection();
         const string query = @"
-            SELECT bp.name, bo.quantity
+            SELECT bp.id, bo.quantity
             FROM Orders o
             INNER JOIN BlocksInOrder bo ON o.id = bo.idOrder
             INNER JOIN BlockProperties bp ON bo.idBlockProperty = bp.id
             WHERE o.id = @id;";
-        var result = await connection.QueryAsync<(string Name, int Quantity)>(query, new { id });
-        return result.ToDictionary(r => r.Name, r => r.Quantity);
+        var result = await connection.QueryAsync<(int id, int Quantity)>(query, new { id });
+        return result.ToDictionary(r => r.id, r => r.Quantity);
     }
 
     public async Task<bool> addBlocksInOrderAsync(int idOrder, int idBlockProperty, int quantity) {

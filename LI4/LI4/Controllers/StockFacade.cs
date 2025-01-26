@@ -99,7 +99,7 @@ public class StockFacade {
     #endregion
 
     #region//---- ORDER METHODS ----//
-    public async Task<Dictionary<string, int>> getOrderContentAsync(int id) {
+    public async Task<Dictionary<int, int>> getOrderContentAsync(int id) {
         return await orderDAO.getOrderContentAsync(id);
     }
 
@@ -141,6 +141,10 @@ public class StockFacade {
 
     public async Task<List<Order>> getUserOrdersAsync(int id) {
         return await orderDAO.getUserOrdersAsync(id);
+    }
+
+    public async Task<Order?> getOrderAsync(int id){
+        return await orderDAO.getByIdAsync(id);
     }
     #endregion
 

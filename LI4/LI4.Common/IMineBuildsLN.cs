@@ -83,7 +83,7 @@ public interface IMineBuildsLN {
     /// </summary>
     /// <param name="id">The ID of the order.</param>
     /// <returns>A task representing the asynchronous operation, with a result containing a dictionary of block names and ther quantities for the specified order.</returns>
-    public Task<Dictionary<string, int>> getOrderContentAsync(int id);
+    public Task<Dictionary<int, int>> getOrderContentAsync(int id);
 
     /// <summary>
     /// Retrieves the list of orders associated with a user.
@@ -115,6 +115,9 @@ public interface IMineBuildsLN {
     public BlockProperties getBlockProperties(int blockPropertiesID);
 
     Dictionary<int, BlockProperties> getAllBlockProperties();
+
+    public Task<Order?> getOrderAsync(int id);
+
     #endregion
 
     #region//---- CONSTRUCTION METHODS ----//
