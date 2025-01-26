@@ -1,0 +1,20 @@
+{
+	"textures": {
+		"#face": "img/textures/oak_planks.png"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"color": 8,
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#face"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#face"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#face"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#face"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#face"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#face"}
+			}
+		}
+	]
+}

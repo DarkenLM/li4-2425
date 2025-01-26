@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" style="--no-debug: 0;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../gui.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-left">
+                        <a class="" href="assembly_lines.html">Assembly Lines</a>
+                        <a class="" href="catalog.html">Catalog</a>
+                        <a class="" href="stock.html">Stock</a>
+                    </div>
+                </div>
+                <div class="navbar-logo">
+                    <img src="../img/logo.png" alt="logo">
+                </div>
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-right">
+                        <a class="" href="queue.html">Queues</a>
+                        <a class="" href="profile.html">Profile</a>
+                        <a class="" href="history.html">Production History</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mc-container" style="margin: 10px;">
+            <div class="title">
+                Order <span style="color: #008600;">#121</span>
+            </div>
+            <div class="main-container" style="height: 70vh;">
+                <div class="content-wrapper">
+                    <div class="overflow-container mc-scrollbar">
+                        <div class="overflow-content">
+                            <div class="stock">
+                                <div class="mc-slot stock-slot">
+                                    <div class="mc-item">
+                                        <div class="icon">
+                                            <img src="../img/pictures/bookshelf.png" alt="Bookshelf">
+                                        </div>
+                                        <div class="stock-item-name">Bookshelf</div>
+                                        <div class="mc-item-count">39</div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="mc-slot stock-slot">
+                                    <div class="mc-item">
+                                        <div class="icon">
+                                            <img src="../img/pictures/cobblestone.png" alt="Cobblestone">
+                                        </div>
+                                        <div class="stock-item-name">Cobblestone</div>
+                                        <div class="mc-item-count">7</div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="mc-slot stock-slot">
+                                    <div class="mc-item">
+                                        <div class="icon">
+                                            <img src="../img/pictures/glass_pane.png" alt="Glass pane">
+                                        </div>
+                                        <div class="stock-item-name">Glass pane</div>
+                                        <div class="mc-item-count">3</div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="mc-slot stock-slot">
+                                    <div class="mc-item">
+                                        <div class="icon">
+                                            <img src="../img/pictures/grass_block.png" alt="Grass block">
+                                        </div>
+                                        <div class="stock-item-name">Grass block</div>
+                                        <div class="mc-item-count">31</div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="mc-slot stock-slot">
+                                    <div class="mc-item">
+                                        <div class="icon">
+                                            <img src="../img/pictures/lectern.png" alt="Lectern">
+                                        </div>
+                                        <div class="stock-item-name">Lectern</div>
+                                        <div class="mc-item-count">49</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="secondary-container stock">
+                <div class="orders-progress-bar">
+                    <!-- #region ======= PENDING ORDER ======= -->
+                        <!-- <img src="../img/hourglass.png" alt="hourglass">
+                        <p class="mc-text-align">10h 09m 08s</p> -->
+                    <!-- #endregion ======= PENDING ORDER ======= -->
+
+                    <!-- #region ======= FINISHED ORDER ======= -->
+                        <img src="../img/mc_accept.png" alt="hourglass">
+                        <p class="mc-text-align">24/01/2025 15:43:12</p>
+                    <!-- #endregion ======= FINISHED ORDER ======= -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="__DEBUG">
+        TODO: <br/>
+        - Update pending order to show time left IRT. <br/>
+    </p>
+</body>
+</html>

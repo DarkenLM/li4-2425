@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../gui.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-left">
+                        <a class="" href="assembly_lines.html">Assembly Lines</a>
+                        <a class="" href="catalog.html">Catalog</a>
+                        <a class="" href="stock.html">Stock</a>
+                    </div>
+                </div>
+                <div class="navbar-logo">
+                    <img src="../img/logo.png" alt="logo">
+                </div>
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-right">
+                        <a class="" href="queue.html">Queues</a>
+                        <a class="" href="profile.html">Profile</a>
+                        <a class="" href="history.html">Production History</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mc-container" style="margin: 10px;">
+            <div class="title">
+                Queues
+            </div>
+            <div class="main-container">
+                <div class="content-wrapper">
+                    <div class="overflow-container mc-scrollbar">
+                        <div class="overflow-content">
+                            <div class="mc-slot long-slot assline-slot" data-queue-id="1" data-queue-elems="100">
+                                <div class="icon">
+                                    <img src="../img/pictures/plains_library_2.png" alt="Plains Library 2">
+                                </div>
+                                <div class="content-2c-1r queue">
+                                    <div class="mc-text-align">Plains Library</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element"><p class="mc-text-align">100</p></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mc-slot long-slot assline-slot" data-queue-id="2" data-queue-elems="50">
+                                <div class="icon">
+                                    <img src="../img/pictures/small_tent_1.png" alt="Small Tent 1">
+                                </div>
+                                <div class="content-2c-1r queue">
+                                    <div class="mc-text-align">Small Tent</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element"><p class="mc-text-align">50</p></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mc-slot long-slot assline-slot" data-queue-id="3" data-queue-elems="5">
+                                <div class="icon">
+                                    <img src="../img/pictures/plains_village_house_5.png" alt="Plains Village House 5">
+                                </div>
+                                <div class="content-2c-1r queue">
+                                    <div class="mc-text-align">Plains Village House</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element"><p class="mc-text-align">5</p></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <dialog id="nuke_dialog" class="queue-dialog">
+        <div class="mc-container" id="mc_container" style="--target-width: 681px; --target-height: 220px; overflow: hidden;">
+        <!-- <div class="mc-container" id="mc_container" style="overflow: hidden;"> -->
+            <div class="title">
+                Nuking queue <span id="nuke_dialog_queue_id" style="color: #008600;">-1</span>
+                <button class="close">X</button>
+            </div>
+            <div class="mc-inner-container" style="color: var(--secondary);">
+                <p>Are you sure you want to remove <span id="nuke_dialog_queue_elems" style="color: #860000;">0</span> elements from the queue?</p>
+                <p>This action cannot be reversed!</p>
+
+                <div class="center" style="gap: 20px;">
+                    <button id="nuke_it_btn" class="mc-button icon">
+                        <i class="mc-accept"></i>
+                    </button>
+                    <button id="nuke_cancel_btn" class="mc-button icon">
+                        <i class="mc-reject"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </dialog>
+</body>
+
+<script type="module" src="../js/pages/queue.js"></script>
+</html>

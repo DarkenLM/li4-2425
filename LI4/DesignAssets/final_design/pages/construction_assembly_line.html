@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" style="--no-debug: 0;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../gui.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-left">
+                        <a class="" href="assembly_lines.html">Assembly Lines</a>
+                        <a class="" href="catalog.html">Catalog</a>
+                        <a class="" href="stock.html">Stock</a>
+                    </div>
+                </div>
+                <div class="navbar-logo">
+                    <img src="../img/logo.png" alt="logo">
+                </div>
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-right">
+                        <a class="" href="queue.html">Queues</a>
+                        <a class="" href="profile.html">Profile</a>
+                        <a class="" href="history.html">Production History</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mc-container" style="margin: 10px;">
+            <div class="title">
+                Small Tent
+                <button class="close">X</button>
+            </div>
+            <div class="main-container" style="height: 70vh;">
+                <!-- <div id="construction" class="construction" data-construction="small_tent_1" data-render="norender"> -->
+                <div id="construction" class="construction" data-construction="small_tent_1" data-render="true">
+                    <div class="construction-preview">
+                        <div id="render3d">
+
+                        </div>
+                    </div>
+                    <div class="construction-materials">
+                        <div class="title">
+                            Material List
+                        </div>
+                        <div id="material_list" class="content mc-scrollbar">
+                            <div class="mc-slot" data-item="oak_fence" data-cost="10">
+                                <div class="icon"><img src="../img/pictures/oak_fence.png" alt="Oak Fence"></div>
+                                <p class="name">Oak Fence</p>
+                                <p class="details"><span name="used">6</span>/<span name="total">10</span></p>
+                            </div>
+                            <div class="mc-slot" data-item="white_wool" data-cost="20">
+                                <div class="icon"><img src="../img/pictures/white_wool.png" alt="White Wool"></div>
+                                <p class="name">White Wool</p>
+                                <p class="details"><span name="used">0</span>/<span name="total">20</span></p>
+                            </div>
+                            <div class="mc-slot" data-item="crafting_table" data-cost="1">
+                                <div class="icon"><img src="../img/pictures/crafting_table.png" alt="Crafting Table"></div>
+                                <p class="name">Crafting Table</p>
+                                <p class="details"><span name="used">1</span>/<span name="total">1</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="secondary-container construction">
+                <div class="construction-controls">
+                    <div class="slider" style="visibility: hidden;">
+                        <!-- <span name="__slider_width_marker" style="display: block; width: 100%"></span> -->
+                        <div class="mc-slider" style="--chevrons: 3;">
+                            <input type="range" min="0" max="1240" step="1" value="0" disabled/>
+                            <div class="mc-slider-progress"></div>
+                        </div>
+                    </div>
+                    <div class="checkboxes">
+                        <div class="mc-checkbox" data-control="autotick">
+                            <input type="checkbox" id="autotickCheckbox" disabled>
+                            <label for="autotickCheckbox">Autotick</label>
+                        </div>
+                        <div class="mc-checkbox" data-control="repeat">
+                            <input type="checkbox" id="repeatCheckbox" disabled>
+                            <label for="repeatCheckbox">Repeat</label>
+                        </div>
+                        <div class="mc-checkbox" data-control="snap-stage">
+                            <input type="checkbox" id="snapStageCheckbox" disabled>
+                            <label for="snapStageCheckbox">Snap to Stages</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="construction-secondary-controls">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+                "json5": "https://unpkg.com/json5@2/dist/index.min.mjs"
+            }
+        }
+    </script>
+    <script type="module" src="../js/pages/construction.js"></script>
+
+    <p class="__DEBUG">
+        TODO: <br/>
+        - Populate data fields through Blazor IRT. <br/>
+    </p>
+</body>
+</html>

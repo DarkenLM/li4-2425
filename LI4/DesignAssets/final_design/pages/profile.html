@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" style="--no-debug: 0;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../gui.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-left">
+                        <a href="assembly_lines.html">Assembly Lines</a>
+                        <a href="catalog.html">Catalog</a>
+                        <a href="stock.html">Stock</a>
+                    </div>
+                </div>
+                <div class="navbar-logo">
+                    <img src="../img/logo.png" alt="logo">
+                </div>
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-right">
+                        <a href="queue.html">Queues</a>
+                        <a href="profile.html">Profile</a>
+                        <a href="history.html">Production History</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="center">
+            <div class="mc-container">
+                <div class="title">
+                    Profile
+                </div>
+                <div class="input-container">
+                    <div class="input-group">
+                        <div class="labels">
+                            <label for="email_input">Email:</label>
+                            <label for="username_input">Username:</label>
+                            <label for="password_input">Password:</label>
+                        </div>
+                        <div class="inputs">
+                            <input type="text" class="mc-textarea" name="email_input" id="email_input" placeholder="john@doe.com">
+                            <input type="text" class="mc-textarea" name="username_input" id="username_input" placeholder="johndoe">
+                            <input type="password" class="mc-textarea" name="password_input" id="password_input" placeholder="********">
+                        </div>
+                    </div>
+
+                    <div class="button-group" style="--__width: 95% !important;">
+                        <div class="mc-button"><p style="color: var(--success)">Save</p></div>
+                        <a class="mc-button" href="home.html"><p style="color: var(--error)">Cancel</p></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="__DEBUG">
+        TODO: <br/>
+        - Populate input placeholders with user's current info. <br/>
+            -- Except for the password, you dumb fuck. <br/>
+    </p>
+</body>
+</html>

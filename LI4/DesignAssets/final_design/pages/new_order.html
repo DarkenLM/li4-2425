@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" style="--no-debug: 0;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../gui.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-left">
+                        <a class="" href="assembly_lines.html">Assembly Lines</a>
+                        <a class="" href="catalog.html">Catalog</a>
+                        <a class="" href="stock.html">Stock</a>
+                    </div>
+                </div>
+                <div class="navbar-logo">
+                    <img src="../img/logo.png" alt="logo">
+                </div>
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-right">
+                        <a class="" href="queue.html">Queues</a>
+                        <a class="" href="profile.html">Profile</a>
+                        <a class="" href="history.html">Production History</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mc-container" style="margin: 10px;">
+            <div class="title">
+                New Order: <span style="color: #008600;">#122</span>
+            </div>
+            <div class="main-container" style="height: 70vh;">
+                <div class="content-wrapper">
+                    <div class="overflow-container mc-scrollbar">
+                        <div class="overflow-content">
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/bookshelf.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Bookshelf</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div>
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div><input class="mc-textarea"></input></div>
+                                        <div>
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/cobblestone.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Cobblestone</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/crafting_table.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Crafting table</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/glass_pane.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Glass pane</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/grass_block.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Grass block</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/lectern.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Lectern</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/oak_door.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Oak door</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/oak_fence.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Oak fence</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/oak_log.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Oak log</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/oak_planks.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Oak planks</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/white_wool.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">White wool</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="mc-slot long-slot orders-slot">
+                                <div class="icon">
+                                    <img src="../img/pictures/yellow_bed.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Yellow bed</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element">
+                                            <button name="add_btn" class="mc-button icon">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element"><input class="mc-textarea"></input></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="secondary-container orders">
+                <div class="mc-button icon">
+                    <i class="mc-accept"><p class="mc-text-align">Confirm</p></i>
+                </div>
+                <div class="mc-button icon">
+                    <i class="mc-reject"><p class="mc-text-align">Cancel</p></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="__DEBUG">
+        TODO: <br/>
+        - Make input scale with content. <br/>
+        - Make buttons actually do something.
+    </p>
+</body>
+</html>

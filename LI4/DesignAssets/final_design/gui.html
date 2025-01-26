@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GUI Test</title>
+    <link rel="stylesheet" href="gui.css">
+</head>
+<body>
+    <div class="center">
+        <div class="mc-container expand-box" id="mc_container" style="--target-width: 481px; --target-height: 520px; overflow: hidden;">
+            <div class="title">Test Title</div>
+
+            <!-- <div class="test" draggable="true" style="width: 100px; height: 100px; background-color: red;"></div> -->
+
+            <div class="mc-slot-container">
+                <div class="mc-slot" style="--slot-size: 50px;"></div>
+                <div class="mc-slot">
+                    <!-- <div class="mc-item" data-name="Le Gay" data-description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."> -->
+                    <div class="mc-item" data-name="Le Gay" data-description="This is an &lt;span class='italic'&gt;italic&lt;/span&gt; text, &lt;br/&gt;a &lt;span class='bold'&gt;bold&lt;/span&gt; text, &lt;br/&gt;and some texts with different colors: &lt;span class='faded-red'&gt;red&lt;/span&gt;, &lt;span class='green'&gt;green&lt;/span&gt;, and &lt;span class='blue'&gt;blue&lt;/span&gt;. &lt;br/&gt; &lt;br/&gt; &lt;span class='rainbow'&gt;Taste le rainbou&lt;/span&gt;">
+                        <p style="color: blue;">Item</p>
+                        <div class="mc-item-count">123</div>
+                    </div>
+                </div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot disabled"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot disabled"></div>
+                <div class="mc-slot disabled"></div>
+            </div>
+            <div class="mc-slot-container">
+                <div class="mc-slot" style="--slot-size: 50px;"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot disabled">
+                    <!-- <div>
+                        <p style="color: red; font-weight: 500;">Hello</p>
+                    </div> -->
+                    <div class="mc-item">
+                        <p style="color: red;">Hello</p>
+                        <div class="mc-item-count">64</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mc-slot-container">
+                <div class="mc-slot" style="--slot-size: 50px;"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot disabled"></div>
+                <div class="mc-slot"></div>
+                <div class="mc-slot disabled"></div>
+                <div class="mc-slot disabled"></div>
+            </div>
+
+            <div class="mc-slot-container">
+                <div class="mc-button">
+                    <p style="color: #ff6d6d; font-weight: 500;">Hello</p>
+                </div>
+            </div>
+
+            <div class="mc-slot-container">
+                <textarea class="mc-textarea" name="" id=""></textarea>
+            </div>
+
+            <div class="mc-slot-container">
+                <label for="testlabel">Test:</label>
+                <input type="text" class="mc-textarea" name="testlabel" id="" placeholder="Test">
+            </div>
+
+            <div class="mc-slot-container">
+                <div class="mc-progress-bar" style="--width: 480px;">
+                    <div class="mc-progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <div class="mc-slot-container">
+                <div class="mc-progress-bar" style="background-image: url('img/green_background.png'); --width: 480px;">
+                    <div class="mc-progress-bar-fill" style="background-image: url('img/green_progress.png');"></div>
+                </div>
+            </div>
+
+            <div class="mc-slot-container">
+                <!-- <div class="mc-slider" style="--chevrons: 10; --chevron-width: 20px;"> -->
+                <input type="text" class="mc-textarea" name="testlabel" id="sliderChevrons" placeholder="10" style="--width: 20px; --height: 10px;">
+                <div class="mc-slider" style="--chevrons: 10;">
+                    <input type="range" min="0" max="10" step="1" value="0"/>
+                    <div class="mc-slider-progress"></div>
+                </div>
+            </div>
+
+            <div class="mc-slot-container">
+                <div class="mc-button icon">
+                    <i class="mc-accept"></i>
+                </div>
+                <div class="mc-button icon">
+                    <i class="mc-reject"></i>
+                </div>
+            </div>
+
+            <div class="mc-slot-container">
+                <div class="mc-frame" style="width: 50px; height: 50px;">
+                    <img src="https://minecraft.wiki/images/Player_Head_%288%29_JE5.png?6f81f&format=original">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <dialog id="innerContainer">
+        <div class="mc-container" id="mc_container" style="--target-width: 881px; --target-height: 520px; overflow: hidden;">
+            <div class="title">
+                Inner Box
+                <button class="close">X</button>
+            </div>
+            <div class="mc-inner-container">
+                
+            </div>
+        </div>
+    </dialog>
+</body>
+
+<script type="module" src="js/gui.js"></script>
+</html>

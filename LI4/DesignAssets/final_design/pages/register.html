@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../gui.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-left">
+                        <a class="hidden" href="assembly_lines.html">Assembly Lines</a>
+                        <a class="hidden" href="catalog.html">Catalog</a>
+                        <a class="hidden" href="stock.html">Stock</a>
+                    </div>
+                </div>
+                <div class="navbar-logo">
+                    <img src="../img/logo.png" alt="logo">
+                </div>
+                <div class="navbar-side">
+                    <div class="navbar-links navbar-links-right">
+                        <a class="hidden" href="queue.html">Queues</a>
+                        <a class="hidden" href="profile.html">Profile</a>
+                        <a class="hidden" href="history.html">Production History</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="center">
+            <div class="mc-container">
+                <div class="input-container">
+                    <div class="input-group">
+                        <div class="labels">
+                            <label for="email_input">Email:</label>
+                            <label for="username_input">Username:</label>
+                            <label for="password_input">Password:</label>
+                        </div>
+                        <div class="inputs">
+                            <input type="text" class="mc-textarea" name="email_input" id="email_input" placeholder="john@doe.com">
+                            <input type="text" class="mc-textarea" name="username_input" id="username_input" placeholder="johndoe">
+                            <input type="password" class="mc-textarea" name="password_input" id="password_input" placeholder="********">
+                        </div>
+                    </div>
+
+                    <div class="button-group" style="--__width: 95% !important;">
+                        <div class="mc-button"><p style="color: var(--highlight)">Register</p></div>
+                        <div class="mc-button"><p style="color: var(--highlight)">Login</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
