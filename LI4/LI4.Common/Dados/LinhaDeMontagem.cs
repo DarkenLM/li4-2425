@@ -15,7 +15,7 @@ public class LinhaDeMontagem {
 
 public class Estagio {
     public int? idConstruction;
-    public TimerWrapper tw;
+    public TimerWrapper? tw;
     public int tempo;
     public bool tried;
 
@@ -28,4 +28,12 @@ public class Estagio {
         this.tempo = seconds;
     }
 
+    public Estagio DeepClone() {
+        return new Estagio {
+            idConstruction = this.idConstruction,
+            tw = null,
+            tempo = this.tempo,
+            tried = this.tried
+        };
+    }
 }

@@ -3,6 +3,8 @@ using LI4.Common.Exceptions.ConstructionExceptions;
 using LI4.Controllers.DAO;
 using LI4.Dados;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace LI4.Controllers;
@@ -41,7 +43,7 @@ public class ConstructionFacade {
 
                 foreach (var stage in construction.Value) {
                     this.constructionProperties[construction.Key].stages[stage.Item1].setupTimer(stage.Item2);
-                    // Console.WriteLine("Construcao ID" + construction.Key + ". Estagio: " + stage.Item1 + ". Tempo: " + stage.Item2);
+                    //Console.WriteLine("Construcao ID" + construction.Key + ". Estagio: " + stage.Item1 + ". Tempo: " + stage.Item2);
                 }
             }
 
@@ -74,23 +76,24 @@ public class ConstructionFacade {
             this.assemblyLines = new();
 
             var constructionsBuilding = await constructionDAO.getUserIdAndConstructionsIdOfStateAsync((int) ConstructionState.BUILDING);
+            var constructionsWaiting = await constructionDAO.getUserIdAndConstructionsIdOfStateAsync((int) ConstructionState.WAITING);
+
             foreach(var consWaiting in constructionsBuilding) {
                 int idConstruction = consWaiting.Item1;
                 int idConstructionProperties = consWaiting.Item2;
                 int idUser = consWaiting.Item3;
-                // Console.WriteLine("Adicionado com prioridade: " + idConstruction);
-
+                await constructionDAO.updateConstructionStateAsync(idConstruction, (int) ConstructionState.WAITING);
                 addConstructionWaitingList(idConstructionProperties, idConstruction, idUser);
+                Console.WriteLine($"[PRIORIDADE] - Construção com id:{idConstruction} adicionada a fila de espera do utilizador: {idUser}");
             }
 
-            var constructionsWaiting = await constructionDAO.getUserIdAndConstructionsIdOfStateAsync((int) ConstructionState.WAITING);
             foreach(var consWaiting in constructionsWaiting) {
                 int idConstruction = consWaiting.Item1;
                 int idConstructionProperties = consWaiting.Item2;
                 int idUser = consWaiting.Item3;
-                // Console.WriteLine("Adicionado sem prioridade: " + idConstruction);
 
                 addConstructionWaitingList(idConstructionProperties, idConstruction, idUser);
+                Console.WriteLine($"[SEM PRIORIDADE] - Construção com id:{idConstruction} adicionada a fila de espera do utilizador: {idUser}");
             }
         } catch (Exception ex) {
             throw new Exception("Failed to initialize assembly lines", ex);
@@ -102,12 +105,12 @@ public class ConstructionFacade {
         if (this.assemblyLines.ContainsKey(idUser)) {
             if (!this.assemblyLines[idUser].ContainsKey(idConstructionProperties)) {
                 ConstructionProperties cp = getConstructionProperties(idConstructionProperties);
-                this.assemblyLines[idUser].Add(idConstructionProperties, new LinhaDeMontagem(cp.nStages, cp.stages));
+                this.assemblyLines[idUser].Add(idConstructionProperties, new LinhaDeMontagem(cp.nStages, cp.DeepClone().stages));
             } 
         } else {
             Dictionary<int, LinhaDeMontagem> userLines = new();
             ConstructionProperties cp = getConstructionProperties(idConstructionProperties);
-            userLines.Add(idConstructionProperties, new LinhaDeMontagem(cp.nStages, cp.stages));
+            userLines.Add(idConstructionProperties, new LinhaDeMontagem(cp.nStages, cp.DeepClone().stages));
             this.assemblyLines.Add(idUser, userLines);
         }
 
@@ -119,8 +122,9 @@ public class ConstructionFacade {
         if (linha.stages[0].idConstruction == null) {
             linha.stages[0].idConstruction = idConstruction;
             linha.stages[0].tw = new TimerWrapper(linha.stages[0].tempo * 1000, () => this.changeConstructionStageAsync(0, linha), false);
-            linha.stages[0].tw.start();
-            await updateConstructionStateAsync(idConstruction, (int) ConstructionState.BUILDING);
+            linha.stages[0].tw?.start();
+            var s = await updateConstructionStateAsync(idConstruction, (int) ConstructionState.BUILDING);
+            Console.WriteLine($"Construção:{idConstruction} passou a BUILDING");
         } else {
             linha.waitingConstructions.Add(idConstruction);
         }
@@ -130,41 +134,56 @@ public class ConstructionFacade {
         if (index < 0 || index >= linha.nStages) return;
         linha.stages[index].tw = null!;
 
+        int? DEBUGID = linha.stages[index].idConstruction;
         // Último estágio
         if (index == linha.nStages - 1) {
             await updateConstructionStateAsync((int) linha.stages[index].idConstruction!, (int) ConstructionState.COMPLETED);
             if (linha.stages[index - 1].tw == null && linha.stages[index - 1].idConstruction != null) {
                 linha.stages[index].idConstruction = linha.stages[index - 1].idConstruction;
                 linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStageAsync(index, linha), false);
-                linha.stages[index].tw.start();
+                linha.stages[index].tw?.start();
                 linha.stages[index - 1].idConstruction = null;
                 // Console.WriteLine("Timer iniciado no último estágio, após a anterior já ter validado se podia avançar.");
             } else {
                 linha.stages[index].idConstruction = null;
             }
+            Console.WriteLine($"A construção:{DEBUGID} passou de BUILDING a COMPLETED!");
         } else {
             if (linha.stages[index + 1].idConstruction == null) {
                 linha.stages[index + 1].idConstruction = linha.stages[index].idConstruction;
                 linha.stages[index + 1].tw = new TimerWrapper(linha.stages[index + 1].tempo * 1000, () => this.changeConstructionStageAsync(index + 1, linha), false);
-                linha.stages[index + 1].tw.start();
+                linha.stages[index + 1].tw?.start();
                 linha.stages[index].idConstruction = null;
                 // Console.WriteLine($"Timer iniciado no estágio {index + 1}, após mover de posição. Construção: {linha.stages[index + 1].idConstruction}");
-
                 if (index == 0 && linha.waitingConstructions.Count > 0) {
                     int tmpId = linha.waitingConstructions[0];
+                    Console.WriteLine($"Vai ser puxada a casa com id:{tmpId}, mas ainda há {linha.waitingConstructions.Count} a espera");
+
                     linha.waitingConstructions.RemoveAt(0);
                     linha.stages[index].idConstruction = tmpId;
                     linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStageAsync(index, linha), false);
-                    linha.stages[index].tw.start();
+                    linha.stages[index].tw?.start();
                     await updateConstructionStateAsync(tmpId, (int) ConstructionState.BUILDING);
+                    Console.WriteLine($"A construção:{tmpId} passou de WAITING a BUILDING!");
                     // Console.WriteLine($"Timer iniciado no primeiro estágio, após retirar construção da fila de espera. Construção: {linha.stages[index].idConstruction}");
                 }
                 
                 if (index != 0 && linha.stages[index - 1].tw == null && linha.stages[index - 1].idConstruction != null) {
                     linha.stages[index].idConstruction = linha.stages[index - 1].idConstruction;
                     linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStageAsync(index, linha), false);
-                    linha.stages[index].tw.start();
+                    linha.stages[index].tw?.start();
                     linha.stages[index - 1].idConstruction = null;
+                    if(index == 1 && linha.waitingConstructions.Count > 0) {
+                        int tmpId = linha.waitingConstructions[0];
+                        Console.WriteLine($"Vai ser puxada a casa com id:{tmpId}, mas ainda há {linha.waitingConstructions.Count} a espera");
+
+                        linha.waitingConstructions.RemoveAt(0);
+                        linha.stages[index-1].idConstruction = tmpId;
+                        linha.stages[index-1].tw = new TimerWrapper(linha.stages[index - 1].tempo * 1000, () => this.changeConstructionStageAsync(index - 1, linha), false);
+                        linha.stages[index-1].tw?.start();
+                        await updateConstructionStateAsync(tmpId, (int)ConstructionState.BUILDING);
+                        Console.WriteLine($"A construção:{tmpId} passou de WAITING a BUILDING!");
+                    }
                     // Console.WriteLine($"Timer iniciado num estágio do meio, após o anterior já ter validado se podia avançar. Construção: {linha.stages[index].idConstruction}");
                 }
             }

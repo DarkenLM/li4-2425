@@ -42,7 +42,7 @@ SET IDENTITY_INSERT ConstructionProperties OFF
 SET IDENTITY_INSERT BlockProperties ON
 INSERT INTO BlockProperties (id, name, rarity, timeToAcquire)
 	VALUES
-	('1', 'Bed', 'RARE','3'),
+	('1', 'Yellow Bed', 'RARE','3'),
 	('2', 'Bookshelf', 'EPIC','4'),
 	('3', 'Cobblestone', 'COMMON','1'),
 	('4', 'Crafting Table', 'COMMON','2'),
@@ -62,16 +62,51 @@ SET IDENTITY_INSERT BlockProperties OFF
 -- ----------------------------------------------------
 -- VALUES FOR Construction
 -- ---------------------------------------------------
+DELETE FROM Constructions;
 SET IDENTITY_INSERT Constructions ON
 INSERT INTO Constructions (id, state, idConstructionProperties, idUser)
-	VALUES
-	('1', 'COMPLETED','1','1'),
-	('2', 'COMPLETED','2','5'),
-	('3', 'BUILDING','3','2'),
-	('4', 'WAITING','2','3'),
-	('5', 'WAITING','2','3'),
-	('6', 'COMPLETED','1','9');
-SET IDENTITY_INSERT Constructions OFF
+    VALUES
+    ('1', 'COMPLETED','1','1'),
+    ('2', 'COMPLETED','2','5'),
+    ('3', 'BUILDING','3','2'),
+    ('4', 'WAITING','2','3'),
+    ('5', 'WAITING','2','3'),
+    ('6', 'BUILDING','1','9'),
+    ('7', 'WAITING', '1', '2'),
+    ('8', 'BUILDING', '2', '4'),
+    ('9', 'WAITING', '3', '5'),
+    ('10', 'COMPLETED', '1', '7'),
+    ('11', 'BUILDING', '2', '8'),
+    ('12', 'WAITING', '3', '9'),
+    ('13', 'COMPLETED', '1', '10'),
+    ('14', 'BUILDING', '2', '3'),
+    ('15', 'WAITING', '3', '6'),
+    ('16', 'COMPLETED', '1', '1'),
+    ('17', 'BUILDING', '2', '2'),
+    ('18', 'WAITING', '3', '4'),
+    ('19', 'COMPLETED', '1', '5'),
+    ('20', 'BUILDING', '2', '6'),
+    ('21', 'WAITING', '3', '7'),
+    ('22', 'COMPLETED','1','8'),
+    ('23', 'BUILDING','2','9'),
+    ('24', 'WAITING','3','10'),
+    ('25', 'COMPLETED','1','4'),
+    ('26', 'BUILDING','2','5'),
+    ('27', 'WAITING','3','1'),
+    ('28', 'COMPLETED','1','2'),
+    ('29', 'BUILDING','2','3'),
+    ('30', 'WAITING','3','4'),
+    ('31', 'COMPLETED','1','6'),
+    ('32', 'BUILDING','2','7'),
+    ('33', 'WAITING','3','8'),
+    ('34', 'COMPLETED','1','9'),
+    ('35', 'BUILDING','2','10'),
+    ('36', 'WAITING','3','1'),
+    ('37', 'COMPLETED','1','3'),
+    ('38', 'BUILDING','2','4'),
+    ('39', 'WAITING','3','5'),
+    ('40', 'COMPLETED','1','7');
+SET IDENTITY_INSERT Constructions OFF;
 
 -- ----------------------------------------------------
 -- VALUES FOR ConstructionStages

@@ -31,4 +31,16 @@ public class ConstructionProperties {
     public string toString() {
         return $"ConstructionProperties [ID: {id}, Name: {name}, dificulty: {dificulty}, Number of stages: {nStages} stages]";
     }
+
+    public ConstructionProperties DeepClone() {
+        var clone = new ConstructionProperties(id, name, dificulty, nStages) {
+            stages = new Estagio[nStages]
+        };
+
+        for (int i = 0; i < stages.Length; i++) {
+            clone.stages[i] = this.stages[i]?.DeepClone(); // Use DeepClone from Estagio
+        }
+
+        return clone;
+    }
 }
