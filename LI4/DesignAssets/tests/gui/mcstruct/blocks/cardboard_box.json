@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "#end": "img/textures/cardboard_box.png",
+    "#side": "img/textures/cardboard_box_side.png",
+    "#tape_side": "img/textures/cardboard_box_tape_side.png"
+  },
+  "elements": [
+      {
+          "from": [0, 0, 0],
+          "to": [16, 16, 16],
+          "color": 8,
+          "faces": {
+              "north": {"uv": [0, 0, 16, 16], "texture": "#tape_side"},
+              "east": {"uv": [0, 0, 16, 16], "texture": "#side"},
+              "south": {"uv": [0, 0, 16, 16], "texture": "#tape_side"},
+              "west": {"uv": [0, 0, 16, 16], "texture": "#side"},
+              "up": {"uv": [0, 0, 16, 16], "texture": "#end"},
+              "down": {"uv": [0, 0, 16, 16], "texture": "#end"}
+          }
+      }
+  ]
+}

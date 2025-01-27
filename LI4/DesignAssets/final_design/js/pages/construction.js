@@ -196,13 +196,13 @@ document.addEventListener("DOMContentLoaded", async function() {
 });
 
 function animate(time) {
-    if (autoTick) {
+    if (autoTick && !stopped) {
         if (mc3d.mcrender._currentTick >= mc3d.mcrender._totalTicks) {
             if (repeat) {
                 // mc3d.setTick(0);
                 mc3d.tick();
             } else {
-                mc3d.stop();
+                // mc3d.stop();
                 stopped = true;
                 return;
             }

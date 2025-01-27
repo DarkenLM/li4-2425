@@ -106,11 +106,34 @@
                 </div>
             </div>
         </div>
+    
+        <dialog id="nuke_dialog" class="queue-dialog">
+            <div class="mc-container" id="mc_container" style="--target-width: 681px; --target-height: 220px; overflow: hidden;">
+            <!-- <div class="mc-container" id="mc_container" style="overflow: hidden;"> -->
+                <div class="title">
+                    Nuking queue <span id="nuke_dialog_queue_id" style="color: #008600;">-1</span>
+                    <button class="close">X</button>
+                </div>
+                <div class="mc-inner-container" style="color: var(--secondary);">
+                    <p>Are you sure you want to remove <span id="nuke_dialog_queue_elems" style="color: #860000;">0</span> elements from the queue?</p>
+                    <p>This action cannot be reversed!</p>
+    
+                    <div class="center" style="gap: 20px;">
+                        <button id="nuke_it_btn" class="mc-button icon">
+                            <i class="mc-accept"></i>
+                        </button>
+                        <button id="nuke_cancel_btn" class="mc-button icon">
+                            <i class="mc-reject"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </dialog>
     </div>
 
-    <dialog id="nuke_dialog" class="queue-dialog">
+    <!-- <dialog id="nuke_dialog" class="queue-dialog">
         <div class="mc-container" id="mc_container" style="--target-width: 681px; --target-height: 220px; overflow: hidden;">
-        <!-- <div class="mc-container" id="mc_container" style="overflow: hidden;"> -->
+        < !-- <div class="mc-container" id="mc_container" style="overflow: hidden;"> -- >
             <div class="title">
                 Nuking queue <span id="nuke_dialog_queue_id" style="color: #008600;">-1</span>
                 <button class="close">X</button>
@@ -129,7 +152,7 @@
                 </div>
             </div>
         </div>
-    </dialog>
+    </dialog> -->
 </body>
 
 <script type="module" src="../js/pages/queue.js"></script>

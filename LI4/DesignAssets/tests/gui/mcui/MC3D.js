@@ -26,6 +26,16 @@ class MC3D {
         this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
         this.camera = new THREE.PerspectiveCamera(75, size.width / size.height, 0.1, 1000);
+        // const aspect = size.width / size.height;
+        // const cameraSize = 20;
+        // this.camera = new THREE.OrthographicCamera(
+        //     -cameraSize * aspect,
+        //     cameraSize * aspect,
+        //     cameraSize,
+        //     -cameraSize,
+        //     0.1,
+        //     1000
+        // );
         this.camera.position.set(5, 5, 10);
         this.camera.lookAt(0, 0, 0);
 

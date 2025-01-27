@@ -1,0 +1,12 @@
+{
+    "stages": [
+        {
+            "blocks": [
+                {
+                    "block": "cardboard_box",
+                    "x": 0, "y": 0, "z": 0
+                }
+            ]
+        }
+    ]
+}

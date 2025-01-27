@@ -1,3 +1,5 @@
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import MCStruct from "./mcstruct/MCStruct.js";
 import MC3D from "./mcui/MC3D.js";
@@ -8,10 +10,15 @@ import smallTent1 from "./mcstruct/constructions/small_tent_1.json" with { type:
 // import plainsVillageHouse5 from "./mcstruct/constructions/plains_village_house_5.json" with { type: "json" };
 const plainsVillageHouse5 = await loadJSON5Module("./mcstruct/constructions/plains_village_house_5.json");
 const plainsLibrary2 = await loadJSON5Module("./mcstruct/constructions/plains_library_2.json");
+const singleton = await loadJSON5Module("./mcstruct/constructions/singleton.json");
 
-// const struct = new MCStruct(smallTent1);
+const _structs = [smallTent1, plainsVillageHouse5, plainsLibrary2, singleton];
+const structs = _structs.map((s) => new MCStruct(s));
+let structIndex = 0;
+
+const struct = new MCStruct(smallTent1);
 // const struct = new MCStruct(plainsVillageHouse5);
-const struct = new MCStruct(plainsLibrary2);
+// const struct = new MCStruct(plainsLibrary2);
 console.log("STRUCTURE:", struct);
 
 const pVHStruct = new MCStruct(plainsVillageHouse5);
@@ -26,7 +33,23 @@ mc3d.setCameraPosition(5 * 16, 5 * 16, 10 * 16);
 
 await mc3d.loadStructure(struct);
 mc3d.prepare();
-mc3d.mcrender._debugTextures(mc3d.scene);
+
+//#region ------- Minecraft Orthographic Camera -------
+const aspect = window.innerWidth / window.innerHeight;
+const cameraSize = 20;
+mc3d.camera = new THREE.OrthographicCamera(
+    -cameraSize * aspect,
+    cameraSize * aspect,
+    cameraSize,
+    -cameraSize,
+    0.1,
+    1000
+);
+mc3d.camera.position.set(16, 13.75, 16);
+mc3d.camera.lookAt(0, 0, 0);
+mc3d.controls = new OrbitControls(mc3d.camera, mc3d.renderer.domElement);
+//#endregion ------- Minecraft Orthographic Camera -------
+// mc3d.mcrender._debugTextures(mc3d.scene);
 
 //#region ============== GUI Setup ==============
 let _GUI_selfupdate = false;
@@ -102,5 +125,23 @@ document.addEventListener("keydown", async function (e) {
             .reset();
 
         mc3d.start(animate)
+    } else {
+        const numKey = parseInt(e.key);
+        console.log("LOADING:", numKey);
+        if (numKey >= 1 && numKey <= structs.length) {
+            const struct = structs[numKey - 1];
+
+            mc3d.clearScene();
+            await mc3d.loadStructure(struct);
+            mc3d.prepare();
+
+            _GUI_selfupdate = true;
+            curTick
+                .setValue(0)
+                .max(mc3d.mcrender._totalTicks)
+                .reset();
+
+            mc3d.start(animate);
+        }
     }
 });
