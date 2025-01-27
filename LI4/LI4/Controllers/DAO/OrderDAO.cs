@@ -129,16 +129,20 @@ public class OrderDAO {
         using var connection = getConnection();
         const string query = @"
             SELECT 
-                (bio.quantity * b.timeToAcquire) AS TotalTimeToAcquire
+                SUM(bio.quantity * b.timeToAcquire) - DATEDIFF(SECOND, o.orderDate, GETDATE()) AS RemainingTimeToAcquire
             FROM 
                 BlocksInOrder bio
             INNER JOIN 
                 BlockProperties b ON bio.idBlockProperty = b.id
+            INNER JOIN
+                Orders o ON bio.idOrder = o.id
             WHERE 
-                bio.idOrder = @OrderId;
+                bio.idOrder = @OrderId
+            GROUP BY 
+                o.orderDate;
         ";
 
-        var times = await connection.QueryAsync<int>(query, new { OrderId = idOrder });
-        return times.Sum();
+        var remainingTime = await connection.QueryFirstOrDefaultAsync<int?>(query, new { OrderId = idOrder });
+        return remainingTime < 0 ? 0 : remainingTime ?? 0; // Return 0 if no results
     }
 }

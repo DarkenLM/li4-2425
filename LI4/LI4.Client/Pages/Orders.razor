@@ -36,7 +36,7 @@
                                             @if (!order.delivered)
                                             {
                                                 <img src="/img/hourglass.png" alt="hourglass">
-                                                <p class="mc-text-align">TODO - @(StringUtil.formatTimeSpan(orderTimes[order.id]))</p>
+                                                <p class="mc-text-align">Time Left: - @(StringUtil.formatTimeSpan(orderTimes[order.id]))</p>
                                             }
                                             else
                                             {
@@ -98,22 +98,24 @@
             //         orderTimes[order.id] = 0;
             //     }
             // }
-            foreach (var order in orders) {
+            foreach (var order in orders){
                 orderTimes[order.id] = await facade.getEstimatedTimeOrderAsync(order.id);
             }
 
-            var orderTimesUpdateTimer = new Timer(new TimerCallback(_ => {
-                foreach (var timer in orderTimes) {
-                    orderTimes[timer.Key] = timer.Value - 1;
+            var orderTimesUpdateTimer = new Timer(new TimerCallback(_ =>{
+                foreach (var orderTimer in orderTimes.Keys.ToList()) {
+                    orderTimes[orderTimer]--;
 
-                    if (orderTimes[timer.Key] == 0) {
-                        orders.Where(o => o.id == timer.Key).First().delivered = true;
-                        orderTimes.Remove(timer.Key);
-                        continue;
+                    if (orderTimes[orderTimer] <= 0){
+                        var order = orders.FirstOrDefault(o => o.id == orderTimer);
+                        if (order != null){
+                            order.delivered = true; 
+                        }
+                        orderTimes.Remove(orderTimer);
                     }
                 }
 
-                InvokeAsync(StateHasChanged);
+                InvokeAsync(StateHasChanged); // Update the UI
             }), null, 1000, 1000);
 
             await InvokeAsync(StateHasChanged);
