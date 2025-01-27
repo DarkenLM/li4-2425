@@ -138,6 +138,7 @@ public class ConstructionFacade {
         int? DEBUGID = linha.stages[index].idConstruction;
         // Último estágio
         if (index == linha.nStages - 1) {
+            linha.stages[index].tried = false;
             await updateConstructionStateAsync((int) linha.stages[index].idConstruction!, (int) ConstructionState.COMPLETED);
             if (linha.stages[index - 1].tw == null && linha.stages[index - 1].idConstruction != null) {
                 linha.stages[index].idConstruction = linha.stages[index - 1].idConstruction;
@@ -151,6 +152,7 @@ public class ConstructionFacade {
             Console.WriteLine($"A construção:{DEBUGID} passou de BUILDING a COMPLETED!");
         } else {
             if (linha.stages[index + 1].idConstruction == null) {
+                linha.stages[index].tried = false;
                 linha.stages[index + 1].idConstruction = linha.stages[index].idConstruction;
                 linha.stages[index + 1].tw = new TimerWrapper(linha.stages[index + 1].tempo * 1000, () => this.changeConstructionStageAsync(index + 1, linha), false);
                 linha.stages[index + 1].tw?.start();
@@ -170,6 +172,7 @@ public class ConstructionFacade {
                 }
                 
                 if (index != 0 && linha.stages[index - 1].tw == null && linha.stages[index - 1].idConstruction != null) {
+                    linha.stages[index-1].tried = false;
                     linha.stages[index].idConstruction = linha.stages[index - 1].idConstruction;
                     linha.stages[index].tw = new TimerWrapper(linha.stages[index].tempo * 1000, () => this.changeConstructionStageAsync(index, linha), false);
                     linha.stages[index].tw?.start();
@@ -187,6 +190,8 @@ public class ConstructionFacade {
                     }
                     // Console.WriteLine($"Timer iniciado num estágio do meio, após o anterior já ter validado se podia avançar. Construção: {linha.stages[index].idConstruction}");
                 }
+            } else {
+                linha.stages[index].tried = true;
             }
         } 
     }
@@ -326,6 +331,9 @@ public class ConstructionFacade {
         int totalTime = line.stages[stage].tempo;
 
         int time = totalTime - secondsPassed;
+        if (line.stages[stage].tw == null && line.stages[stage].tried) {
+            time = 0;
+        }
         for (int index = stage+1; index < line.stages.Length; index++) {
             time += line.stages[index].tempo;
         }

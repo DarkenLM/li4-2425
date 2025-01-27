@@ -27,9 +27,13 @@
                         @{var constructionProperties = facade.getConstructionProperties(construction);}
                         @foreach (var constr in constructions) {
                             var stage = getStage(constr, userId, construction);
-                            if (stage == -1)
-                            {
-                                continue;
+                            Console.WriteLine($"A construção com id{constr} esta no estagio {stage}");
+                            int time = 0;
+                            if (stage >= 0){
+                                time = constructionTimes[constr];
+                            }
+                            else {
+                                stage = constructionProperties.nStages;
                             }
 
                             <a class="mc-slot long-slot assline-slot" href="/assembly_line/@constr/construction">
@@ -37,7 +41,7 @@
                                     <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(constructionProperties.name)).png" alt="@(constructionProperties.name)">
                                 </div>
                                 <div class="content-1c-2r">
-                                    <div class="mc-text-align">@(constructionProperties.name)</div>
+                                    <div class="mc-text-align">#@(constr) - @(constructionProperties.name)</div>
                                     <div class="content-2c-1r">
                                         <div class="assline-progress-bar">
                                             <div class="mc-progress-bar" style="background-image: url('/img/green_background.png'); --width: 480px; --progress: @(stage == constructionProperties.nStages ? 100 : (stage / (double)constructionProperties.nStages * 100))%">
@@ -47,7 +51,7 @@
                                         </div>
                                         <div class="assline-progress-left">
                                             <img src="/img/hourglass.png" alt="hourglass">
-                                            <p class="mc-text-align">Time Left: @(StringUtil.formatTimeSpan(constructionTimes[constr]))</p>
+                                            <p class="mc-text-align">Time Left: @(StringUtil.formatTimeSpan(@time))</p>
                                         </div>
                                     </div>
                                 </div>
@@ -100,9 +104,16 @@
             {
                 foreach (var timer in constructionTimes.ToList())
                 {
-                    constructionTimes[timer.Key] = timer.Value - 1;
+                    if (constructionTimes[timer.Key] > 0){
+                        var stage = getStage(timer.Key, userId, construction);
+                        if (stage == -1){
+                            constructionTimes[timer.Key] = 0;
+                        } else {
+                            constructionTimes[timer.Key] = facade.getEstimatedTime(userId, construction, stage);
+                        }
+                    }
 
-                    if (constructionTimes[timer.Key] < 0)
+                    if (constructionTimes[timer.Key] == 0)
                     {
                         constructions = await facade.getBuildingIdsConstructionsAsync(userId, construction);
                         foreach (var constr in constructions)
@@ -116,8 +127,6 @@
                             }
                             constructionTimes[constr] = facade.getEstimatedTime(userId, construction, stage);
                         }
-
-                        //constructionTimes.Remove(timer.Key);
                         continue;
                     }
                 }
