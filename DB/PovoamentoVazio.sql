@@ -48,16 +48,15 @@ INSERT INTO BlockProperties (id, name, rarity, timeToAcquire)
 	('3', 'Cobblestone', 'COMMON','1'),
 	('4', 'Crafting Table', 'COMMON','2'),
 	('5', 'Dirt', 'COMMON','1'),
-	('6', 'Dirt Path', 'RARE','2'),
-	('7', 'Glass Pane', 'RARE','1'),
-	('8', 'Grass Block', 'EPIC','2'),
-	('9', 'Lectern', 'RARE','1'),
-	('10', 'Oak Door', 'COMMON','2'),
-	('11', 'Oak Fence', 'COMMON','1'),
-	('12', 'Oak Log', 'COMMON','3'),
-	('13', 'Oak Planks', 'COMMON','4'),
-	('14', 'Oak Stairs', 'COMMON','1'),
-	('15', 'White Wool', 'RARE','3');
+	('6', 'Glass Pane', 'RARE','1'),
+	('7', 'Grass Block', 'EPIC','2'),
+	('8', 'Lectern', 'RARE','1'),
+	('9', 'Oak Door', 'COMMON','2'),
+	('10', 'Oak Fence', 'COMMON','1'),
+	('11', 'Oak Log', 'COMMON','3'),
+	('12', 'Oak Planks', 'COMMON','4'),
+	('13', 'Oak Stairs', 'COMMON','1'),
+	('14', 'White Wool', 'RARE','3');
 SET IDENTITY_INSERT BlockProperties OFF
 
 -- ----------------------------------------------------
