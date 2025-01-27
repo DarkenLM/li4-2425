@@ -3,6 +3,7 @@ using LI4.Common.Exceptions.ConstructionExceptions;
 using LI4.Controllers.DAO;
 using LI4.Dados;
 using Microsoft.Data.SqlClient;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -240,7 +241,8 @@ public class ConstructionFacade {
 
     public int getConstructionStage(int idConstruction, int idUser, int idConstructionProperties) {
         if (this.assemblyLines.ContainsKey(idUser) && this.assemblyLines[idUser].ContainsKey(idConstructionProperties)) {
-            for (int i = 0 ; i < this.assemblyLines[idUser][idConstructionProperties].nStages ; i++) {
+            int i = 0;
+            for (; i < this.assemblyLines[idUser][idConstructionProperties].nStages ; i++) {
                 if (this.assemblyLines[idUser][idConstructionProperties].stages[i].idConstruction == idConstruction)
                     return i+1;
             }
@@ -305,6 +307,7 @@ public class ConstructionFacade {
     }
 
     public int getEstimatedTime(int idUser, int idConstructionProperties, int stage) {
+        stage--;
         if (!assemblyLines.TryGetValue(idUser, out var temp)) {
             return 0;
         }
@@ -317,8 +320,13 @@ public class ConstructionFacade {
         }
         //Dictionary<int, LinhaDeMontagem> temp = assemblyLines[idUser];
         //LinhaDeMontagem line = temp[idConstructionProperties];
-        int time = 0;
-        for (int index = stage; index < line.stages.Length; index++) {
+        DateTime startedAt = line.stages[stage].tw == null ? DateTime.Now : line.stages[stage].tw.startTime;
+        DateTime currentDate = DateTime.Now;
+        int secondsPassed = (int)(currentDate - startedAt).TotalSeconds;
+        int totalTime = line.stages[stage].tempo;
+
+        int time = totalTime - secondsPassed;
+        for (int index = stage+1; index < line.stages.Length; index++) {
             time += line.stages[index].tempo;
         }
 

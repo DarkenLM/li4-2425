@@ -27,19 +27,23 @@
                         @{var constructionProperties = facade.getConstructionProperties(construction);}
                         @foreach (var constr in constructions) {
                             var stage = getStage(constr, userId, construction);
+                            if (stage == -1)
+                            {
+                                continue;
+                            }
 
                             <a class="mc-slot long-slot assline-slot" href="/assembly_line/@constr/construction">
                                 <div class="icon">
-                                            <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(constructionProperties.name)).png" alt="@(constructionProperties.name)">
+                                    <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(constructionProperties.name)).png" alt="@(constructionProperties.name)">
                                 </div>
                                 <div class="content-1c-2r">
                                     <div class="mc-text-align">@(constructionProperties.name)</div>
                                     <div class="content-2c-1r">
                                         <div class="assline-progress-bar">
-                                            <div class="mc-progress-bar" style="background-image: url('/img/green_background.png'); --width: 480px; --progress: @(stage / constructionProperties.nStages * 100)%">
+                                            <div class="mc-progress-bar" style="background-image: url('/img/green_background.png'); --width: 480px; --progress: @(stage == constructionProperties.nStages ? 100 : (stage / (double)constructionProperties.nStages * 100))%">
                                                 <div class="mc-progress-bar-fill" style="background-image: url('/img/green_progress.png');"></div>
                                             </div>
-                                            <p class="mc-text-align">99%</p>
+                                            <p class="mc-text-align">@(stage == constructionProperties.nStages ? "100%" : (stage / (double)constructionProperties.nStages * 100).ToString("F0") + "%")</p>
                                         </div>
                                         <div class="assline-progress-left">
                                             <img src="/img/hourglass.png" alt="hourglass">
@@ -68,11 +72,13 @@
     private string? message;
 
     protected override async Task OnInitializedAsync() {
-        try {
+        try
+        {
             var user = await facade.getUserByEmailAsync("paulo@example.com");
 
-            if (user == null) {
-                message = "Unknown error.";
+            if (user == null)
+            {
+                message = "Unknown error. (No Users)";
 
                 await InvokeAsync(StateHasChanged);
                 return;
@@ -81,25 +87,37 @@
             userId = user.id;
             constructions = await facade.getBuildingIdsConstructionsAsync(userId, construction);
 
-            foreach (var constr in constructions) {
+            foreach (var constr in constructions)
+            {
                 var stage = getStage(constr, userId, construction);
+                if(stage==-1){
+                    continue;
+                }
                 constructionTimes[constr] = facade.getEstimatedTime(userId, construction, stage);
             }
 
-            var orderTimesUpdateTimer = new Timer(new TimerCallback(async _ => {
-                foreach (var timer in constructionTimes.ToList()) {
+            var orderTimesUpdateTimer = new Timer(new TimerCallback(async _ =>
+            {
+                foreach (var timer in constructionTimes.ToList())
+                {
                     constructionTimes[timer.Key] = timer.Value - 1;
 
-                    if (constructionTimes[timer.Key] == 0) {
+                    if (constructionTimes[timer.Key] < 0)
+                    {
                         constructions = await facade.getBuildingIdsConstructionsAsync(userId, construction);
-                        foreach (var constr in constructions) {
+                        foreach (var constr in constructions)
+                        {
                             if (constructionTimes.ContainsKey(constr)) continue;
 
                             var stage = getStage(constr, userId, construction);
+                            if (stage == -1)
+                            {
+                                continue;
+                            }
                             constructionTimes[constr] = facade.getEstimatedTime(userId, construction, stage);
                         }
 
-                        constructionTimes.Remove(timer.Key);
+                        //constructionTimes.Remove(timer.Key);
                         continue;
                     }
                 }
@@ -109,7 +127,7 @@
 
             await InvokeAsync(StateHasChanged);
         } catch (Exception ex) {
-            message = "Unknown error.";
+            message = "Unknown error: " + ex.Message;
 
             await InvokeAsync(StateHasChanged);
         }
@@ -130,9 +148,8 @@
         try {
             return facade.getConstructionCurrentStage(idConstruction, idUser, idConstructionProperties);
         } catch(Exception ex) {
-            message = $"{ex.Message}";
+            return -1;
         }
-
         return 0;
     }
 
