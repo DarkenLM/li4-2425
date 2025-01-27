@@ -2,69 +2,91 @@
 @rendermode InteractiveServer
 @inject IMineBuildsLN facade;
 @inject NavigationManager NavigationManager
-@inject IJSRuntime js;
 
-<h3>Perfil</h3>
-
-<div>
-    <label>Email:</label>
-    <p>@email</p>
-</div>
-<div>
-    <label>Username:</label>
-    <p>@username</p>
-</div>
-<div>
-    <label>Password:</label>
-    <p>@password</p>
-</div>
-
-<div>
-    <button @onclick="NavigateToEditProfile">Editar Perfil</button>
+<div class="center">
+    <div class="mc-container">
+        <div class="title">
+            Profile
+            <button class="close" @onclick="goTheFuckBack">X</button>
+        </div>
+        <div class="input-container">
+            <div class="input-group">
+                <div class="labels">
+                    <label for="email_input">Email:</label>
+                    <label for="username_input">Username:</label>
+                    <label for="password_input">Password:</label>
+                </div>
+                <div class="inputs">
+                    <input type="text" class="mc-textarea" name="email_input" id="email_input" placeholder="@origEmail" @bind="email" @bind:event="oninput">
+                    <input type="text" class="mc-textarea" name="username_input" id="username_input" placeholder="@origUsername" @bind="@username" @bind:event="oninput">
+                    <input type="password" class="mc-textarea" name="password_input" id="password_input" placeholder="********" @bind="password" @bind:event="oninput">
+                </div>
+            </div>
+            <div class="button-group" style="--__width: 95% !important;">
+                <div class="mc-button" @onclick="UpdateProfile"><p style="color: var(--success)">Save</p></div>
+                <a class="mc-button" href="/"><p style="color: var(--error)">Cancel</p></a>
+            </div>
+        </div>
+        @if (message != "") {
+            <p style="color: var(@(msgSuccess ? "--success" : "--error")">@message</p>
+        }
+    </div>
 </div>
 
 @code {
+    private int id;
     private string email = string.Empty;
-
     private string username = string.Empty;
-
     private string password = string.Empty;
 
+    private string origEmail = "";
+    private string origUsername = "";
+    private string origPassword = "";
 
+    private string message = string.Empty;
+    private bool msgSuccess = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync() {
+        try {
+            var user = await facade.getUserByEmailAsync("paulo@example.com");
 
-    {
+            if (user != null) {
+                id = user.id;
+                email    = user.email;
+                username = user.username;
+                password = user.userPassword;
 
-        var user = await facade.getUserByEmailAsync("paulo@example.com");
+                origEmail    = user.email;
+                origUsername = user.username;
+                origPassword = user.userPassword;
+            }
 
-        if (user != null)
-
-        {
-
-            email = user.email;
-
-            username = user.username;
-
-            password = user.userPassword;
-
-
-
+            await InvokeAsync(StateHasChanged);
+        } catch (Exception ex) {
+            message = $"Erro ao carregar perfil: {ex.Message}";
         }
-
-        await InvokeAsync(StateHasChanged);
-
-
-
     }
 
+    private async Task UpdateProfile() {
+        try {
+            var success = await facade.updateUserAsync(id, email, username, password);
 
+            if (success != null) {
+                message = "Perfil atualizado com sucesso!";
+                msgSuccess = true;
 
-    private void NavigateToEditProfile()
+            } else {
 
-    {
+                msgSuccess = false;
+                message = "Erro ao atualizar perfil.";
+            }
+        } catch (Exception ex) {
+            message = $"Erro: {ex.Message}";
+            msgSuccess = false;
+        }
+	}
 
-        NavigationManager.NavigateTo("/edit-profile");
-
-    }
+    private void goTheFuckBack() {
+        NavigationManager.NavigateTo("/");
+    } 
 }

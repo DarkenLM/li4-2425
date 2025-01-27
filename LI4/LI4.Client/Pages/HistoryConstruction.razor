@@ -1,0 +1,163 @@
+﻿@page "/history/{constructionId:int}"
+@implements IAsyncDisposable
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
+@using Util;
+
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        @(constructionProperties?.name ?? "idfk")
+        <button class="close" @onclick="goTheFuckBack">X</button>
+    </div>
+    @if (message is not null) {
+            <p>@message</p>
+    } else if (blocksForConstruction is null || constructionProperties is null || blocks is null) {
+            <p>Loading...</p>
+    } else {
+            <div class="main-container" style="height: 70vh;">
+                <div id="construction" class="construction" data-construction="@(StringUtil.reverseInterpolateBlockName(constructionProperties.name))" data-render="true">
+                    <div class="construction-preview">
+                        <div id="render3d">
+
+                        </div>
+                    </div>
+                    <div class="construction-materials">
+                        <div class="title">
+                            Material List
+                        </div>
+                        <div id="material_list" class="content mc-scrollbar">
+                            @foreach (var material in blocksForConstruction) {
+                                <div class="mc-slot" data-item="@(StringUtil.reverseInterpolateBlockName(material.Key))" data-cost="@(material.Value)">
+                                    <div class="icon"><img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(material.Key)).png" alt="@(material.Key)"></div>
+                                    <p class="name">@(material.Key)</p>
+                                    <p class="details"><span name="total">@(material.Value)</span></p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="secondary-container construction">
+                <div class="construction-controls">
+                    <div class="slider" style="visibility: hidden;">
+                        <div class="mc-slider" style="--chevrons: 3;">
+                            <input type="range" min="0" max="1240" step="1" value="0" disabled />
+                            <div class="mc-slider-progress"></div>
+                        </div>
+                    </div>
+                    <div class="checkboxes">
+                        <div class="mc-checkbox" data-control="autotick">
+                            <input type="checkbox" id="autotickCheckbox" disabled>
+                            <label for="autotickCheckbox">Autotick</label>
+                        </div>
+                        <div class="mc-checkbox" data-control="repeat">
+                            <input type="checkbox" id="repeatCheckbox" disabled>
+                            <label for="repeatCheckbox">Repeat</label>
+                        </div>
+                        <div class="mc-checkbox" data-control="snap-stage">
+                            <input type="checkbox" id="snapStageCheckbox" disabled>
+                            <label for="snapStageCheckbox">Snap to Stages</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="construction-secondary-controls" style="font-size: 40px;">
+                        <p class="mc-text-align"><span name="available">@completed</span>/<span name="total">@total</span></p>
+                </div>
+            </div>
+    }
+</div>
+
+<script type="module" src="/js/pages/construction.js"></script>
+
+@code {
+    [Parameter] public int constructionId { get; set; }
+
+    private int userId;
+    private Dictionary<string, int>? blocksForConstruction;
+    private ConstructionProperties? constructionProperties;
+    private Dictionary<string, int>? blocks;
+
+    private int total = 0;
+    private int completed = 0;
+
+    private string? message;
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            JSConsole console = new(js);
+
+            await js.InvokeVoidAsync("window.__BRIDGE_CONSTRUCTION");
+        }
+    }
+
+    protected override async Task OnInitializedAsync() {
+        try {
+            var user = await facade.getUserByEmailAsync("paulo@example.com");
+
+            if (user != null) {
+                userId = user.id;
+            } else {
+                message = "Unknown error.";
+
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            blocksForConstruction = await facade.getAllBlocksConstructionAsync(constructionId);
+            constructionProperties = facade.getConstructionProperties(constructionId);
+            blocks = await facade.getUserStockAsync(userId);
+
+            total = await totalConstructions();
+            completed = await numCompletedConstructions();
+
+            await InvokeAsync(StateHasChanged);
+        } catch (Exception ex) {
+            userId = -1;
+            message = "Unknown error.";
+
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+    }
+
+    public async ValueTask DisposeAsync() {
+        await js.InvokeVoidAsync("window.__BRIDGE_CONSTRUCTION_DISPOSE");
+    }
+
+    private async Task<int> numCompletedConstructions() {
+        Dictionary<int, int> completed = await facade.getCompletedConstructionsAsync(userId);
+        int completedCount = completed.TryGetValue(constructionId, out int completedValue) ? completedValue : 0;
+        return completedCount;
+    }
+
+    private async Task<int> numOfnonCompletedConstructions() {
+        Dictionary<int, int> awaiting = await facade.getAwaitingConstructionsAsync(userId);
+        Dictionary<int, int> building = await facade.getBuildingConstructionsAsync(userId);
+        int awaitingCount = awaiting.TryGetValue(constructionId, out int awaitingValue) ? awaitingValue : 0;
+        int buildingCount = building.TryGetValue(constructionId, out int buildingValue) ? buildingValue : 0;
+
+        return awaitingCount + buildingCount;
+    }
+
+    private async Task<int> totalConstructions() {
+        int a = await numOfnonCompletedConstructions();
+        int b = await numCompletedConstructions();
+        int result = a + b;
+
+        return result;
+    }
+
+    private void NavigateToCompletedConstructions() {
+        NavigationManager.NavigateTo("/constructions/completedConstructions");
+    }
+
+    private void goTheFuckBack() {
+        NavigationManager.NavigateTo("/history");
+    } 
+}
+

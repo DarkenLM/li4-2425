@@ -16,5 +16,13 @@
             this.rarity = rarity;
             this.timeToAcquire = timeToAcquire;
         }
+
+        public override string ToString() => "Block{"
+            + "id=" + this.id + ", "
+            + "quantity=" + this.quantity + ", "
+            + "name='" + this.name + "', "
+            + "rarity=" + this.rarity + ", "
+            + "timeToAcquire=" + this.timeToAcquire
+            + "}";
     }
 }

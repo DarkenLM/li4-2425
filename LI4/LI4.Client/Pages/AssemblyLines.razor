@@ -1,0 +1,49 @@
+﻿@page "/assembly_lines"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
+@using Util;
+
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        Assembly Lines
+    </div>
+    @if (message is not null) {
+        <p>@message</p>
+    } else if (catalog is null) {
+        <p>Loading...</p>
+    } else {
+        <div class="main-container">
+            <div class="content-wrapper">
+                <div class="overflow-container mc-scrollbar">
+                    <div class="overflow-content">
+                        @foreach (var construction in catalog) {
+                            var constructionProperties = facade.getConstructionProperties(construction);
+
+                            <a class="mc-slot long-slot assline-slot" style="width: 100%; height: 200px; box-sizing: border-box;" href="/assembly_line/@construction">
+                                <div class="icon">
+                                    <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(constructionProperties.name)).png">
+                                </div>
+                                <div class="name mc-text-align">@(constructionProperties.name)</div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<int>? catalog;
+
+    private string? message;
+
+    protected override async Task OnInitializedAsync() {
+        catalog = facade.getCatalog();
+    }
+}

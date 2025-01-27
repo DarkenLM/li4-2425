@@ -1,0 +1,126 @@
+﻿@page "/history"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
+@using Util;
+
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        Production History
+    </div>
+    @if (message is not null) {
+        <p>@message</p>
+    } else if (totalConstructionsMap is null) {
+        <p>Loading...</p>
+    } else {
+        <div class="main-container">
+            <div class="content-wrapper">
+                <div class="overflow-container mc-scrollbar">
+                    <div class="overflow-content">
+                        @foreach (var construction in totalConstructionsMap) {
+                            var constructionProperties = facade.getConstructionProperties(construction.Key);
+
+                            <a class="mc-slot long-slot assline-slot" href="/history/@construction.Key">
+                                <div class="icon">
+                                    <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(constructionProperties.name)).png" alt="@(constructionProperties.name)">
+                                </div>
+                                <div class="content-2c-1r history">
+                                    <div class="mc-text-align">@(constructionProperties.name)</div>
+                                    <div class="content-2c-1r history-inner">
+                                        <div class="history-icon-text"><img class="square" src="/img/box_open.png"><p class="mc-text-align">@(getNumCompleted(construction.Key))</p></div>
+                                        <div class="history-icon-text"><p class="mc-text-align">/@(construction.Value)</p><img class="square" src="/img/box_closed.png"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script type="module" src="/js/pages/construction.js"></script>
+
+@code {
+    private int userId;
+    private Dictionary<int, int>? constructions;
+    private List<int>? catalog;
+    private Dictionary<int, int>? totalConstructionsMap;
+
+    private string? message;
+
+    protected override async Task OnInitializedAsync() {
+
+        try {
+            var user = await facade.getUserByEmailAsync("paulo@example.com");
+
+            if (user == null) {
+                message = "Unknown error.";
+
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            userId = user.id;
+
+            constructions = await facade.getCompletedConstructionsAsync(userId);
+            catalog = facade.getCatalog();
+            totalConstructionsMap = new();
+            await initTotalConstructionMap();
+
+            await InvokeAsync(StateHasChanged);
+        } catch (Exception ex) {
+            message = "Unknown error.";
+
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+    }
+
+    private async Task<int> numCompletedConstructions(int id){
+        Dictionary<int, int> completed = await facade.getCompletedConstructionsAsync(userId);
+        int completedCount = completed.TryGetValue(id, out int completedValue) ? completedValue : 0;
+        return completedCount;
+    }
+
+    private async Task<int> numOfnonCompletedConstructions(int id){
+        Dictionary<int, int> awaiting = await facade.getAwaitingConstructionsAsync(userId);
+        Dictionary<int, int> building = await facade.getBuildingConstructionsAsync(userId);
+        int awaitingCount = awaiting.TryGetValue(id, out int awaitingValue) ? awaitingValue : 0;
+        int buildingCount = building.TryGetValue(id, out int buildingValue) ? buildingValue : 0;
+
+        return awaitingCount + buildingCount;
+    }
+
+    private async Task<int> totalConstructions(int id){
+        int a = await numOfnonCompletedConstructions(id);
+        int b = await numCompletedConstructions(id);
+        int result = a + b;
+
+        return result;
+    }
+
+    private async Task initTotalConstructionMap(){
+        catalog = facade.getCatalog();
+        foreach (var construction in catalog)
+        {
+            int id = construction;
+            int total = await totalConstructions(id);
+            if (total == 0) continue;
+            totalConstructionsMap[id] = total;
+        }
+    }
+
+    private int getNumCompleted(int id){
+        return constructions.TryGetValue(id, out int completedValue) ? completedValue : 0;
+    }
+
+    private void NavigateToCompletedConstruction(int idConstructionProperties){
+        NavigationManager.NavigateTo($"/completedConstructions/construction/{idConstructionProperties}");
+    }
+}

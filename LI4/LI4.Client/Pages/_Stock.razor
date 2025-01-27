@@ -1,0 +1,83 @@
+@page "/OLD_stock"
+@rendermode InteractiveServer
+@inject IMineBuildsLN facade;
+@inject NavigationManager NavigationManager
+@inject IJSRuntime js;
+
+<h3>Stock</h3>
+
+@if (stock != null && stock.Any())
+
+{
+    <ul>
+        @foreach (var item in stock)
+
+        {
+            <li><strong>@item.Key</strong>: @item.Value</li>
+        }
+    </ul>
+}
+
+else
+
+{
+    <p>Loading stock...</p>
+}
+
+<div>
+    <button @onclick="NavigateToOrders">Ver Encomendas</button>
+    <button @onclick="NavigateToOrderPage">Encomendar</button>
+</div>
+
+@code {
+
+    private int id;
+
+    private Dictionary<string, int>? stock;
+
+
+
+    protected override async Task OnInitializedAsync()
+
+    {
+
+
+
+        var user = await facade.getUserByEmailAsync("paulo@example.com");
+
+
+
+        if (user != null)
+        {
+            id = user.id;
+
+        }
+
+
+
+        stock = await facade.getUserStockAsync(id);
+
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+
+
+    private void NavigateToOrders()
+
+    {
+
+        NavigationManager.NavigateTo("/orders");
+
+    }
+
+
+
+    private void NavigateToOrderPage()
+
+    {
+
+        NavigationManager.NavigateTo("/order");
+
+    }
+}

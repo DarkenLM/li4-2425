@@ -1,114 +1,120 @@
-@page "/orders"
+ï»¿@page "/orders"
 @rendermode InteractiveServer
 @inject IMineBuildsLN facade;
 @inject NavigationManager NavigationManager
 @inject IJSRuntime js;
 
-<h3>Minhas Encomendas</h3>
+@using Util;
 
-@if (orders == null)
-{
-    <p>A carregar encomendas...</p>
-}
-else if (!orders.Any())
-{
-    <p>Não há encomendas.</p>
-}
-else if (selectedOrder == null)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Data</th>
-                <th>Entregue</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in orders)
-            {
-                <tr>
-                    <td>@order.id</td>
-                    <td>@order.orderDate.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@(order.delivered ? "Sim" : "Não")</td>
-                    <td>
-                        <button class="btn btn-info" @onclick="() => LoadOrderDetails(order.id)">Ver Encomenda</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <h4>Detalhes da Encomenda @selectedOrder.id</h4>
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        Orders
+        <button class="close" @onclick="goTheFuckBack">X</button>
+    </div>
+    <div class="main-container">
+        <div class="content-wrapper">
+            <div class="overflow-container mc-scrollbar">
+                <div class="overflow-content">
+                    @if (orders == null) {
+                        <p>A carregar encomendas...</p>
+                    } else if (!orders.Any()) {
+                        <p>NÃ£o hÃ¡ encomendas.</p>
+                    } else {
+                        @foreach (var order in orders) {
+                            <a class="mc-slot long-slot orders-slot" href="order/@order.id">
+                                <div class="icon">
+                                    <img src="/img/pictures/cardboard_box.png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">Order #@order.id</div>
+                                    <div class="content-2c-1r">
+                                        <div class="orders-progress-bar">
+                                            @if (!order.delivered) {
+                                                <img src="/img/hourglass.png" alt="hourglass">
+                                                <p class="mc-text-align">TODO - @(StringUtil.formatTimeSpan(orderTimes[order.id]))</p>
+                                            } else {
+                                                <img src="/img/mc_accept.png" alt="hourglass">
+                                                <p class="mc-text-align">@(StringUtil.formatTime(order.orderDate))</p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    @if (selectedOrderBlocks == null)
-    {
-        <p>A carregar detalhes da encomenda...</p>
-    }
-    else if (!selectedOrderBlocks.Any())
-    {
-        <p>Esta encomenda não contém blocos.</p>
-    }
-    else
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Bloco</th>
-                    <th>Quantidade</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var block in selectedOrderBlocks)
-                {
-                    <tr>
-                        <td>@block.Key</td>
-                        <td>@block.Value</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-
-    <button class="btn btn-secondary" @onclick="BackToOrders">Voltar às Encomendas</button>
-}
-
-<button class="btn btn-primary" @onclick="GoToStock">Voltar ao Stock</button>
 
 @code {
     private List<LI4.Dados.Order> orders = new();
     private Dictionary<string, int>? selectedOrderBlocks = null;
-    private LI4.Dados.Order? selectedOrder = null;
+    private Dictionary<int, long> orderTimes = new();
+    private string errorMsg = "";
 
-    protected override async Task OnInitializedAsync()
-    {
-        int userId = 1; // Substituir pelo ID do utilizador autenticado
-        orders = await facade.getUserOrdersAsync(userId);
-    }
+    protected override async Task OnInitializedAsync() {
+        int id;
+        try {
+            var user = await facade.getUserByEmailAsync("paulo@example.com");
 
-    private async Task LoadOrderDetails(int orderId)
-    {
-        selectedOrder = orders.FirstOrDefault(o => o.id == orderId);
-        selectedOrderBlocks = null; // Para mostrar "A carregar detalhes..."
+            if (user != null) {
+                id = user.id;
+            } else {
+                throw null;
+            }
 
-        if (selectedOrder != null)
-        {
-            selectedOrderBlocks = await facade.getOrderContentAsync(orderId);
+            orders = await facade.getUserOrdersAsync(id);
+            if (orders.Count == 0) {
+                errorMsg = "NÃ£o hÃ¡ encomendas.";
+                throw null;
+            }
+
+            // var blocks = facade.getAllBlockProperties();
+
+            // foreach (var order in orders) {
+            //     if (!order.delivered) {
+            //         var orderContent = await facade.getOrderContentAsync(order.id);
+            //         if (orderContent is null) continue;
+
+            //         int estimatedTime = 0;
+            //         foreach (var block in orderContent) {
+            //             estimatedTime += block.Value * blocks[block.Key].timeToAcquire;
+            //         }
+
+            //         long _et = (StringUtil.convertToUnixTimestamp(order.orderDate) + estimatedTime * 1000) - DateTimeOffset.Now.ToUnixTimeSeconds();
+            //         orderTimes[order.id] = _et;
+            //     } else {
+            //         orderTimes[order.id] = 0;
+            //     }
+            // }
+            foreach (var order in orders) {
+                orderTimes[order.id] = await facade.getEstimatedTimeOrderAsync(order.id);
+            }
+
+            var orderTimesUpdateTimer = new Timer(new TimerCallback(_ => {
+                foreach (var timer in orderTimes) {
+                    orderTimes[timer.Key] = timer.Value - 1;
+
+                    if (orderTimes[timer.Key] == 0) {
+                        orders.Where(o => o.id == timer.Key).First().delivered = true;
+                        orderTimes.Remove(timer.Key);
+                        continue;
+                    }
+                }
+
+                InvokeAsync(StateHasChanged);
+            }), null, 1000, 1000);
+
+            await InvokeAsync(StateHasChanged);
+        } catch (Exception _) {
+            errorMsg = "Unknown error occured while fetching orders.";
         }
     }
 
-    private void BackToOrders()
-    {
-        selectedOrder = null;
-        selectedOrderBlocks = null;
-    }
-
-    private void GoToStock()
-    {
+    private void goTheFuckBack() {
         NavigationManager.NavigateTo("/stock");
-    }
+    } 
 }
-

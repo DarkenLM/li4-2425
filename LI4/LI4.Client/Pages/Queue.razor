@@ -1,0 +1,310 @@
+﻿@page "/queue"
+@implements IAsyncDisposable
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
+@using Util;
+
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        Queues
+    </div>
+    @if (message is not null) {
+        <p>@message</p>
+    } else if (constructions is null) {
+        <p>Loading...</p>
+    } else if (constructions.Count == 0) {
+        <p>Queue is empty.</p>
+    } else {
+        <div class="main-container">
+            <div class="content-wrapper">
+                <div class="overflow-container mc-scrollbar">
+                    <div class="overflow-content">
+                        @foreach (var construction in constructions) {
+                            var constructionProperties = facade.getConstructionProperties(construction.Key);
+
+                            <a class="mc-slot long-slot assline-slot" data-queue-id="@(construction.Key)" data-queue-elems="100">
+                                <div class="icon">
+                                    <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(constructionProperties.name)).png" alt="@(constructionProperties.name)">
+                                </div>
+                                <div class="content-2c-1r queue">
+                                    <div class="mc-text-align">@(constructionProperties.name)</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div class="queue-element"><p class="mc-text-align">@(construction.Value)</p></div>
+                                        <div class="queue-element">
+                                            <button name="subtract_btn" class="mc-button icon" @onclick="() => removeConstruction(construction.Key)">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="queue-element">
+                                            <button name="nuke_btn" class="mc-button icon" @onclick="() => openNukeDialog(construction.Key, construction.Value)">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<dialog id="nuke_dialog" class="queue-dialog __blazor-override"> @*="@nukeDialogOpen"*@
+    <div class="mc-container" id="mc_container" style="--target-width: 681px; --target-height: 220px; overflow: hidden;">
+        <div class="title">
+            Nuking queue <span id="nuke_dialog_queue_id" style="color: #008600;">@nukeQueueId</span>
+            <button class="close">X</button>
+        </div>
+        <div class="mc-inner-container" style="color: var(--secondary);">
+            <p>Are you sure you want to remove <span id="nuke_dialog_queue_elems" style="color: #860000;">@nukeQueueCount</span> elements from the queue?</p>
+            <p>This action cannot be reversed!</p>
+
+            <div class="center" style="gap: 20px;">
+                <button id="nuke_it_btn" class="mc-button icon" @onclick="() => removeAllConstructions(nukeQueueId, nukeQueueCount)">
+                    <i class="mc-accept"></i>
+                </button>
+                <button id="nuke_cancel_btn" class="mc-button icon" @onclick="() => closeNukeDialog()">
+                    <i class="mc-reject"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</dialog>
+
+@*< script type="module">
+    import MCDialog from "/js/mcui/MCDialog.js";
+
+    // let theFuckingDialog;
+    // let theFuckingDialogElem;
+
+    function _setupTheFuckingDialog() {
+        window.theFuckingDialogElem = document.getElementById("nuke_dialog");
+        // theFuckingDialog = new MCDialog(theFuckingDialogElem);
+    }
+
+    window.setupTheFuckingDialog = async function() {
+        await new Promise((r) => {
+            console.log("START PROMISE");
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", function() {
+                    _setupTheFuckingDialog()
+                    console.log("END PROMISE 1", window.theFuckingDialog, window.theFuckingDialogElem);
+
+                    r();
+                })
+            } else {
+                _setupTheFuckingDialog()
+                console.log("END PROMISE 2", window.theFuckingDialog, window.theFuckingDialogElem);
+
+                r();
+            }
+        });
+
+        return 0;
+    };
+
+    window.moveTheFuckingDialog = function() {
+        try {
+            console.log("THE FUCKING:", window.theFuckingDialog, window.theFuckingDialogElem)
+
+            const body = document.querySelector("body");
+            const theFuckingDialogParent = window.theFuckingDialogElem.parentNode;
+
+            // if (theFuckingDialogParent && theFuckingDialogParent.removeChild) theFuckingDialogParent.removeChild(window.theFuckingDialogElem);
+            if (body) body.appendChild(window.theFuckingDialogElem);
+
+            window.theFuckingDialog = new MCDialog(window.theFuckingDialogElem);
+        } catch (e) {
+
+        }
+    };
+
+    window.openTheFuckingDialog = function() {
+        console.log("THE FUCKING DIALOG:", window.theFuckingDialog, window.theFuckingDialogElem)
+        window.theFuckingDialog.open();
+    };
+
+    window.closeTheFuckingDialog = function() {
+        window.theFuckingDialog.close();
+    };
+
+    window.fuckingKillThemAll = function() {
+        delete window.theFuckingDialog;
+        delete window.theFuckingDialogElem;
+
+        window.setupTheFuckingDialog = (function(){});
+        window.moveTheFuckingDialog = (function(){});
+        window.openTheFuckingDialog = (function(){});
+        window.closeTheFuckingDialog = (function(){});
+        window.fuckingKillThemAll = (function(){});
+    }
+</script>
+ *@
+
+<script type="module">
+    import MCDialog from "/js/mcui/MCDialog.js";
+
+    function _setupbtns() {
+        const _subBtns = document.getElementsByName("subtract_btn");
+        const _nukeBtns = document.getElementsByName("nuke_btn");
+
+        const subBtns = [];
+        const nukeBtns = [];
+
+        _subBtns.forEach((btn) => {
+            subBtns.push(new MCButton(btn));
+        });
+
+        _nukeBtns.forEach((btn) => {
+            nukeBtns.push(new MCButton(btn));
+        });
+    }
+
+    function _setupNukeDialog() {
+        window.nukeDialogElem = document.getElementById("nuke_dialog");
+        window.nukeDialog = new MCDialog(window.nukeDialogElem);
+
+        _setupBtns();
+    }
+
+    window.setupNukeDialog = async function() {
+       console.log("SETUP NUKE DIALOG");
+
+        await new Promise((r) => {
+            console.log("START PROMISE", document.readyState);
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", function() {
+                    _setupNukeDialog()
+                    console.log("END PROMISE 1", window.nukeDialog, window.nukeDialogElem);
+
+                    r();
+                })
+            } else {
+                _setupNukeDialog()
+                console.log("END PROMISE 2", window.nukeDialog, window.nukeDialogElem);
+
+                r();
+            }
+        });
+
+        return 0;
+    };
+
+    window.openNukeDialog = function openNukeDialog() {
+        window.nukeDialog.open();
+    }
+
+    window.closeNukeDialog = function closeNukeDialog() {
+        window.nukeDialog.close();
+    }
+</script>
+
+@code {
+    private int userId;
+    private Dictionary<int, int>? constructions;
+
+    // private bool nukeDialogOpen = false;
+    private int nukeQueueId = -1;
+    private int nukeQueueCount = -1;
+
+    private string? message;
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            try {
+                await js.InvokeVoidAsync("window.setupNukeDialog");
+            } catch (Exception stfu) {
+                Console.WriteLine("ERROR: " + stfu.Message);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync() {
+        try {
+            var user = await facade.getUserByEmailAsync("paulo@example.com");
+
+            if (user == null) {
+                message = "Unknown error.";
+
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            userId = user.id;
+
+            constructions = await facade.getAwaitingConstructionsAsync(userId);
+            // constructions[1] = 10;
+
+            await InvokeAsync(StateHasChanged);
+        } catch (Exception ex) {
+            message = "Unknown error.";
+
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+    }
+
+    public async ValueTask DisposeAsync() {
+        // await js.InvokeVoidAsync("window.fuckingKillThemAll");
+    }
+
+    private async Task<bool> removeConstruction(int idConstructionProperties){
+        try {
+            if (constructions.ContainsKey(idConstructionProperties)) {
+                await facade.removeConstructionAsync(userId, idConstructionProperties);
+                constructions[idConstructionProperties] = Math.Max(constructions[idConstructionProperties] - 1, 0);
+
+                if (constructions[idConstructionProperties] == 0){
+                    constructions.Remove(idConstructionProperties);
+                }
+                return true;
+            }
+        } catch (Exception ex){
+            message = $"{ex.Message}";
+        }
+
+        return false;
+    }
+
+    private async Task removeAllConstructions(int idConstructionProperties, int N) {
+        try {
+            bool removed = true;
+            for (int i = 0; i < N && removed; i++) {
+                removed = await facade.removeConstructionAsync(userId, idConstructionProperties);
+            }
+        } catch (Exception ex) {
+            message = $"{ex.Message}";
+        }
+
+        await closeNukeDialog();
+    }
+
+    private async Task openNukeDialog(int queueId, int queueCount) {
+        nukeQueueId = queueId;
+        nukeQueueCount = queueCount;
+        // nukeDialogOpen = true;
+
+        // await js.InvokeVoidAsync("window.openTheFuckingDialog");
+        await js.InvokeVoidAsync("window.openNukeDialog");
+    }
+
+    private async Task closeNukeDialog() {
+        nukeQueueId = -1;
+        nukeQueueCount = -1;
+        // nukeDialogOpen = false;
+
+        // await js.InvokeVoidAsync("window.closeTheFuckingDialog");
+        await js.InvokeVoidAsync("window.closeNukeDialog");
+    }
+
+	private void NavigateToWaitingLineConstruction(int idConstructionProperties) {
+        NavigationManager.NavigateTo($"/waitingLine/construction/{idConstructionProperties}");
+    }
+}

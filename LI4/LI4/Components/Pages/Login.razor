@@ -1,0 +1,66 @@
+﻿@page "/login"
+@inject IMineBuildsLN facade;
+@inject NavigationManager NavigationManager
+@* @using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Authorization
+@attribute [AllowAnonymous]
+ *@
+
+<div class="center">
+    <div class="mc-container">
+        <div class="input-container">
+            <div class="input-group">
+                <div class="labels">
+                    <label for="email_input">Email:</label>
+                    <label for="password_input">Password:</label>
+                </div>
+                <div class="inputs">
+                    <input type="text" class="mc-textarea" name="email_input" id="email_input" placeholder="john@doe.com" @bind-value="@username">
+                    <input type="password" class="mc-textarea" name="password_input" id="password_input" placeholder="********" @bind-value="@password">
+                </div>
+            </div>
+
+            <div class="button-group" style="--__width: 95% !important;">
+                <div class="mc-button" @onclick="login"><p style="color: var(--highlight)">Login</p></div>
+                <div class="mc-button" @onclick="goToRegisterPage"><p style="color: var(--highlight)">Register</p></div>
+            </div>
+        </div>
+        @if (message is not null) {
+            <p style="color: var(--error)">@message</p>
+        }
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public HttpContext? httpContext { get; set; }
+
+    private string username;
+    private string password;
+
+    private string? message;
+
+    protected async Task login() {
+        try {
+            var userData = await facade.authenticateAsync(username, password);
+
+            // var claims = new[] {
+            //     new System.Security.Claims.Claim("id", userData.id.ToString()),
+            //     new System.Security.Claims.Claim("username", userData.username)
+            // };
+            // var identity = new System.Security.Claims.ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            // var principal = new System.Security.Claims.ClaimsPrincipal(identity);
+
+            // await httpContext.SignInAsync(principal);
+
+            NavigationManager.NavigateTo("/");
+        } catch (Exception e) {
+            message = "Invalid credentials.";
+        }
+    }
+
+    protected void goToRegisterPage() {
+        NavigationManager.NavigateTo("/register");
+    }
+}

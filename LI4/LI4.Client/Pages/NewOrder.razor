@@ -1,0 +1,125 @@
+﻿@page "/newOrder"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
+@using Util;
+
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        New Order: <span style="color: #008600;">#122</span>
+        <button class="close" @onclick="goTheFuckBack">X</button>
+    </div>
+    <div class="main-container" style="height: 70vh;">
+        <div class="content-wrapper">
+            <div class="overflow-container mc-scrollbar">
+                <div class="overflow-content">
+                    @if (blocks is null) {
+                        <p>Loading...</p>
+                    } else {
+                        @foreach (var block in blocks.Values) {
+                            <div class="mc-slot long-slot orders-slot" data-block="@(block.id)">
+                                <div class="icon">
+                                    <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(block.name)).png" alt="Order">
+                                </div>
+                                <div class="content-1c-2r">
+                                    <div class="mc-text-align">@(block.name)</div>
+                                    <div class="content-3c-1r queue-inner">
+                                        <div>
+                                            <button name="add_btn" class="mc-button icon" @onclick="() => IncrementBlock(block.id)">
+                                                <i class="mc-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div><input class="mc-textarea" @bind="orderQuantities[block.id]"></div>
+                                        <div>
+                                            <button name="subtract_btn" class="mc-button icon" @onclick="() => DecrementBlock(block.id)">
+                                                <i class="mc-minus"></i>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button name="nuke_btn" class="mc-button icon" @onclick="() => NukeBlock(block.id)">
+                                                <i class="mc-reject"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="secondary-container orders">
+        @if (message is not null) {
+            <p style="color: var(@(msgSuccess ? "--success" : "--error")">@message</p>
+        }
+
+        <div class="mc-button icon" @onclick="createNewOrder">
+            <i class="mc-accept">
+                <p class="mc-text-align">Confirm</p>
+            </i>
+        </div>
+        <a class="mc-button icon" href="/stock">
+            <i class="mc-reject">
+                <p class="mc-text-align">Cancel</p>
+            </i>
+        </a>
+    </div>
+</div>
+
+@code {
+    private Dictionary<int, BlockProperties> blocks;
+    private Dictionary<int, int> orderQuantities = new();
+
+    private string message;
+    private bool msgSuccess;
+
+    protected override async Task OnInitializedAsync() {
+        blocks = facade.getAllBlockProperties();
+
+        foreach (var block in blocks.Values) {
+            orderQuantities[block.id] = 0;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async void createNewOrder() {
+        message = null;
+
+        Console.WriteLine("CNO");
+        var validOrder = orderQuantities.Where(kv => kv.Value > 0).ToDictionary(kv => kv.Key, kv => kv.Value);
+        if (!validOrder.Any()) {
+            message = "No blocks selected!";
+            msgSuccess = false;
+            return;
+        }
+
+        await facade.createOrderAsync(1, validOrder);
+
+        NavigationManager.NavigateTo("/orders");
+    }
+
+    private void IncrementBlock(int blockId) {
+        message = null;
+        if (orderQuantities.ContainsKey(blockId)) orderQuantities[blockId]++;
+    }
+
+    private void DecrementBlock(int blockId) {
+        message = null;
+        if (orderQuantities.ContainsKey(blockId) && orderQuantities[blockId] > 0) orderQuantities[blockId]--;
+    }
+
+    private void NukeBlock(int blockId) {
+        message = null;
+        if (orderQuantities.ContainsKey(blockId)) orderQuantities[blockId] = 0;
+    }
+
+    private void goTheFuckBack() {
+        NavigationManager.NavigateTo("/stock");
+    } 
+}

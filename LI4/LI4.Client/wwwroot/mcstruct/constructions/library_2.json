@@ -1,0 +1,1570 @@
+{
+    "name": "Plains Library 2",
+    "meta": {
+        "size": {
+            "x": 9,
+            "y": 10,
+            "z": 8
+        }
+    },
+    "stages": [
+        {
+            "blocks": [
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 0, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 0, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 0, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 0, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 0, "z": 2
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 0, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 0, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 0, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 0, "z": 6
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 0, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 0, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 0, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 0, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 6
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 3
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 0, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 0, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 0, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 0, "z": 3
+                },
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 0, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 0, "z": 5
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 0, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 0, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 0, "z": 5
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 0, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 0, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 0, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 4
+                }
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= Vertical pillars =======
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 1, "z": 2
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 2, "z": 2
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 3, "z": 2
+                },
+
+
+                
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 1, "z": 2
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 2, "z": 2
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 3, "z": 2
+                },
+
+
+                
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 1, "z": 6
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 2, "z": 6
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 3, "z": 6
+                },
+
+
+                
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 1, "z": 6
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 2, "z": 6
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 3, "z": 6
+                },
+                //#endregion ======= Vertical pillars =======
+
+
+                //#region ======= Horizontal Beams =======
+                // ------- -Z -------
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 4, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 2, "y": 4, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 3, "y": 4, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 4, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 4, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 6, "y": 4, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 4, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+
+
+                // ------- +Z -------
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 4, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 2, "y": 4, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 3, "y": 4, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 4, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 4, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 6, "y": 4, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 4, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+
+
+
+                // ------- -X -------
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 4, "z": 3,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 4, "z": 4,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 4, "z": 5,
+                    "rotation": { "x": 90 }
+                },
+
+
+
+                // ------- +X -------
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 4, "z": 3,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 4, "z": 4,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 4, "z": 5,
+                    "rotation": { "x": 90 }
+                }
+                //#endregion ======= Horizontal Beams =======
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= -Z =======
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 1, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 2, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 3, "z": 2
+                },
+
+
+                
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 1, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 2, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 3, "z": 2
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 1, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 2, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 3, "z": 2
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 3, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 3, "z": 2
+                },
+                //#endregion ======= -Z =======
+
+
+
+                //#region ======= +X =======
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 1, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 1, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 1, "z": 5
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 2, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 2, "z": 5
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 3, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 3, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 7, "y": 3, "z": 5
+                },
+                //#endregion ======= +X =======
+
+
+
+                //#region ======= +Z =======
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 1, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 1, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 1, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 1, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 1, "z": 6
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 2, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 2, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 2, "z": 6
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 6, "y": 3, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 3, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 3, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 3, "z": 6
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 3, "z": 6
+                },
+                //#endregion ======= +Z =======
+
+
+
+                //#region ======= +X =======
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 1, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 1, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 1, "z": 5
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 2, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 2, "z": 5
+                },
+
+
+
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 3, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 3, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 3, "z": 5
+                },
+                //#endregion ======= +X =======
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= Vertical Pillars =======
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 5, "z": 2
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 6, "z": 2
+                },
+
+
+
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 5, "z": 2
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 6, "z": 2
+                },
+
+
+
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 5, "z": 6
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 6, "z": 6
+                },
+
+
+
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 5, "z": 6
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 6, "z": 6
+                },
+                //#endregion ======= Vertical Pillars =======
+            
+            
+                //#region ======= Balcony Supports =======
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 4, "z": 1,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 7, "y": 4, "z": 1,
+                    "rotation": { "x": 90 }
+                },
+
+
+
+                {
+                    "block": "oak_log",
+                    "x": 2, "y": 4, "z": 0,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 3, "y": 4, "z": 0,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 4, "z": 0,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 4, "z": 0,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 6, "y": 4, "z": 0,
+                    "rotation": { "z": 90 }
+                }
+                //#endregion ======= Balcony Supports =======
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= Floor =======
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 4, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 4, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 4, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 4, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 4, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 4, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 4, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 4, "z": 4
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 4, "z": 5
+                },
+                //#endregion ======= Floor =======
+
+
+
+                //#region ======= Balcony Floor =======
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 4, "z": 1,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 4, "z": 1,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 4, "z": 1,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 1,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 4, "z": 1,
+                    "rotation": { "z": 90 }
+                },
+                //#endregion ======= Balcony Floor =======
+            
+            
+                //#region ======= Walls =======
+                //#region ------- -Z -------
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 5, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 6, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 7, "z": 2
+                },
+
+
+                
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 5, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 6, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 7, "z": 2
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 5, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 6, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 7, "z": 2
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 7, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 7, "z": 2
+                },
+                //#endregion ------- -Z -------
+
+
+
+                //#region ------- +X -------
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 5, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 5, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 5, "z": 5
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 6, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 6, "z": 5
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 7, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 7, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 7, "y": 7, "z": 5
+                },
+                //#endregion ------- +X -------
+
+
+
+                //#region ------- +Z -------
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 5, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 5, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 5, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 5, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 5, "z": 6
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 6, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 6, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 6, "z": 6
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 6, "y": 7, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 7, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 7, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 7, "z": 6
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 7, "z": 6
+                },
+                //#endregion ------- +Z -------
+
+
+
+                //#region ------- +X -------
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 5, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 5, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 5, "z": 5
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 6, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 6, "z": 5
+                },
+
+
+
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 7, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 7, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 7, "z": 5
+                },
+                //#endregion ------- +X -------
+                //#endregion ======= Walls =======
+
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= Support Logs =======
+                {
+                    "block": "oak_log",
+                    "x": 3, "y": 8, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 8, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 8, "z": 2,
+                    "rotation": { "z": 90 }
+                },
+
+
+
+                {
+                    "block": "oak_log",
+                    "x": 3, "y": 8, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 8, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 8, "z": 6,
+                    "rotation": { "z": 90 }
+                },
+
+
+                
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 9, "z": 1,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 9, "z": 2,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 9, "z": 3,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 9, "z": 4,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 9, "z": 5,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 9, "z": 6,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 9, "z": 7,
+                    "rotation": { "x": 90 }
+                },
+                //#endregion ======= Support Logs =======
+            
+                //#region ======= Roof =======
+                //#region ------- Top -X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 9, "z": 1,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 9, "z": 2,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 9, "z": 3,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 9, "z": 4,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 9, "z": 5,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 9, "z": 6,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 9, "z": 7,
+                    "rotation": { "y": 0 }
+                },
+                //#endregion ------- Top -X -------
+
+                //#region ------- Top -2X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 8, "z": 1,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 8, "z": 2,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 8, "z": 3,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 8, "z": 4,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 8, "z": 5,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 8, "z": 6,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 8, "z": 7,
+                    "rotation": { "y": 0 }
+                },
+                //#endregion ------- Top -2X -------
+
+                //#region ------- Top -3X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 7, "z": 1,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 7, "z": 2,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 7, "z": 6,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 7, "z": 7,
+                    "rotation": { "y": 0 }
+                },
+                //#endregion ------- Top -3X -------
+
+                //#region ------- Top -4X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 6, "z": 1,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 6, "z": 2,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 6, "z": 6,
+                    "rotation": { "y": 0 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 6, "z": 7,
+                    "rotation": { "y": 0 }
+                },
+
+
+                
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 6, "z": 3,
+                    "rotation": { "y": 90, "x": 90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 6, "z": 5,
+                    "rotation": { "y": 90, "x": -180 }
+                },
+
+
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 7, "z": 5,
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 7, "z": 4,
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 7, "z": 3,
+                },
+                //#endregion ------- Top -4X -------
+
+
+
+
+                //#region ------- Top +X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 9, "z": 1,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 9, "z": 2,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 9, "z": 3,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 9, "z": 4,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 9, "z": 5,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 9, "z": 6,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 9, "z": 7,
+                    "rotation": { "y": 180 }
+                },
+                //#endregion ------- Top +X -------
+                
+                //#region ------- Top +2X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 8, "z": 1,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 8, "z": 2,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 8, "z": 3,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 8, "z": 4,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 8, "z": 5,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 8, "z": 6,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 8, "z": 7,
+                    "rotation": { "y": 180 }
+                },
+                //#endregion ------- Top +2X -------
+                
+                //#region ------- Top +3X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 7, "y": 7, "z": 1,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 7, "y": 7, "z": 2,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 7, "y": 7, "z": 6,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 7, "y": 7, "z": 7,
+                    "rotation": { "y": 180 }
+                },
+                //#endregion ------- Top +3X -------
+                
+                //#region ------- Top +4X -------
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 6, "z": 1,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 6, "z": 2,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 6, "z": 6,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 6, "z": 7,
+                    "rotation": { "y": 180 }
+                },
+
+
+                
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 6, "z": 3,
+                    "rotation": { "y": 90, "x": 90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 6, "z": 5,
+                    "rotation": { "y": 90, "x": -180 }
+                },
+
+
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 7, "z": 5,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 7, "z": 4,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 8, "y": 7, "z": 3,
+                    "rotation": { "y": 180 }
+                },
+                //#endregion ------- Top +4X -------
+                //#endregion ======= Roof =======
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= Grass =======
+                {
+                    "block": "grass_block",
+                    "x": 2, "y": 0, "z": 0
+                },
+                {
+                    "block": "grass_block",
+                    "x": 3, "y": 0, "z": 0
+                },
+                {
+                    "block": "grass_block",
+                    "x": 4, "y": 0, "z": 0
+                },
+                {
+                    "block": "grass_block",
+                    "x": 5, "y": 0, "z": 0
+                },
+                {
+                    "block": "grass_block",
+                    "x": 6, "y": 0, "z": 0
+                },
+
+
+
+                {
+                    "block": "grass_block",
+                    "x": 2, "y": 0, "z": 1
+                },
+                {
+                    "block": "grass_block",
+                    "x": 3, "y": 0, "z": 1
+                },
+                {
+                    "block": "grass_block",
+                    "x": 4, "y": 0, "z": 1
+                },
+                {
+                    "block": "grass_block",
+                    "x": 5, "y": 0, "z": 1
+                },
+                {
+                    "block": "grass_block",
+                    "x": 6, "y": 0, "z": 1
+                },
+                //#endregion ======= Grass =======
+            
+            
+                
+                //#region ======= Poles =======
+                {
+                    "block": "oak_fence[sides=false]",
+                    "x": 2, "y": 1, "z": 0
+                },
+                {
+                    "block": "oak_fence[sides=false]",
+                    "x": 2, "y": 2, "z": 0
+                },
+                {
+                    "block": "oak_fence[oneside=true]",
+                    "x": 2, "y": 3, "z": 0,
+                    "rotation": { "y": -90 }
+                },
+
+
+
+                {
+                    "block": "oak_fence[sides=false]",
+                    "x": 4, "y": 1, "z": 0
+                },
+                {
+                    "block": "oak_fence[sides=false]",
+                    "x": 4, "y": 2, "z": 0
+                },
+                {
+                    "block": "oak_fence",
+                    "x": 4, "y": 3, "z": 0,
+                    "rotation": { "y": 90 }
+                },
+
+
+
+                {
+                    "block": "oak_fence[sides=false]",
+                    "x": 6, "y": 1, "z": 0
+                },
+                {
+                    "block": "oak_fence[sides=false]",
+                    "x": 6, "y": 2, "z": 0
+                },
+                {
+                    "block": "oak_fence[oneside=true]",
+                    "x": 6, "y": 3, "z": 0,
+                    "rotation": { "y": 90 }
+                },
+
+
+
+                {
+                    "block": "oak_fence",
+                    "x": 3, "y": 3, "z": 0,
+                    "rotation": { "y": 90 }
+                },
+                {
+                    "block": "oak_fence",
+                    "x": 5, "y": 3, "z": 0,
+                    "rotation": { "y": 90 }
+                },
+                //#endregion ======= Poles =======
+            
+            
+            
+                //#region ======= Bookshelves =======
+                {
+                    "block": "bookshelf",
+                    "x": 2, "y": 1, "z": 5
+                },
+                {
+                    "block": "bookshelf",
+                    "x": 3, "y": 1, "z": 5
+                },
+                {
+                    "block": "bookshelf",
+                    "x": 2, "y": 2, "z": 5
+                },
+                {
+                    "block": "bookshelf",
+                    "x": 2, "y": 3, "z": 5
+                },
+                //#endregion ======= Bookshelves =======
+            
+            
+            
+                //#region ======= Stairs =======
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 1, "z": 5,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 1, "z": 5
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 4, "y": 2, "z": 5,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 3, "z": 5,
+                    "rotation": { "y": 180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 4, "z": 5,
+                    "rotation": { "y": 180 }
+                },
+                //#endregion ======= Stairs =======
+            
+            
+            
+                //#region ======= Windows =======
+                {
+                    "block": "glass_pane",
+                    "x": 1, "y": 2, "z": 4
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 3, "y": 2, "z": 6,
+                    "rotation": { "y": 90 }
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 5, "y": 2, "z": 6,
+                    "rotation": { "y": 90 }
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 7, "y": 2, "z": 4
+                },
+
+
+
+                {
+                    "block": "glass_pane",
+                    "x": 1, "y": 6, "z": 4
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 3, "y": 6, "z": 6,
+                    "rotation": { "y": 90 }
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 5, "y": 6, "z": 6,
+                    "rotation": { "y": 90 }
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 7, "y": 6, "z": 4
+                },
+                //#endregion ======= Windows =======
+            
+            
+            
+                //#region ======= Doors =======
+                {
+                    "block": "oak_door",
+                    "x": 3, "y": 1, "z": 2,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_door",
+                    "x": 5, "y": 1, "z": 2,
+                    "rotation": { "y": -90 }
+                },
+
+
+                
+                {
+                    "block": "oak_door",
+                    "x": 3, "y": 5, "z": 2,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_door",
+                    "x": 5, "y": 5, "z": 2,
+                    "rotation": { "y": -90 }
+                },
+                //#endregion ======= Doors =======
+            
+            
+            
+                
+                {
+                    "block": "lectern",
+                    "x": 2, "y": 1, "z": 3,
+                    "rotation": { "y": -90 }
+                }
+            ]
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">LI4</a>
     </div>
@@ -18,18 +18,18 @@
             <NavLink class="nav-link" href="login">
                 Login
             </NavLink>
-        </div> *@
+        </div> * @
 
 @*         <div class="nav-item px-3">
             <NavLink class="nav-link" href="register">
                 Register
             </NavLink>
-        </div> *@
+        </div> * @
 @*         <div class="nav-item px-3">
             <NavLink class="nav-link" href="edit-profile">
                 Edit Profile
             </NavLink>
-        </div> *@
+        </div> * @
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="profile">
                 Profile
@@ -69,7 +69,30 @@
             <NavLink class="nav-link" href="order">
                 Order
             </NavLink>
-        </div> *@
+        </div> * @
     </nav>
 </div>
 
+ *@
+
+<div class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-side">
+            <div class="navbar-links navbar-links-left">
+                <a class="" href="assembly_lines">Assembly Lines</a>
+                <a class="" href="catalog">Catalog</a>
+                <a class="" href="stock">Stock</a>
+            </div>
+        </div>
+        <a class="navbar-logo" href="">
+            <img src="../img/logo.png" alt="logo">
+        </a>
+        <div class="navbar-side">
+            <div class="navbar-links navbar-links-right">
+                <a class="" href="queue">Queues</a>
+                <a class="" href="profile">Profile</a>
+                <a class="" href="history">Production History</a>
+            </div>
+        </div>
+    </div>
+</div>

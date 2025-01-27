@@ -1,83 +1,74 @@
-@page "/stock"
+﻿@page "/stock"
 @rendermode InteractiveServer
-@inject IMineBuildsLN facade;
-@inject NavigationManager NavigationManager
-@inject IJSRuntime js;
+@inject IMineBuildsLN facade
+@inject IJSRuntime JS
+@using Util;
 
-<h3>Stock</h3>
-
-@if (stock != null && stock.Any())
-
-{
-    <ul>
-        @foreach (var item in stock)
-
-        {
-            <li><strong>@item.Key</strong>: @item.Value</li>
-        }
-    </ul>
-}
-
-else
-
-{
-    <p>Loading stock...</p>
-}
-
-<div>
-    <button @onclick="NavigateToOrders">Ver Encomendas</button>
-    <button @onclick="NavigateToOrderPage">Encomendar</button>
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        Stock
+    </div>
+    <div class="main-container" style="height: 70vh;">
+        <div class="content-wrapper">
+            <div class="overflow-container mc-scrollbar">
+                <div class="overflow-content">
+                    <div class="stock">
+                        @if (stock != null && stock.Any()) {
+                            @foreach (var item in stock) {
+                                <div class="mc-slot stock-slot">
+                                    <div class="mc-item">
+                                        <div class="icon">
+                                            <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(item.Key)).png" alt="@(item.Key)">
+                                        </div>
+                                        <div class="stock-item-name">@(item.Key)</div>
+                                        <div class="mc-item-count">@(item.Value)</div>
+                                    </div>
+                                </div>
+                            }
+                        } else {
+                            <p>Loading...</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="secondary-container stock">
+        <a class="mc-button icon" href="/orders">
+            <i>
+                <p class="mc-text-align">Orders</p>
+            </i>
+        </a>
+        <a class="mc-button icon" href="/newOrder">
+            <i>
+                <p class="mc-text-align">New Order</p>
+            </i>
+        </a>
+    </div>
 </div>
 
 @code {
-
     private int id;
-
     private Dictionary<string, int>? stock;
 
-
-
-    protected override async Task OnInitializedAsync()
-
-    {
-
-
-
+    protected override async Task OnInitializedAsync() {
         var user = await facade.getUserByEmailAsync("paulo@example.com");
 
-
-
-        if (user != null)
-        {
+        if (user != null) {
             id = user.id;
-
         }
-
-
 
         stock = await facade.getUserStockAsync(id);
 
+        var blocks = facade.getAllBlockProperties();
+
+        Console.WriteLine("STOCK: \n" + string.Join(Environment.NewLine, stock.Select(kvp => "- " + kvp.Key + ": " + kvp.Value.ToString())));
+        Console.WriteLine("BLOCKS: \n");
+        foreach (var block in blocks) {
+            Console.WriteLine("- " + block.Value.ToString());
+        }
+
         await InvokeAsync(StateHasChanged);
-
-    }
-
-
-
-    private void NavigateToOrders()
-
-    {
-
-        NavigationManager.NavigateTo("/orders");
-
-    }
-
-
-
-    private void NavigateToOrderPage()
-
-    {
-
-        NavigationManager.NavigateTo("/order");
 
     }
 }

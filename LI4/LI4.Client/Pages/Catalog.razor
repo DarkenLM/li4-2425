@@ -1,0 +1,83 @@
+﻿@page "/catalog"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using LI4.Common.Dados;
+@using LI4.Common.Exceptions.ConstructionExceptions;
+@using LI4.Dados;
+@using Util;
+
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        Catalog
+    </div>
+    <div class="main-container">
+        <div class="content-wrapper">
+            <div class="overflow-container mc-scrollbar">
+                <div class="overflow-content">
+                    <div class="catalog">
+                        @if (catalog is null) {
+                            <p>Loading...</p>
+                        } else {
+                            @foreach (var item in catalog) {
+                                var construction = facade.getConstructionProperties(item);
+
+                                <a class="mc-slot catalog-slot @(catalogAvailables[item] ? "" : "disabled")" href="/catalog/@item">
+                                    <div class="mc-item">
+                                        <div class="icon">
+                                            <img src="/img/pictures/@(StringUtil.reverseInterpolateBlockName(construction.name)).png" alt="@(construction.name)">
+                                        </div>
+                                        <div class="mc-item-count">@(construction.name)</div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/js/pages/construction.js"></script>
+
+@code {
+    private List<int>? catalog;
+    private Dictionary<int, bool> catalogAvailables = new();
+
+    protected override async Task OnInitializedAsync() {
+        try {
+            var user = await facade.getUserByEmailAsync("paulo@example.com");
+
+
+            if (user == null) {
+                await InvokeAsync(StateHasChanged);
+                return;
+            }
+
+            catalog = facade.getCatalog();
+
+
+            var blocks = await facade.getUserStockAsync(user.id);
+            foreach (var construction in catalog){
+                var blocksForConstruction = await facade.getAllBlocksConstructionAsync(construction);
+                bool isAvailable = true;
+
+                foreach (var material in blocksForConstruction) {
+                    if (material.Value >= blocks[material.Key]) {
+                        isAvailable = false;
+                        break;
+                    }
+                }
+
+                catalogAvailables[construction] = isAvailable;
+            }
+
+            await InvokeAsync(StateHasChanged);
+        } catch (Exception ex) {
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+    }
+}

@@ -1,7 +1,49 @@
-﻿@page "/"
+﻿@page "/OLD_home"
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@* <h1>Hello, world!</h1>
 
-Welcome to your new app.
+Welcome to your new app. *@
+
+<div class="home-container">
+    <div class="home-top">
+        <div class="home-profile">
+            <div class="mc-frame">
+                <img src="https://minecraft.wiki/images/Player_Head_%288%29_JE5.png?6f81f&format=original">
+            </div>
+            <div class="home-profile-meta">
+                <p>Welcome back, <span style="color: var(--secondary);">johndoe</span></p>
+                <a class="mc-button" href="profile" style="width: fit-content; height: 45%; padding: 0 10px;">
+                    <p class="mc-text-align" style="color: var(--highlight)">Edit Profile</p>
+                </a>
+            </div>
+        </div>
+        <div class="home-line-stock">
+            <a class="home-assembly-line" href="assembly_line">
+                <div class="mc-container" style="--size: 300px; width: var(--size); height: var(--size);">
+                    <div class="title">
+                        Assembly Line
+                    </div>
+                    <div class="mc-inner-container" style="--target-height: var(--size);">
+
+                    </div>
+                </div>
+            </a>
+            <a class="home-stock" href="stock" style="height: 195px; text-align: center;">
+                STOCK
+            </a>
+        </div>
+    </div>
+    <div class="home-bottom">
+        <a class="mc-button" href="queue" style="padding: 0 10px;">
+            <p class="mc-text-align" style="color: var(--highlight)">Queues</p>
+        </a>
+        <a class="mc-button" href="catalog" style="padding: 0 10px;">
+            <p class="mc-text-align" style="color: var(--highlight)">Catalog</p>
+        </a>
+        <a class="mc-button" href="history" style="padding: 0 10px;">
+            <p class="mc-text-align" style="color: var(--highlight)">Production History</p>
+        </a>
+    </div>
+</div>

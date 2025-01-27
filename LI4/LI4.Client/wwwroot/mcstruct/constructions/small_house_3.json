@@ -1,0 +1,774 @@
+{
+    "name": "Plains Village House 5",
+    "meta": {
+        "size": {
+            "x": 7,
+            "y": 7,
+            "z": 7
+        }
+    },
+    "stages": [
+        {
+            "blocks": [
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 0, "z": 1
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 1, "z": 1
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 2, "z": 1
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 3, "z": 1
+                },
+
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 0, "z": 1
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 1, "z": 1
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 2, "z": 1
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 3, "z": 1
+                },
+
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 0, "z": 5
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 1, "z": 5
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 2, "z": 5
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 3, "z": 5
+                },
+
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 0, "z": 5
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 1, "z": 5
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 2, "z": 5
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 3, "z": 5
+                },
+
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 2, "z": 2,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 1, "y": 2, "z": 4,
+                    "rotation": { "x": 90 }
+                },
+
+                {
+                    "block": "oak_log",
+                    "x": 2, "y": 2, "z": 5,
+                    "rotation": { "z": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 4, "y": 2, "z": 5,
+                    "rotation": { "z": 90 }
+                },
+
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 2, "z": 2,
+                    "rotation": { "x": 90 }
+                },
+                {
+                    "block": "oak_log",
+                    "x": 5, "y": 2, "z": 4,
+                    "rotation": { "x": 90 }
+                }
+            ]
+        },
+        {
+            "blocks": [
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 0, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 0, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 0, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 0, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 0, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 0, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 0, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 0, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 0, "z": 3
+                }
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= First Layer =======
+                //#region ---- -Z ----
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 0, "z": 1
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 0, "z": 1
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 0, "z": 1
+                },
+                //#endregion ---- -Z ----
+
+                //#region ---- +X ----
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 0, "z": 4
+                },
+                //#endregion ---- +X ----
+
+                //#region ---- +Z ----
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 0, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 0, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 0, "z": 5
+                },
+                //#endregion ---- +Z ----
+
+                //#region ---- -X ----
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 0, "z": 2
+                },
+                //#endregion ---- +X ----
+                //#endregion ======= First Layer =======
+
+                //#region ======= Second Layer =======
+                //#region ---- -Z ----
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 1, "z": 1
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 1, "z": 1
+                },
+                //#endregion ---- -Z ----
+
+                //#region ---- +X ----
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 1, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 1, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 1, "z": 4
+                },
+                //#endregion ---- +X ----
+
+                //#region ---- +Z ----
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 1, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 1, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 1, "z": 5
+                },
+                //#endregion ---- +Z ----
+
+                //#region ---- -X ----
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 1, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 1, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 1, "z": 2
+                },
+                //#endregion ---- +X ----
+
+                //#endregion ======= Second Layer =======
+
+                //#region ======= Third Layer =======
+                //#region ---- -Z ----
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 2, "z": 1
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 2, "z": 1
+                },
+                //#endregion ---- -Z ----
+                //#endregion ======= Third Layer =======
+            
+                //#region ======= Fourth Layer =======
+                //#region ---- -Z ----
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 3, "z": 1
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 3, "z": 1
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 3, "z": 1
+                },
+                //#endregion ---- -Z ----
+
+                //#region ---- +X ----
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 3, "z": 2
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 3, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 5, "y": 3, "z": 4
+                },
+                //#endregion ---- +X ----
+
+                //#region ---- +Z ----
+                {
+                    "block": "cobblestone",
+                    "x": 4, "y": 3, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 3, "y": 3, "z": 5
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 2, "y": 3, "z": 5
+                },
+                //#endregion ---- +Z ----
+
+                //#region ---- -X ----
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 3, "z": 4
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 3, "z": 3
+                },
+                {
+                    "block": "cobblestone",
+                    "x": 1, "y": 3, "z": 2
+                },
+                //#endregion ---- +X ----
+                //#endregion ======= Fourth Layer =======
+            ]
+        },
+        {
+            "blocks": [
+                //#region ======= First Plank Ring =======
+                // ---- -Z ----
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 4, "z": 1
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 4, "z": 1
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 4, "z": 1
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 4, "z": 1
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 1
+                },
+
+                // ---- +X ----
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 5, "y": 4, "z": 5
+                },
+
+                // ---- +Z ----
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 4, "z": 5
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 4, "z": 5
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 4, "z": 5
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 4, "z": 5
+                },
+
+                // ---- -X ----
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 4, "z": 5
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 4, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 4, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 1, "y": 4, "z": 2
+                },
+                //#endregion ======= First Plank Ring =======
+                
+                //#region ======= First Stair Ring =======
+                // ---- -Z ----
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 0, "y": 4, "z": 0
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 4, "z": 0,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 4, "z": 0,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 4, "z": 0,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 4, "y": 4, "z": 0,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 4, "z": 0,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 6, "y": 4, "z": 0,
+                    "rotation": { "y": -90 }
+                },
+                
+                // ---- +Z ----
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 4, "z": 1,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 4, "z": 2,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 4, "z": 3,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 4, "z": 4,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 6, "y": 4, "z": 5,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 6, "y": 4, "z": 6,
+                    "rotation": { "y": -180 }
+                },
+
+                // ---- +X ----
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 4, "z": 6,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 4, "y": 4, "z": 6,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 4, "z": 6,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 4, "z": 6,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 4, "z": 6,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 0, "y": 4, "z": 6,
+                    "rotation": { "y": -270 }
+                },
+
+                // ---- -Z ----
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 4, "z": 5,
+                    // "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 4, "z": 4,
+                    // "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 4, "z": 3,
+                    // "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 4, "z": 2,
+                    // "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 0, "y": 4, "z": 1,
+                    // "rotation": { "y": -270 }
+                },
+                //#endregion ======= First Stair Ring =======
+            
+                //#region ======= Second Stair Ring =======
+                // ---- -Z ----
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 1, "y": 5, "z": 1
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 5, "z": 1,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 5, "z": 1,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 4, "y": 5, "z": 1,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 5, "y": 5, "z": 1,
+                    "rotation": { "y": -90 }
+                },
+
+                // ---- +X ----
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 5, "z": 2,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 5, "z": 3,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 5, "y": 5, "z": 4,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 5, "y": 5, "z": 5,
+                    "rotation": { "y": -180 }
+                },
+
+                // ---- +Z ----
+                {
+                    "block": "oak_stairs",
+                    "x": 4, "y": 5, "z": 5,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 5, "z": 5,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 5, "z": 5,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 1, "y": 5, "z": 5,
+                    "rotation": { "y": -270 }
+                },
+
+                // ---- -X ----
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 5, "z": 4
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 5, "z": 3
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 1, "y": 5, "z": 2
+                },
+                //#endregion ======= Second Stair Ring =======
+
+                //#region ======= Second Plank Ring =======
+                // ---- -X ----
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 5, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 5, "z": 2
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 5, "z": 2
+                },
+
+                // ---- +Z ----
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 5, "z": 3
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 4, "y": 5, "z": 4
+                },
+
+                // ---- +X ----
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 5, "z": 4
+                },
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 5, "z": 4
+                },
+
+                // ---- -Z ----
+                {
+                    "block": "oak_planks",
+                    "x": 2, "y": 5, "z": 3
+                },
+                //#endregion ======= Second Plank Ring =======
+            
+                //#region ======= Third Stair Ring =======
+                // ---- -Z ----
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 2, "y": 6, "z": 2
+                },
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 6, "z": 2,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 4, "y": 6, "z": 2,
+                    "rotation": { "y": -90 }
+                },
+
+                // ---- +X ----
+                {
+                    "block": "oak_stairs",
+                    "x": 4, "y": 6, "z": 3,
+                    "rotation": { "y": -180 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 4, "y": 6, "z": 4,
+                    "rotation": { "y": -180 }
+                },
+
+                // ---- +Z ----
+                {
+                    "block": "oak_stairs",
+                    "x": 3, "y": 6, "z": 4,
+                    "rotation": { "y": -270 }
+                },
+                {
+                    "block": "oak_stairs[inner=true]",
+                    "x": 2, "y": 6, "z": 4,
+                    "rotation": { "y": -270 }
+                },
+
+                // ---- -X ----
+                {
+                    "block": "oak_stairs",
+                    "x": 2, "y": 6, "z": 3
+                },
+                //#endregion ======= Third Stair Ring =======
+
+                
+                {
+                    "block": "oak_planks",
+                    "x": 3, "y": 6, "z": 3
+                },
+            ]
+        },
+        {
+            "blocks": [
+                {
+                    "block": "oak_door",
+                    "x": 3, "y": 1, "z": 1,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "yellow_bed",
+                    "x": 4, "y": 1, "z": 3,
+                    "rotation": { "y": -90 }
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 1, "y": 2, "z": 3
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 5, "y": 2, "z": 3
+                },
+                {
+                    "block": "glass_pane",
+                    "x": 3, "y": 2, "z": 5,
+                    "rotation": { "y": 90 }
+                },
+            ]
+        }
+    ]
+}

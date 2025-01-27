@@ -5,14 +5,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="app.css" />
+    @* <link rel="stylesheet" href="bootstrap/bootstrap.min.css" /> *@
+    @* <link rel="stylesheet" href="app.css" /> *@
+    <link rel="stylesheet" href="gui.css" />
     <link rel="stylesheet" href="LI4.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet />
 </head>
 
 <body>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+                "json5": "https://unpkg.com/json5@2/dist/index.min.mjs"
+            }
+        }
+    </script>
+
     <Routes />
     <script src="_framework/blazor.web.js"></script>
     <script src="js/util/interopUtil.js"></script>

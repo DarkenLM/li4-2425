@@ -1,4 +1,4 @@
-@page "/order"
+ï»¿@page "/order/{order:int}"
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 @inject IMineBuildsLN facade;
@@ -8,190 +8,122 @@
 @using LI4.Dados;
 @using Util;
 
-<h3>Encomendar Blocos</h3>
+<div class="mc-container" style="margin: 10px;">
+    <div class="title">
+        Order <span style="color: #008600;">#@order</span>
+        <button class="close" @onclick="goTheFuckBack">X</button>
+    </div>
+    @if (orderStruct is null) {
+        <p>Unknown order</p>
+    } else if (errorMsg != null) {
+        <p style="color: var(--error);">@errorMsg</p>
+    } else {
+        <div class="main-container" style="height: 70vh;">
+            <div class="content-wrapper">
+                <div class="overflow-container mc-scrollbar">
+                    <div class="overflow-content">
+                        <div class="stock">
+                            @foreach (var block in orderContent) {
+                                BlockProperties bp = facade.getBlockProperties(block.Key);
+                                string name = bp.name;
 
-<div>
-    @if (blockProperties != null && blockProperties.Any())
-
-    {
-        <table>
-            <thead>
-                <tr>
-                    <th>Bloco</th>
-                    <th>Quantidade</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var block in blockProperties.Values)
-
-                {
-                    <tr>
-                        <td>@block.name</td>
-                        <td>
-                            <input type="number" style="width: 100px; padding: 5px;" @bind="orderQuantities[block.id]" />
-                        </td>
-                        <td>
-                            <button @onclick="() => IncrementBlock(block.id)">+</button>
-                            <button @onclick="() => DecrementBlock(block.id)">-</button>
-                        </td>
-                    </tr>
+                                <div class="mc-slot stock-slot">
+                                    <div class="mc-item">
+                                        <div class="icon"><img src="img/pictures/@(StringUtil.reverseInterpolateBlockName(name)).png" alt="@name"></div>
+                                        <div class="stock-item-name">@name</div>
+                                        <div class="mc-item-count">@(block.Value)</div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="secondary-container stock">
+            <div class="orders-progress-bar">
+                @if (orderStruct.delivered) {
+                    <img src="/img/mc_accept.png" alt="hourglass">
+                    <p class="mc-text-align">@(StringUtil.formatTime(orderStruct.orderDate))</p>
+                } else {
+                    <img src="../img/hourglass.png" alt="hourglass">
+                    <p class="mc-text-align">@(StringUtil.formatTimeSpan(_et))</p>
                 }
-            </tbody>
-        </table>
-    }
+                <!-- #region ======= PENDING ORDER ======= -->
+                <!-- <img src="../img/hourglass.png" alt="hourglass">
+                <p class="mc-text-align">10h 09m 08s</p> -->
+                <!-- #endregion ======= PENDING ORDER ======= -->
 
-    else
-
-    {
-        <p>Loading available blocks...</p>
+                <!-- #region ======= FINISHED ORDER ======= -->
+                @* <img src="/img/mc_accept.png" alt="hourglass">
+                <p class="mc-text-align">24/01/2025 15:43:12</p> *@
+                <!-- #endregion ======= FINISHED ORDER ======= -->
+            </div>
+        </div>
     }
 </div>
 
-<button @onclick="ConfirmOrder">Confirmar Encomenda</button>
-<button @onclick="NavigateToStock">Voltar ao Stock</button>
-
-<p>@message</p>
-
 @code {
-    private Dictionary<int, BlockProperties> blockProperties = new();  // Inicializa o dicionário como vazio
+    [Parameter] public int order { get; set; }
 
+    // private Dictionary<int, BlockProperties> blocks;
+    private LI4.Dados.Order? orderStruct = null;
+    private Dictionary<int, int> orderContent;
+    private int estimatedTime = 0;
+    private long _et = 0;
 
+    private string? errorMsg;
 
-    private Dictionary<int, int> orderQuantities = new();  // A chave aqui é int (usando o Id do bloco)
+    protected override async Task OnInitializedAsync() {
+        Console.WriteLine("ORDER ID: " + order);
 
+        orderStruct = await facade.getOrderAsync(order);
+        Console.WriteLine("ORDER STRUCT: " + orderStruct);
 
-
-    private string message = string.Empty;
-
-
-
-    protected override async Task OnInitializedAsync()
-
-    {
-
-        // Inicializar os BlockProperties a partir da tabela carregada no facade
-
-        blockProperties = facade.getAllBlockProperties();  // Corrigido para utilizar o método assíncrono
-
-
-
-        if (blockProperties != null)
-
-        {
-
-            foreach (var block in blockProperties.Values)
-
-            {
-
-                orderQuantities[block.id] = 0;  // Inicializa a quantidade do bloco com 0
-
-            }
-
-        }
-
-    }
-
-
-
-    private void IncrementBlock(int blockId)  // Incrementa a quantidade de um bloco
-
-    {
-
-        if (orderQuantities.ContainsKey(blockId))
-
-        {
-
-            orderQuantities[blockId]++;
-
-        }
-
-    }
-
-
-
-    private void DecrementBlock(int blockId)  // Decrementa a quantidade de um bloco
-
-    {
-
-        if (orderQuantities.ContainsKey(blockId) && orderQuantities[blockId] > 0)
-
-        {
-
-            orderQuantities[blockId]--;
-
-        }
-
-    }
-
-
-
-
-
-
-
-    private async Task ConfirmOrder()
-
-    {
-
-
-        var validOrder = orderQuantities
-
-            .Where(kv => kv.Value > 0)
-
-            .ToDictionary(kv => kv.Key, kv => kv.Value);
-
-
-
-        if (!validOrder.Any())
-
-        {
-
-            message = "Erro: Não pode encomendar sem selecionar blocos!";
-
+        if (orderStruct == null) {
             return;
-
         }
 
+        orderContent = await facade.getOrderContentAsync(order);
+        if (orderContent.Count == 0) {
+            errorMsg = "Empty order.";
 
-
-        var orderId = await facade.createOrderAsync(1, validOrder);
-
-
-
-        if (orderId > 0)
-
-        {
-
-            message = $"Encomenda criada com sucesso! ID: {orderId}";
-
+            await InvokeAsync(StateHasChanged);
+            return;
         }
 
-        else
+        // Console.WriteLine("BLOCKS: \n");
+        // foreach (var block in blocks) {
+        //     Console.WriteLine("- " + block.ToString());
+        // }
 
-        {
+        // foreach (var block in orderContent) {
+        //     estimatedTime += block.Value * blocks[block.Key].timeToAcquire;
+        // }
 
-            message = "Erro ao criar encomenda.";
+        // Console.WriteLine("ORDER DATE 2:" + orderStruct!.orderDate + " | " + StringUtil.convertToUnixTimestamp(orderStruct!.orderDate));
+        // Console.WriteLine("ESTIMATED TIME 2:" + estimatedTime * 1000);
+        // Console.WriteLine("NOW 2:" + DateTime.Now + " | " + DateTimeOffset.Now.ToUnixTimeSeconds());
 
-        }
 
+        // _et = (StringUtil.convertToUnixTimestamp(orderStruct!.orderDate) + estimatedTime * 1000) - DateTimeOffset.Now.ToUnixTimeSeconds();
+
+        _et = await facade.getEstimatedTimeOrderAsync(order);
+        Timer? orderTimeUpdateTimer = null;
+        orderTimeUpdateTimer = new Timer(new TimerCallback(_ => {
+                _et--;
+                if (_et == 0) {
+                    orderStruct.delivered = true;
+                    orderTimeUpdateTimer!.Change(Timeout.Infinite, Timeout.Infinite);
+                }
+
+                InvokeAsync(StateHasChanged);
+            }), null, 1000, 1000);
+
+        await InvokeAsync(StateHasChanged);
     }
 
-
-
-
-
-
-
-
-
-    private void NavigateToStock()
-
-    {
-
-        NavigationManager.NavigateTo("/stock");
-
-    }
+    private void goTheFuckBack() {
+        NavigationManager.NavigateTo("/orders");
+    } 
 }
-
-

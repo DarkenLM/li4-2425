@@ -4,8 +4,24 @@ using LI4.Components;
 using LI4.Controllers;
 using LI4.Controllers.DAO;
 using LI4.Hubs;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options => {
+//        options.LoginPath = "/login";
+//        //options.AccessDeniedPath = "/access-denied";
+//        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+//    });
+
+//builder.Services.AddAuthorization(options => {
+//    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build();
+//});
+//builder.Services.AddCascadingAuthenticationState();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -33,6 +49,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapHub<ChatHub>(ChatHub.URL);
 
