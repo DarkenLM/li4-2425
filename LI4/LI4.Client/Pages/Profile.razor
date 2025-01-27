@@ -80,6 +80,9 @@
             var success = await facade.updateUserAsync(id, email, username, password);
 
             if (success != null) {
+                if (origEmail != email){
+                    NavigationManager.NavigateTo("/logout");
+                }
                 message = "Perfil atualizado com sucesso!";
                 msgSuccess = true;
 

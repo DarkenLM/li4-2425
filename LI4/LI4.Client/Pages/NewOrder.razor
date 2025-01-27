@@ -74,6 +74,7 @@
 @code {
     private Dictionary<int, BlockProperties> blocks;
     private Dictionary<int, int> orderQuantities = new();
+    private User user;
 
     private string message;
     private bool msgSuccess;
@@ -88,6 +89,21 @@
         await InvokeAsync(StateHasChanged);
     }
 
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+
+        try {
+            string userAuth = await CookieUtil.getUserAuth(js);
+            Console.WriteLine("User ID: " + $">>{userAuth}<<");
+
+            user = await facade.getUserByEmailAsync(userAuth);
+
+            await InvokeAsync(StateHasChanged);
+        } catch (Exception ex) {
+            user = null;
+        }
+    }
+
     protected async void createNewOrder() {
         message = null;
 
@@ -99,7 +115,7 @@
             return;
         }
 
-        await facade.createOrderAsync(1, validOrder);
+        await facade.createOrderAsync(user.id, validOrder);
 
         NavigationManager.NavigateTo("/orders");
     }

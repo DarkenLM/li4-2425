@@ -82,7 +82,7 @@
             orders = await facade.getUserOrdersAsync(id);
             if (orders.Count == 0) {
                 errorMsg = "Não há encomendas.";
-                throw null;
+                //throw new Exception();
             }
 
             // var blocks = facade.getAllBlockProperties();

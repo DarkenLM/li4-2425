@@ -19,7 +19,7 @@
             </div>
 
             <div class="button-group" style="--__width: 95% !important;">
-                <div class="mc-button"><p style="color: var(--highlight)" @onclick="register">Register</p></div>
+                <div class="mc-button" @onclick="register"><p style="color: var(--highlight)">Register</p></div>
                 <div class="mc-button" @onclick="goToLoginPage"><p style="color: var(--highlight)">Login</p></div>
             </div>
         </div>
@@ -37,6 +37,7 @@
     private string? message;
 
     private async Task register() {
+        Console.WriteLine($"mail:{email}; username:{username}; pass:{password}");
         try {
             bool success = await facade.registerUserAsync(email, username, password);
 

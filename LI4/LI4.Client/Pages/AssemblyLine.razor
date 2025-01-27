@@ -27,7 +27,6 @@
                         @{var constructionProperties = facade.getConstructionProperties(construction);}
                         @foreach (var constr in constructions) {
                             var stage = getStage(constr, userId, construction);
-                            Console.WriteLine($"A construção com id{constr} esta no estagio {stage}");
                             int time = 0;
                             if (stage >= 0){
                                 time = constructionTimes[constr];
