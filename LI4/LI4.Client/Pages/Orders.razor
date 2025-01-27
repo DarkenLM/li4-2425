@@ -6,6 +6,9 @@
 
 @using Util;
 
+@{
+    int i = 1;
+}
 <div class="mc-container" style="margin: 10px;">
     <div class="title">
         Orders
@@ -20,19 +23,23 @@
                     } else if (!orders.Any()) {
                         <p>Não há encomendas.</p>
                     } else {
-                        @foreach (var order in orders) {
+                        @foreach (var order in orders)
+                        {
                             <a class="mc-slot long-slot orders-slot" href="order/@order.id">
                                 <div class="icon">
                                     <img src="/img/pictures/cardboard_box.png" alt="Order">
                                 </div>
                                 <div class="content-1c-2r">
-                                    <div class="mc-text-align">Order #@order.id</div>
+                                    <div class="mc-text-align">Order #@i</div>
                                     <div class="content-2c-1r">
                                         <div class="orders-progress-bar">
-                                            @if (!order.delivered) {
+                                            @if (!order.delivered)
+                                            {
                                                 <img src="/img/hourglass.png" alt="hourglass">
                                                 <p class="mc-text-align">TODO - @(StringUtil.formatTimeSpan(orderTimes[order.id]))</p>
-                                            } else {
+                                            }
+                                            else
+                                            {
                                                 <img src="/img/mc_accept.png" alt="hourglass">
                                                 <p class="mc-text-align">@(StringUtil.formatTime(order.orderDate))</p>
                                             }
@@ -40,6 +47,7 @@
                                     </div>
                                 </div>
                             </a>
+                            i++;
                         }
                     }
                 </div>
