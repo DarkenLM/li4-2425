@@ -1,21 +1,7 @@
 ﻿@inherits LayoutComponentBase
-
-@* <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div> *@
-
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject IJSRuntime js
 
 <div class="layout">
     <NavMenu />
@@ -27,3 +13,42 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    protected override void OnInitialized() {
+        Console.WriteLine("MAINLAYOUT INITIALIZED.");
+        Navigation.LocationChanged += OnLocationChanged;
+        base.OnInitialized();
+    }
+
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e) {
+        Console.WriteLine("LOCATION CHANGED.");
+        await js.InvokeVoidAsync("onNavigation", e.Location);
+        // js.InvokeVoidAsync("alert", "Navigation event is triggered");
+    }
+
+    public void Dispose() {
+        Console.WriteLine("MAINLAYOUT DISPOSED.");
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+
+    // private IDisposable registration;
+
+    // protected override void OnAfterRender(bool firstRender) {
+    //     Console.WriteLine("MAINLAYOUT RENDER.");
+    //     if (firstRender) {
+    //         Console.WriteLine("MAINLAYOUT FIRST RENDER.");
+    //         registration = Navigation.RegisterLocationChangingHandler(LocationChangingHandler);
+    //     }
+    // }
+
+    // private ValueTask LocationChangingHandler(LocationChangingContext arg) {
+    //     Console.WriteLine("Location is changing...");
+    //     return ValueTask.CompletedTask;
+    // }
+
+    // public void Dispose() {
+    //     Console.WriteLine("MAINLAYOUT DISPOSED.");
+    //     registration?.Dispose();
+    // }
+}

@@ -63,10 +63,15 @@
     private Dictionary<int, long> orderTimes = new();
     private string errorMsg = "";
 
-    protected override async Task OnInitializedAsync() {
+    // protected override async Task OnInitializedAsync() {
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+
         int id;
         try {
-            var user = await facade.getUserByEmailAsync("paulo@example.com");
+            // var user = await facade.getUserByEmailAsync("paulo@example.com");
+            string userAuth = await CookieUtil.getUserAuth(js);
+            var user = await facade.getUserByEmailAsync(userAuth);
 
             if (user != null) {
                 id = user.id;

@@ -151,7 +151,7 @@
 <script type="module">
     import MCDialog from "/js/mcui/MCDialog.js";
 
-    function _setupbtns() {
+    function _setupBtns() {
         const _subBtns = document.getElementsByName("subtract_btn");
         const _nukeBtns = document.getElementsByName("nuke_btn");
 
@@ -216,19 +216,24 @@
 
     private string? message;
 
-    protected override async void OnAfterRender(bool firstRender) {
-        if (firstRender) {
-            try {
-                await js.InvokeVoidAsync("window.setupNukeDialog");
-            } catch (Exception stfu) {
-                Console.WriteLine("ERROR: " + stfu.Message);
-            }
-        }
-    }
+    // protected override async void OnAfterRender(bool firstRender) {
+    //     if (firstRender) {
+    //         try {
+    //             await js.InvokeVoidAsync("window.setupNukeDialog");
+    //         } catch (Exception stfu) {
+    //             Console.WriteLine("ERROR: " + stfu.Message);
+    //         }
+    //     }
+    // }
 
-    protected override async Task OnInitializedAsync() {
+    // protected override async Task OnInitializedAsync() {
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+
         try {
-            var user = await facade.getUserByEmailAsync("paulo@example.com");
+            // var user = await facade.getUserByEmailAsync("paulo@example.com");
+            string userAuth = await CookieUtil.getUserAuth(js);
+            var user = await facade.getUserByEmailAsync(userAuth);
 
             if (user == null) {
                 message = "Unknown error.";
@@ -243,6 +248,11 @@
             // constructions[1] = 10;
 
             await InvokeAsync(StateHasChanged);
+            try {
+                await js.InvokeVoidAsync("window.setupNukeDialog");
+            } catch (Exception stfu) {
+                Console.WriteLine("ERROR: " + stfu.Message);
+            }
         } catch (Exception ex) {
             message = "Unknown error.";
 

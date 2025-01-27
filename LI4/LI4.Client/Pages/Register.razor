@@ -1,0 +1,56 @@
+﻿@page "/register"
+@inject IMineBuildsLN facade;
+@inject NavigationManager NavigationManager
+
+<div class="center">
+    <div class="mc-container">
+        <div class="input-container">
+            <div class="input-group">
+                <div class="labels">
+                    <label for="email_input">Email:</label>
+                    <label for="username_input">Username:</label>
+                    <label for="password_input">Password:</label>
+                </div>
+                <div class="inputs">
+                    <input type="text" class="mc-textarea" name="email_input" id="email_input" placeholder="john@doe.com" @bind="email">
+                    <input type="text" class="mc-textarea" name="username_input" id="username_input" placeholder="johndoe" @bind="username">
+                    <input type="password" class="mc-textarea" name="password_input" id="password_input" placeholder="********" @bind="password">
+                </div>
+            </div>
+
+            <div class="button-group" style="--__width: 95% !important;">
+                <div class="mc-button"><p style="color: var(--highlight)" @onclick="register">Register</p></div>
+                <div class="mc-button" @onclick="goToLoginPage"><p style="color: var(--highlight)">Login</p></div>
+            </div>
+        </div>
+        @if (message is not null) {
+            <p style="color: var(--error)">@message</p>
+        }
+    </div>
+</div>
+
+@code {
+    private string email = "";
+    private string username = "";
+    private string password = "";
+
+    private string? message;
+
+    private async Task register() {
+        try {
+            bool success = await facade.registerUserAsync(email, username, password);
+
+            if (success) {
+                NavigationManager.NavigateTo("/login");
+            } else  {
+                message = "Registration failed!";
+            }
+        } catch (Exception ex) {
+            message = $"{ex.Message}";
+        }
+    }
+
+    protected void goToLoginPage() {
+        NavigationManager.NavigateTo("/login");
+    }
+}

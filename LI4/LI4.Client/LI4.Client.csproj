@@ -17,4 +17,10 @@
     <ProjectReference Include="..\LI4.Common\LI4.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Login.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

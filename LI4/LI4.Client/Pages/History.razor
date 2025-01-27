@@ -54,10 +54,14 @@
 
     private string? message;
 
-    protected override async Task OnInitializedAsync() {
+    // protected override async Task OnInitializedAsync() {
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
 
         try {
-            var user = await facade.getUserByEmailAsync("paulo@example.com");
+            // var user = await facade.getUserByEmailAsync("paulo@example.com");
+            string userAuth = await CookieUtil.getUserAuth(js);
+            var user = await facade.getUserByEmailAsync(userAuth);
 
             if (user == null) {
                 message = "Unknown error.";

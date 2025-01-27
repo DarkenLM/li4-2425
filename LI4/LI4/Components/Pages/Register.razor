@@ -1,4 +1,4 @@
-﻿@page "/register"
+﻿@page "/NO_register"
 @inject IMineBuildsLN facade;
 @inject NavigationManager NavigationManager
 
@@ -20,12 +20,14 @@
 
             <div class="button-group" style="--__width: 95% !important;">
                 <div class="mc-button"><p style="color: var(--highlight)">Register</p></div>
-                <div class="mc-button"><p style="color: var(--highlight)">Login</p></div>
+                <div class="mc-button" @onclick="goToLoginPage"><p style="color: var(--highlight)">Login</p></div>
             </div>
         </div>
     </div>
 </div>
 
 @code {
-
+    protected void goToLoginPage() {
+        NavigationManager.NavigateTo("/login");
+    }
 }

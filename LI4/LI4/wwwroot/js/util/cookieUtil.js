@@ -1,4 +1,4 @@
-﻿function createCookie(name,value,days) {
+﻿function createCookie(name, value, days) {
     let expiration = "";
 	if (days) {
 		const date = new Date();
@@ -16,8 +16,13 @@ function readCookie(name) {
 	for(var i = 0; i < ca.length; i++) {
 		let c = ca[i];
 		while (c.charAt(0)==' ') c = c.substring(1, c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+		if (c.indexOf(nameEQ) == 0) {
+			console.log("RC found:", [c.substring(nameEQ.length, c.length)])
+			return c.substring(nameEQ.length, c.length);
+		}
 	}
+
+	console.log("RC found fuck all.")
 
 	return undefined;
 }

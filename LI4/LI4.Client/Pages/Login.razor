@@ -1,11 +1,9 @@
-﻿@page "/NO_login"
-@inject IMineBuildsLN facade;
+﻿@page "/login"
+@rendermode InteractiveServer
 @inject NavigationManager NavigationManager
-@* @using Microsoft.AspNetCore.Authentication
-@using Microsoft.AspNetCore.Authentication.Cookies
-@using Microsoft.AspNetCore.Authorization
-@attribute [AllowAnonymous]
- *@
+@inject IMineBuildsLN facade;
+@inject IJSRuntime js
+@using Util;
 
 <div class="center">
     <div class="mc-container">
@@ -23,7 +21,7 @@
 
             <div class="button-group" style="--__width: 95% !important;">
                 <div class="mc-button" @onclick="login"><p style="color: var(--highlight)">Login</p></div>
-                <div class="mc-button" @onclick="goToRegisterPage"><p style="color: var(--highlight)">Registera</p></div>
+                <div class="mc-button" @onclick="goToRegisterPage"><p style="color: var(--highlight)">Register</p></div>
             </div>
         </div>
         @if (message is not null) {
@@ -33,9 +31,6 @@
 </div>
 
 @code {
-    [CascadingParameter]
-    public HttpContext? httpContext { get; set; }
-
     private string username;
     private string password;
 
@@ -43,19 +38,24 @@
 
     protected async Task login() {
         try {
+            message = null;
+
+            Console.WriteLine("Authenticating.");
             var userData = await facade.authenticateAsync(username, password);
+            Console.WriteLine("Authenticated.");
 
-            // var claims = new[] {
-            //     new System.Security.Claims.Claim("id", userData.id.ToString()),
-            //     new System.Security.Claims.Claim("username", userData.username)
-            // };
-            // var identity = new System.Security.Claims.ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            // var principal = new System.Security.Claims.ClaimsPrincipal(identity);
+            // CookieUtil cookieUtil = new(js);
+            Console.WriteLine("Util.");
 
-            // await httpContext.SignInAsync(principal);
+            Console.WriteLine("Writing Cookie:" + "userAuth | " + userData.email.ToString());
+            // await cookieUtil.setCookie("userAuth", userData.id.ToString());
+            // await js.InvokeVoidAsync("eval", "console.log(createCookie)");
+            await js.InvokeVoidAsync("createCookie", "userAuth", userData.email.ToString(), 7);
+            Console.WriteLine("Wrote Cookie");
 
             NavigationManager.NavigateTo("/");
         } catch (Exception e) {
+            Console.WriteLine("AUTH ERROR:", e.GetType());
             message = "Invalid credentials.";
         }
     }

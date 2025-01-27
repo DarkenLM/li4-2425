@@ -1,7 +1,10 @@
 @page "/"
 @rendermode InteractiveServer
 @inject IMineBuildsLN facade
+@inject IJSRuntime js
 @inject NavigationManager Navigation
+
+@using Util;
 
 <div class="home-container">
     <div class="home-top">
@@ -11,9 +14,14 @@
             </div>
             <div class="home-profile-meta">
                 <p>Welcome back, <span style="color: var(--secondary);">@username</span></p>
-                <a class="mc-button" href="profile" style="width: fit-content; height: 45%; padding: 0 10px;">
-                    <p class="mc-text-align" style="color: var(--highlight)">Edit Profile</p>
-                </a>
+                <div style="display: flex; flex-direction: row; align-content: center; align-items: center; justify-content: flex-start; gap:  10px; height: 100%;">
+                    <a class="mc-button" href="profile" style="width: fit-content; height: 70%; padding: 0 10px;">
+                        <p class="mc-text-align" style="color: var(--highlight)">Edit Profile</p>
+                    </a
+                     <a class="mc-button" href="logout" style="width: fit-content; height: 70%; padding: 0 10px;">
+                        <p class="mc-text-align" style="color: var(--highlight)">Logout</p>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="home-line-stock">
@@ -47,9 +55,22 @@
 
 @code {
     private string username = "";
-    protected override async Task OnInitializedAsync() {
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+
         try {
-            var user = await facade.getUserByEmailAsync("paulo@example.com");
+            // var cookieValue = await js.InvokeAsync<string>("readCookie", "userAuth");
+            // if (cookieValue is null) throw new Exception("Unable to read cookie value.");
+
+            // int userId = 
+
+            // Console.WriteLine("Cookie A: " + $">>{value}<<");
+
+            string userAuth = await CookieUtil.getUserAuth(js);
+            Console.WriteLine("User ID: " + $">>{userAuth}<<");
+
+            // var user = await facade.getUserByEmailAsync("paulo@example.com");
+            var user = await facade.getUserByEmailAsync(userAuth);
 
             if (user != null) {
                 username = user.username;

@@ -13,3 +13,16 @@
         Navigation.NavigateTo("/login");
     }
 } *@
+
+@page "/logout"
+@inject NavigationManager Navigation
+@inject IJSRuntime js
+
+@code {
+    protected async override void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+
+        await js.InvokeVoidAsync("eraseCookie", "userAuth");
+        Navigation.NavigateTo("/login");
+    }
+}
