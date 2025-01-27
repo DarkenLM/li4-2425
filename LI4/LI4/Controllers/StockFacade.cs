@@ -61,17 +61,18 @@ public class StockFacade {
                 Dictionary<int, int> blocks = entry.Value.Value;
                 int estimatedTime = 0;
 
-                foreach (KeyValuePair<int, int> blockPair in blocks) { 
-                    int idBlockProperties = blockPair.Key;
-                    int blockQuantity = blockPair.Value;
+                estimatedTime = await orderDAO.getEstimatedTimeOrderAsync(idOrder);
 
-                    int timeToAcquire = blockProperties[idBlockProperties].timeToAcquire;
-                    estimatedTime += blockQuantity * timeToAcquire;
+                if (estimatedTime <= 0) {
+                    await addStockFromOrderAsync(idUser, blocks, idOrder);
+
+                    await orderDAO.updateOrderDeliveredAsync(idOrder, true);
+                } else {
+
+                    // Console.WriteLine($"Iniciado timer para order {idOrder} de {estimatedTime} segundos.");
+                    TimerWrapper tw = new TimerWrapper(estimatedTime * 1000, async () => await addStockFromOrderAsync(idUser, blocks, idOrder), false);
+                    tw.start();
                 }
-
-                // Console.WriteLine($"Iniciado timer para order {idOrder} de {estimatedTime} segundos.");
-                TimerWrapper tw = new TimerWrapper(estimatedTime * 1000, async () => await addStockFromOrderAsync(idUser, blocks, idOrder), false);
-                tw.start();
             }
         } catch (Exception ex) {
             throw new Exception("Failed to initialize orders", ex);
