@@ -167,6 +167,9 @@
         for (int i = 0; i < count; i++) {
             await facade.addConstructionToQueueAsync(userId, constructionId);
         }
+        
+        blocks = await facade.getUserStockAsync(userId);
+        await InvokeAsync(StateHasChanged);
     }
 
     private void goTheFuckBack() {
